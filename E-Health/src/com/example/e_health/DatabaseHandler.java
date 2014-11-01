@@ -1,7 +1,8 @@
-package com.example.e_health.sqlite;
+package com.example.e_health;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -76,7 +77,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 
 	// Getting single Beacon
-	MyBeacon getBeacon(int id) {
+	public MyBeacon getBeacon(int id) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor cursor = db.query(TABLE_BEACONS, new String[] { KEY_NAME,
