@@ -6,8 +6,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.project.e_health.R;
+
+import enseirb.t3.e_health.DAO.UserDatabaseHandler;
 
 /**
  * @author catdiop
@@ -29,12 +32,20 @@ public class AuthentificationActivity extends Activity {
 
 	public void onClick(View v) {
 
+		//Si l'utilisateur appuit sur connexion
 		if(v.getId()==R.id.connexion) {
-
-			createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
+			UserDatabaseHandler dbHandler=new UserDatabaseHandler(this.getApplicationContext());
+			TextView view1=(TextView)findViewById(R.id.username);
+			TextView view2=(TextView)findViewById(R.id.password);
+			if(dbHandler.isUser(view1.getText().toString(), view2.getText().toString())) {
+				//on se connecte
+			}
+			else
+				createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
+			}
+			
 		}
-	}
-
+	
 	private void createDialog(String msg) {
 
 		AlertDialog.Builder dialog=new AlertDialog.Builder(this);
