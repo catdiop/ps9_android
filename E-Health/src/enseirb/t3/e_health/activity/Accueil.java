@@ -1,4 +1,4 @@
-package com.example.e_health;
+package enseirb.t3.e_health.activity;
 
 
 
@@ -14,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 
-import com.example.e_health.R;
+import com.project.e_health.R;
 
 public class Accueil extends Activity {
 	protected static final String TAG = "BeaconActivity";
@@ -65,7 +65,7 @@ public class Accueil extends Activity {
 			        	final MyBeacon beacon = db.getBeacon(position+1);
 			        	switch(item.getItemId()){
 			        	case R.id.remove:
-			        		view.animate().setDuration(2000).alpha(0)
+			        		/*view.animate().setDuration(2000).alpha(0)
 			        		.withEndAction(new Runnable() {
 			        			@Override
 			                    public void run() {
@@ -74,7 +74,7 @@ public class Accueil extends Activity {
 			        				adapter.notifyDataSetChanged();
 			        				view.setAlpha(1);
 			                    }
-			                  });
+			                  });*/
 			        		break;
 			         	}  
 				        return true;  

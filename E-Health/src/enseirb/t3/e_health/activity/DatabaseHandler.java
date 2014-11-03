@@ -1,4 +1,4 @@
-package com.example.e_health;
+package enseirb.t3.e_health.activity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,6 @@
-package com.example.e_health;
+package enseirb.t3.e_health.activity;
 
 import java.util.ArrayList;
-
-import com.example.e_health.R;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.project.e_health.R;
 
 public class MyBeaconListBaseAdapter extends BaseAdapter {
 	private static ArrayList<MyBeacon> itemDetailsrrayList;
