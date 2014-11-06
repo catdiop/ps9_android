@@ -35,7 +35,7 @@ public class Accueil extends Activity {
         
         listAnimation.setAdapter(adapter);
         
-        // Lorsque l'on clique sur un élément de la liste
+        // Lorsque l'on clique sur un ï¿½lï¿½ment de la liste
         listAnimation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,

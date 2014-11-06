@@ -2,14 +2,14 @@
 
     <string name="app_name">E-Health</string>
     
-    <string name="measures">Measures</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="connect">Connect</string>
     <string name="welcome">Welcome</string>
     <string name="menu_popup_remove">Supprimer</string>
-	<string name="goToChart">Chart</string>
-    <string name="str_btn_chart">Visualize chart</string>
     <string name="button_bluetooth">Bluetooth</string>
-
+	<string name="str_btn_chart">Chart</string>
+    <string name="measures">Measures</string>
+    <string name="goToChart">Chart</string>
+    
 </resources>

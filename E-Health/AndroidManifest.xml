@@ -13,12 +13,6 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         
-         <activity
-            android:name="enseirb.t3.e_health.activity.Measures"
-            android:label="@string/measures" >
-        </activity>
-        <activity android:name="org.achartengine.GraphicalActivity" />
-        
         <activity
             android:name="enseirb.t3.e_health.activity.AuthentificationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -26,7 +20,7 @@
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
- 
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
