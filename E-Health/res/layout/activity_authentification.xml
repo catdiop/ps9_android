@@ -37,6 +37,17 @@
         android:onClick="onClick"
         />
     
+    <Button 
+        android:id="@+id/goToChart"
+        android:layout_width="160dp" 
+        android:layout_height="wrap_content"
+        android:background="@drawable/connect_button"
+        android:layout_alignLeft="@id/connexion"
+        android:text="@string/goToChart"
+        android:layout_marginTop="15dp"
+        android:onClick="onClick"
+        />
+    
     
     
 </RelativeLayout>

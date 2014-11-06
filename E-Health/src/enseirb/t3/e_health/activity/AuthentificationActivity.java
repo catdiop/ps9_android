@@ -3,6 +3,7 @@ package enseirb.t3.e_health.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -42,10 +43,13 @@ public class AuthentificationActivity extends Activity {
 			}
 			else
 				createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
-			}
-			
 		}
-	
+		else if (v.getId()==R.id.goToChart) {
+			Intent intent = new Intent(AuthentificationActivity.this, Measures.class);
+			startActivity(intent);
+		}
+	}
+
 	private void createDialog(String msg) {
 
 		AlertDialog.Builder dialog=new AlertDialog.Builder(this);
