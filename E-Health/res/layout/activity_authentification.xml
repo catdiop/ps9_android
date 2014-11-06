@@ -34,9 +34,15 @@
         android:layout_alignRight="@id/password"
         android:text="@string/connect"
         android:layout_marginTop="15dp"
-        android:onClick="onClick"
         />
-    
-    
+
+    <Button
+        android:id="@+id/bluetooth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/connexion"
+        android:layout_marginRight="36dp"
+        android:text="@string/button_bluetooth" />
     
 </RelativeLayout>

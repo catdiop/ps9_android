@@ -7,5 +7,6 @@
     <string name="connect">Connect</string>
     <string name="welcome">Welcome</string>
     <string name="menu_popup_remove">Supprimer</string>
+    <string name="button_bluetooth">Bluetooth</string>
 
 </resources>
