@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 
+
 public class Bluetooth {
 	
 	private final static int REQUEST_CODE_ENABLE_BLUETOOTH = 0;

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.project.e_health.R;
 
+
 public class MyBeaconListBaseAdapter extends BaseAdapter {
 	private static ArrayList<MyBeacon> itemDetailsrrayList;
  

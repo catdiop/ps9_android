@@ -1,7 +1,5 @@
 package enseirb.t3.e_health.activity;
 
-
-
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -15,6 +13,9 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 
 import com.project.e_health.R;
+
+
+
 
 public class Accueil extends Activity {
 	protected static final String TAG = "BeaconActivity";

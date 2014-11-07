@@ -1,7 +1,5 @@
 package enseirb.t3.e_health.DAO;
 
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
