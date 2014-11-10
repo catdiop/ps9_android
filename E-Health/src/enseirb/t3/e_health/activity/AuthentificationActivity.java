@@ -60,6 +60,7 @@ public class AuthentificationActivity extends Activity implements OnClickListene
 			case R.id.bluetooth:
 				Bluetooth bluetooth = new Bluetooth(this);
 				bluetooth.enableBluetooth();
+				bluetooth.discoverDevices();
 				
 				break;
 		}
