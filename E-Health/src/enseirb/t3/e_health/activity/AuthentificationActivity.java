@@ -43,7 +43,7 @@ public class AuthentificationActivity extends Activity implements OnClickListene
 		
 		switch (v.getId()) {
 		
-			//Si l'utilisateur appuit sur connexion
+			//Si l'utilisateur appuie sur connexion
 			case R.id.connexion:
 				UserDatabaseHandler dbHandler=new UserDatabaseHandler(this.getApplicationContext());
 				TextView view1=(TextView)findViewById(R.id.username);
@@ -61,6 +61,13 @@ public class AuthentificationActivity extends Activity implements OnClickListene
 				Bluetooth bluetooth = new Bluetooth(this);
 				bluetooth.enableBluetooth();
 				bluetooth.discoverDevices();
+				
+				break;
+				
+			//Si l'utilisateur veut accéder aux charts
+			case R.id.goToChart:
+				Intent intent = new Intent(AuthentificationActivity.this, Measures.class);
+				startActivity(intent);
 				
 				break;
 		}

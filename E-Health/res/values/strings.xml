@@ -9,5 +9,9 @@
     <string name="menu_popup_remove">Supprimer</string>
     <string name="button_bluetooth">Bluetooth</string>
     <string name="debuggable">true</string>
+    <string name="str_btn_chart">Heartbeats and oxygen</string>
+    <string name="goToChart">Charts</string>
+    <string name="measuresLabel">Measures</string>
+    <string name="measuresGraphicalActivity">Measures graphical activity</string>
 
 </resources>

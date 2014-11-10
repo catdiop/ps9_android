@@ -40,6 +40,19 @@
             </intent-filter>
         </activity>
         
+        <activity
+            android:name="enseirb.t3.e_health.activity.Measures"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/measuresLabel"
+            android:screenOrientation="landscape">
+        </activity>
+        
+        <activity
+            android:name="org.achartengine.GraphicalActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/measuresGraphicalActivity" >
+        </activity>
+        
     </application>
 
 </manifest>
