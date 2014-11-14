@@ -33,35 +33,48 @@ public class Measures extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_measures);
 
-		// Getting reference to the button btn_chart
-		Button btnChart = (Button) findViewById(R.id.btn_chart);
+		// Getting references to buttons
+		Button btnHeartBeats = (Button) findViewById(R.id.btn_heartBeats);
+		Button btnOxygen = (Button) findViewById(R.id.btn_oxygen);
 
 		// Defining click event listener for the button btn_chart
 		OnClickListener clickListener = new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// Draw the Chart
-				openChart();
+
+				switch(v.getId())	{
+
+				// HeatBeats chart
+				case R.id.btn_heartBeats:
+					openChartHeartBeats();
+
+					break;
+				// Oxygen chart
+				case R.id.btn_oxygen:
+					openChartOxygen();
+
+					break;
+				}
+
 			}
 		};
 
-		// Setting event click listener for the button btn_chart of the MainActivity layout
-		btnChart.setOnClickListener(clickListener);
+		// Setting event click listener for the button btn_heartBeats of the measures activity layout
+		btnHeartBeats.setOnClickListener(clickListener);
+		btnOxygen.setOnClickListener(clickListener);
 	}
 
-	private void openChart(){
+	// Heart beats chart
+	private void openChartHeartBeats(){
 		int[] x = { 1,2,3,4,5,6,7,8 };
 		int[] heartBeat = { 80, 81, 79, 80, 90, 87, 91, 92};
-		int[] oxygen = {50, 51, 51, 50, 40, 39, 40, 37};
 
 		// Creating an  XYSeries for heart beat
 		XYSeries heartBeatSeries = new XYSeries("Heartbeats");
-		XYSeries oxygenSeries = new XYSeries("Oxygen");
 		// Adding data to heartBeatSeries
 		for(int i=0;i<x.length;i++){
 			heartBeatSeries.add(x[i], heartBeat[i]);
-			oxygenSeries.add(x[i], oxygen[i]);
 		}
 
 		// Creating a dataset to hold each series
@@ -69,7 +82,6 @@ public class Measures extends Activity {
 
 		// Adding heartBeatSeries to the dataset
 		dataset.addSeries(heartBeatSeries);
-		dataset.addSeries(oxygenSeries);
 
 		// Creating XYSeriesRenderer to customize heartBeatSeries
 		XYSeriesRenderer heartBeatRenderer = new XYSeriesRenderer();
@@ -78,6 +90,49 @@ public class Measures extends Activity {
 		heartBeatRenderer.setFillPoints(true);
 		heartBeatRenderer.setLineWidth(2);
 		heartBeatRenderer.setDisplayChartValues(true);
+
+		// Creating a XYMultipleSeriesRenderer to customize the whole chart
+		XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
+		multiRenderer.setXLabels(0);
+		multiRenderer.setChartTitle("Heart beats of client X");
+		multiRenderer.setXTitle("Year 2012");
+		multiRenderer.setYTitle("Heart beats");
+		multiRenderer.setZoomButtonsVisible(true);
+		for(int i=0;i<x.length;i++){
+			multiRenderer.addXTextLabel(i+1, mMonth[i]);
+		}
+
+		// Adding heart beat renderer to multipleRenderer
+		// Note: The order of adding dataseries to dataset and renderers to multipleRenderer
+		// should be same
+		multiRenderer.addSeriesRenderer(heartBeatRenderer);
+
+		// Creating an intent to plot line chart using dataset and multipleRenderer
+		Intent intent = ChartFactory.getLineChartIntent(getBaseContext(), dataset, multiRenderer);
+
+
+		// Start Activity
+		startActivity(intent);
+	}
+
+	// Oxygen chart
+	private void openChartOxygen(){
+		int[] x = { 1,2,3,4,5,6,7,8 };
+		int[] oxygen = {50, 51, 51, 50, 40, 39, 40, 37};
+
+		// Creating an  XYSeries for heart beat
+		XYSeries oxygenSeries = new XYSeries("Oxygen");
+
+		// Adding data to oxygenSeries
+		for(int i=0;i<x.length;i++){
+			oxygenSeries.add(x[i], oxygen[i]);
+		}
+
+		// Creating a dataset to hold each series
+		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+
+		// Adding oxygenSeries to the dataset
+		dataset.addSeries(oxygenSeries);
 
 		// Creating XYSeriesRenderer to customize oxygenSeries
 		XYSeriesRenderer oxygenRenderer = new XYSeriesRenderer();
@@ -90,9 +145,9 @@ public class Measures extends Activity {
 		// Creating a XYMultipleSeriesRenderer to customize the whole chart
 		XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
 		multiRenderer.setXLabels(0);
-		multiRenderer.setChartTitle("Heart beat and oxygen rate of client X");
+		multiRenderer.setChartTitle("Oxygen rate of client X");
 		multiRenderer.setXTitle("Year 2012");
-		multiRenderer.setYTitle("Heart beat and oxygen rate");
+		multiRenderer.setYTitle("Oxygen rate");
 		multiRenderer.setZoomButtonsVisible(true);
 		for(int i=0;i<x.length;i++){
 			multiRenderer.addXTextLabel(i+1, mMonth[i]);
@@ -101,13 +156,10 @@ public class Measures extends Activity {
 		// Adding heart beat renderer to multipleRenderer
 		// Note: The order of adding dataseries to dataset and renderers to multipleRenderer
 		// should be same
-		multiRenderer.addSeriesRenderer(heartBeatRenderer);
 		multiRenderer.addSeriesRenderer(oxygenRenderer);
-
 
 		// Creating an intent to plot line chart using dataset and multipleRenderer
 		Intent intent = ChartFactory.getLineChartIntent(getBaseContext(), dataset, multiRenderer);
-
 
 		// Start Activity
 		startActivity(intent);
@@ -118,6 +170,6 @@ public class Measures extends Activity {
 		return true;
 	}
 
-	
-	
+
+
 }
