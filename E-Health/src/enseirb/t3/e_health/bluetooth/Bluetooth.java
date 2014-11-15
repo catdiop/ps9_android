@@ -38,7 +38,7 @@ public class Bluetooth {
 		//IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 		//this.activity.registerReceiver(mReceiver, filter); // Don't forget to unregister during onDestroy
 		
-		boolean b=mBluetoothAdapter.startDiscovery();
+		mBluetoothAdapter.startDiscovery();
 		
 	}
 }

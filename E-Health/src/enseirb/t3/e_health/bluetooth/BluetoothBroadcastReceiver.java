@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 public class BluetoothBroadcastReceiver extends BroadcastReceiver {
@@ -19,9 +20,14 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
 	        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 	            // Get the BluetoothDevice object from the Intent
 	            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-				// Add the name and address to an array adapter to show in a ListView
-	           // mArrayAdapter.add(device);
-	            Toast.makeText(context, device.getName(), Toast.LENGTH_SHORT).show();
+	            if(device.getName().equals("Xperia Z2")) {
+	            	Log.d("msg1", "Arduino découvert....");
+	            	Thread ct=new ConnectThread(device);
+	            	
+	            	ct.start();
+	            
+	            }
+			
 	        }
 	    }
 }
