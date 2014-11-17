@@ -11,8 +11,8 @@ import android.util.Log;
 
 public class ConnectThread extends Thread {
 
-	private UUID MY_UUID;
-	private final BluetoothSocket mmSocket;
+	private  UUID SERIAL_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
+	private BluetoothSocket mmSocket = null;
 	private final BluetoothDevice mmDevice;
 	
 	public ConnectThread(BluetoothDevice device){
@@ -21,12 +21,14 @@ public class ConnectThread extends Thread {
 		mmDevice=device;
 		//get a BluetoothSocket to connect with the given BluetoothDevice
 		try{
-			Method m=mmDevice.getClass().getMethod("createInsecureRfcommSocket", new Class[] {int.class});
-			tmp=(BluetoothSocket)m.invoke(mmDevice, Integer.valueOf(1));
+//			mmSocket = device.createRfcommSocketToServiceRecord(SERIAL_UUID);
+//			Method m=mmDevice.getClass().getMethod("createInsecureRfcommSocket", new Class[] {int.class});
+//			tmp=(BluetoothSocket)m.invoke(mmDevice, Integer.valueOf(1));
+			mmSocket = (BluetoothSocket) device.getClass().getMethod("createInsecureRfcommSocket", new Class[] {int.class}).invoke(device,1);
 		}
 		catch(Exception e){
 		}
-		mmSocket=tmp;
+//		mmSocket=tmp;
 	}
 
 	@Override
@@ -34,7 +36,7 @@ public class ConnectThread extends Thread {
 		try{
 			Log.d("msg6",String.valueOf(BluetoothAdapter.getDefaultAdapter().isDiscovering()));
 			BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-			Log.d("msg6",String.valueOf(BluetoothAdapter.getDefaultAdapter().isDiscovering()));
+			Log.d("msg7",String.valueOf(BluetoothAdapter.getDefaultAdapter().isDiscovering()));
 			mmSocket.connect();
 			Log.d("msg3", "Connexion réussie...");
 		}
@@ -47,6 +49,8 @@ public class ConnectThread extends Thread {
 		} 
 		//Do work to manage the connection(in a separate thread)
 		//manageConnectedSocket(mmSocket);
+		ReadThread readthread = new ReadThread(mmSocket);
+		readthread.start();
 	}
 	
 	public void cancel(){

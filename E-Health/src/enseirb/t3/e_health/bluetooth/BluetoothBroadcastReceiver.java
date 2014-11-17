@@ -20,7 +20,7 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
 	        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 	            // Get the BluetoothDevice object from the Intent
 	            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-	            if(device.getName().equals("Xperia Z2")) {
+	            if(device.getName().equals("Cheikh")) {
 	            	Log.d("msg1", "Arduino découvert....");
 	            	Thread ct=new ConnectThread(device);
 	            	

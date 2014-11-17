@@ -5,8 +5,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import android.bluetooth.BluetoothSocket;
+import android.util.Log;
 
-public class ReadThread  {
+public class ReadThread extends Thread {
 
 	private final BluetoothSocket mmSocket;
 	private final InputStream mmInStream;
@@ -27,19 +28,31 @@ public class ReadThread  {
 	}
 	
 	public void run() {
-		byte[] buffer=new byte[1024]; //buffer store for the stream
+		byte[] buffer= new byte[1024]; //buffer store for the stream
 		int bytes;  //bytes returned from read
 		
 		//keep listening to the InputStream until an exceptions occurs
 		while(true){
-			try{
-				//read from InputStream
-				bytes=mmInStream.read(buffer);
-			} catch(IOException e){
-				break;
-			}
+			//read from InputStream
+				try {
+					bytes=mmInStream.read(buffer);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+//			write(buffer);
+//				mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
+//                .sendToTarget();
+			Log.d("buffer", buffer.toString());
 		}
 	}
+	
+	public void write(byte[] bytes) {
+        try {
+            mmOutStream.write(bytes);
+        } catch (IOException e) { }
+    }
+	
 }
 
 
