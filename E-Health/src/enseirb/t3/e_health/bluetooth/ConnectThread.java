@@ -1,6 +1,8 @@
 package enseirb.t3.e_health.bluetooth;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
@@ -16,7 +18,7 @@ public class ConnectThread extends Thread {
 	private final BluetoothDevice mmDevice;
 	
 	public ConnectThread(BluetoothDevice device){
-		Log.d("msg5", device.getName());
+		Log.d("device name", device.getName());
 		BluetoothSocket tmp=null;
 		mmDevice=device;
 		//get a BluetoothSocket to connect with the given BluetoothDevice
@@ -34,21 +36,16 @@ public class ConnectThread extends Thread {
 	@Override
 	public void run() {
 		try{
-			Log.d("msg6",String.valueOf(BluetoothAdapter.getDefaultAdapter().isDiscovering()));
 			BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-			Log.d("msg7",String.valueOf(BluetoothAdapter.getDefaultAdapter().isDiscovering()));
 			mmSocket.connect();
-			Log.d("msg3", "Connexion réussie...");
 		}
 		catch(IOException e){
 			try{
-				Log.d("msg5", "cause : "+e.getLocalizedMessage());
 				mmSocket.close();
 			}
 			catch(IOException closeException){return;}
 		} 
 		//Do work to manage the connection(in a separate thread)
-		//manageConnectedSocket(mmSocket);
 		ReadThread readthread = new ReadThread(mmSocket);
 		readthread.start();
 	}

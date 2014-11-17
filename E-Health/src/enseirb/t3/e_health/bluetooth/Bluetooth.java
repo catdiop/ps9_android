@@ -7,15 +7,14 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
 
 public class Bluetooth {
 	
 	private final static int REQUEST_CODE_ENABLE_BLUETOOTH = 0;
 	private Activity activity;
 	private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-	private Set<BluetoothDevice> pairedDevices;
-	private BroadcastReceiver mReceiver = null;
-    private Set<BluetoothDevice> mArrayAdapter;
 	
 	public Bluetooth (Activity activity) {
 		this.activity = activity;
@@ -29,16 +28,30 @@ public class Bluetooth {
 		}
 	}
 	
-	public void discoverDevices() {
+	public boolean queryingPairedDevices () {
+		Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+		// If there are paired devices
+		if (pairedDevices.size() > 0) {
+		    // Loop through paired devices
+		    for (BluetoothDevice device : pairedDevices) {
+		        // Add the name and address to an array adapter to show in a ListView
+		    	
+		    	if(device.getName().equals("Cheikh")) {
+	            	Log.d("msg", "Arduino déjà découvert....");
+	            	Thread ct=new ConnectThread(device);
+	            	
+	            	ct.start();
+	            	return true;
+	            
+	            }
+		    	Toast.makeText(activity, device.getName(), Toast.LENGTH_SHORT).show();
+		    	
+		    }
+		}
+	    return false;
+	}
 	
-		// Create a BroadcastReceiver for ACTION_FOUND
-		mReceiver = new BluetoothBroadcastReceiver();
-		
-		// Register the BroadcastReceiver
-		//IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-		//this.activity.registerReceiver(mReceiver, filter); // Don't forget to unregister during onDestroy
-		
+	public void discoverDevices() {		
 		mBluetoothAdapter.startDiscovery();
-		
 	}
 }

@@ -1,5 +1,6 @@
 package enseirb.t3.e_health.bluetooth;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,22 +10,16 @@ import android.util.Log;
 
 public class ReadThread extends Thread {
 
-	private final BluetoothSocket mmSocket;
-	private final InputStream mmInStream;
-	private final OutputStream mmOutStream;
+	private InputStream mmInStream;
+	private OutputStream mmOutStream;
 	
-	public ReadThread(BluetoothSocket socket) {
-		mmSocket=socket;
-		InputStream tmpIn=null;
-		OutputStream tmpOut=null;
+	public ReadThread(BluetoothSocket mmSocket) {
 		
 		try{
-			tmpIn=socket.getInputStream();
-			tmpOut=socket.getOutputStream();
-		}catch(IOException e) {}
-		
-		mmInStream=tmpIn;
-		mmOutStream=tmpOut;
+			mmInStream=mmSocket.getInputStream();
+			mmOutStream=mmSocket.getOutputStream();
+		}
+		catch(IOException e) {}
 	}
 	
 	public void run() {
@@ -36,11 +31,11 @@ public class ReadThread extends Thread {
 			//read from InputStream
 				try {
 					bytes=mmInStream.read(buffer);
+					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-//			write(buffer);
 //				mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
 //                .sendToTarget();
 			Log.d("buffer", buffer.toString());
