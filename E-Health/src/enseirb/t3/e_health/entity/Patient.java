@@ -1,27 +1,28 @@
 package enseirb.t3.e_health.entity;
 
-public class Patient {
+import java.util.ArrayList;
+import java.util.List;
+import enseirb.t3.e_health.entity.Data;
 
-    private int id;	
-    private User user;
+public class Patient extends User{
+
 	private Doctor doctor;
+	private List<Data> dataList;
 	
-	public int getId() {
-		return id;
+	public Patient(String username, String password) {
+		super(username, password);
 	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
+	
 	public Doctor getDoctor() {
 		return doctor;
 	}
+
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
+	}
+	public void newData (String name, String value, String date) {
+		dataList = new ArrayList<Data>();
+		Data data = new Data(name, value, date);
+		dataList.add(data);
 	}
 }

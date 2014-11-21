@@ -1,7 +1,5 @@
 package enseirb.t3.e_health.DAO;
 
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,10 +16,10 @@ public class UserDatabaseHandler extends SQLiteOpenHelper implements GenericData
 	// Database Name
 	private static final String DATABASE_NAME = "E-health";
 
-	// Beacons table name
+	// Users table name
 	private static final String TABLE_USERS = "Users";
 
-	// Beacons Table Columns names
+	// Users Table Columns names
 	private static final String KEY_ID = "id";
 	private static final String KEY_USERNAME = "username";
 	private static final String KEY_PASSWORD = "password";
@@ -33,9 +31,9 @@ public class UserDatabaseHandler extends SQLiteOpenHelper implements GenericData
 	// Creating Tables
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String CREATE_BEACONS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
+		String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USERS + "("
 				+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_USERNAME +  " TEXT," + KEY_PASSWORD +  " TEXT"+ ")";
-		db.execSQL(CREATE_BEACONS_TABLE);
+		db.execSQL(CREATE_USER_TABLE);
 	}
 
 	// Upgrading database
@@ -54,7 +52,7 @@ public class UserDatabaseHandler extends SQLiteOpenHelper implements GenericData
 
 		ContentValues values = new ContentValues();
 		values.put(KEY_USERNAME, object.getUsername()); 
-		values.put(KEY_PASSWORD, object.getPassword()); // Beacon Mac Address
+		values.put(KEY_PASSWORD, object.getPassword());
 
 		// Inserting Row
 		db.insert(TABLE_USERS, null, values);
@@ -71,9 +69,7 @@ public class UserDatabaseHandler extends SQLiteOpenHelper implements GenericData
 		if (cursor != null)
 			cursor.moveToFirst();
 
-		User user = new User();
-		user.setUsername(cursor.getString(0));
-		user.setPassword(cursor.getString(1));
+		User user = new User(cursor.getString(0), cursor.getString(1));
 		user.setId(id);
 
 		return user;
@@ -99,13 +95,19 @@ public class UserDatabaseHandler extends SQLiteOpenHelper implements GenericData
 				new String[] { Integer.toString(id)});
 		db.close();
 	}
+	
+	public void deleteAllUser() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_USERS, null, null);
+		db.close();
+	}
 
 	public boolean isUser(String username, String password){
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		String selectQuery = "SELECT * FROM " + TABLE_USERS + " LIMIT 1";
+		String selectQuery = "SELECT * FROM " + TABLE_USERS + " WHERE " + KEY_USERNAME + " = ?" + " AND " + KEY_PASSWORD + " = ?";
 
-		Cursor cursor = db.rawQuery(selectQuery, null);
+		Cursor cursor = db.rawQuery(selectQuery, new String [] {username, password});
 
 		return cursor.moveToFirst();	
 	}

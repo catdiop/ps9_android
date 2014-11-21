@@ -47,43 +47,43 @@ public class Accueil extends Activity {
 		});
         
         // Lorsque l'on fait un clic long on peut afficher une liste permettant d'autres actions (comme par exemple supprimer)
-        listAnimation.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, final View view,
-                final int position, long id) {
+//        listAnimation.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, final View view,
+//                final int position, long id) {
               
 				//Creating the instance of PopupMenu  
-				PopupMenu popup = new PopupMenu(getBaseContext(), view);  
+//				PopupMenu popup = new PopupMenu(getBaseContext(), view);  
 				//Inflating the Popup using xml file  
-				popup.getMenuInflater().inflate(R.menu.popup_accueil, popup.getMenu());
+//				popup.getMenuInflater().inflate(R.menu.popup_accueil, popup.getMenu());
 				
 				//registering popup with OnMenuItemClickListener  
-				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {  
-			        @Override
-					public boolean onMenuItemClick(MenuItem item) {
-			        	Log.d("db", Integer.toString(db.getBeaconsCount()));
-			        	final MyBeacon beacon = db.getBeacon(position+1);
-			        	switch(item.getItemId()){
-			        	case R.id.remove:
-			        		/*view.animate().setDuration(2000).alpha(0)
-			        		.withEndAction(new Runnable() {
-			        			@Override
-			                    public void run() {
-			        				beacons.remove(position);
-			        				db.deleteBeacon(beacon);
-			        				adapter.notifyDataSetChanged();
-			        				view.setAlpha(1);
-			                    }
-			                  });*/
-			        		break;
-			         	}  
-				        return true;  
-			        }
-				});
-				popup.show();
-				return true;
-            }
-        });
-
+//				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {  
+//			        @Override
+//					public boolean onMenuItemClick(MenuItem item) {
+//			        	Log.d("db", Integer.toString(db.getBeaconsCount()));
+//			        	final MyBeacon beacon = db.getBeacon(position+1);
+//			        	switch(item.getItemId()){
+//			        	case R.id.remove:
+//			        		/*view.animate().setDuration(2000).alpha(0)
+//			        		.withEndAction(new Runnable() {
+//			        			@Override
+//			                    public void run() {
+//			        				beacons.remove(position);
+//			        				db.deleteBeacon(beacon);
+//			        				adapter.notifyDataSetChanged();
+//			        				view.setAlpha(1);
+//			                    }
+//			                  });*/
+//			        		break;
+//			         	}  
+//				        return true;  
+//			        }
+//				});
+//				popup.show();
+//				return true;
+//            }
+//        });
+//
 	}
 }

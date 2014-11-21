@@ -2,7 +2,6 @@ package enseirb.t3.e_health.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,12 +11,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.project.e_health.R;
 
 import enseirb.t3.e_health.DAO.UserDatabaseHandler;
 import enseirb.t3.e_health.bluetooth.Bluetooth;
+import enseirb.t3.e_health.entity.Doctor;
+import enseirb.t3.e_health.entity.Patient;
 
 /**
  * @author catdiop
@@ -39,6 +39,13 @@ public class AuthentificationActivity extends Activity implements
 
 		Button connexion = (Button) findViewById(R.id.connexion);
 		connexion.setOnClickListener(this);
+		
+		UserDatabaseHandler userhandler = new UserDatabaseHandler(getBaseContext());
+		userhandler.deleteAllUser();
+		
+		Patient patient = new Patient("pikro", "1234");
+		userhandler.create(patient);
+		
 	}
 
 	@Override
@@ -55,6 +62,8 @@ public class AuthentificationActivity extends Activity implements
 			if (dbHandler.isUser(view1.getText().toString(), view2.getText()
 					.toString())) {
 				// on se connecte
+				Intent intent = new Intent(AuthentificationActivity.this, Measures.class);
+				startActivity(intent);
 			} else {
 				createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
 			}
@@ -64,17 +73,17 @@ public class AuthentificationActivity extends Activity implements
 		case R.id.bluetooth:
 			Bluetooth bluetooth = new Bluetooth(this);
 			bluetooth.enableBluetooth();
-			if (!bluetooth.queryingPairedDevices()) {
+//			if (!bluetooth.queryingPairedDevices()) {
 				// discover
 				bluetooth.discoverDevices();
-			}
+//			}
 			break;
 
 		// Si l'utilisateur veut accéder aux charts
 		case R.id.goToChart:
-			Intent intent = new Intent(AuthentificationActivity.this,
-					Measures.class);
-			startActivity(intent);
+//			Intent intent = new Intent(AuthentificationActivity.this,
+//					Measures.class);
+//			startActivity(intent);
 
 			break;
 		}
