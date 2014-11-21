@@ -77,7 +77,11 @@ public class Measures extends Activity {
 		btnHeartBeats.setOnClickListener(clickListener);
 		btnOxygen.setOnClickListener(clickListener);
 	}
-
+	
+	
+	// Charts' text size
+	float textSize = 22;
+	float titleTextSize = 24;
 	// Heart beats chart
 	private void openChartHeartBeats(){
 		
@@ -119,9 +123,12 @@ public class Measures extends Activity {
 		XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
 		multiRenderer.setXLabels(0);
 		multiRenderer.setChartTitle("Heart beats of client X");
-		multiRenderer.setXTitle("Year 2012");
+		multiRenderer.setXTitle("Arduino timestamps");
 		multiRenderer.setYTitle("Heart beats");
 		multiRenderer.setZoomButtonsVisible(true);
+		multiRenderer.setAxisTitleTextSize(textSize);
+		multiRenderer.setLabelsTextSize(textSize);
+		multiRenderer.setChartTitleTextSize(titleTextSize);
 		for(int i=0;i<x.length;i++){
 			multiRenderer.addXTextLabel(i+1, dates[i]);
 		}
@@ -173,6 +180,9 @@ public class Measures extends Activity {
 		multiRenderer.setXTitle("Year 2012");
 		multiRenderer.setYTitle("Oxygen rate");
 		multiRenderer.setZoomButtonsVisible(true);
+		multiRenderer.setAxisTitleTextSize(textSize);
+		multiRenderer.setLabelsTextSize(textSize);
+		multiRenderer.setChartTitleTextSize(titleTextSize);
 		for(int i=0;i<x.length;i++){
 			multiRenderer.addXTextLabel(i+1, mMonth[i]);
 		}
