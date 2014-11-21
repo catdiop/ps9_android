@@ -6,6 +6,12 @@ public class Data {
 	private String value;
 	private String date;
 	
+	public Data() {
+		dataname = "";
+		value = "";
+		date = "";
+	}
+	
 	public Data (String dataname, String value, String date) {
 		this.dataname = dataname;
 		this.value = value;

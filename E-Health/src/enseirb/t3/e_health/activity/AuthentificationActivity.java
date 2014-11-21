@@ -16,7 +16,7 @@ import com.project.e_health.R;
 
 import enseirb.t3.e_health.DAO.UserDatabaseHandler;
 import enseirb.t3.e_health.bluetooth.Bluetooth;
-import enseirb.t3.e_health.entity.Doctor;
+import enseirb.t3.e_health.entity.ArduinoData;
 import enseirb.t3.e_health.entity.Patient;
 
 /**
@@ -45,6 +45,22 @@ public class AuthentificationActivity extends Activity implements
 		
 		Patient patient = new Patient("pikro", "1234");
 		userhandler.create(patient);
+		
+//		// TESTS
+//		ArduinoData aData = new ArduinoData("DATA190;180|B|78;183|A|9;");
+//		String aDataStr = aData.getArduinoData();
+//
+//		// Split data
+//		String[] chunks = aData.getChunks(aDataStr);
+//
+//		System.out.println("chunk 0 :" + chunks[0]);
+//		System.out.println("chunk 1 :" + chunks[1]);
+//		System.out.println("chunk 2 :" + chunks[2]);
+//
+//		// Get data timestamp
+//		int dataTimestamp = aData.getDataTimestamp(chunks[0]);
+//
+//		System.out.println("data timestamp :" + dataTimestamp);
 		
 	}
 
