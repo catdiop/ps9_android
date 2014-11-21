@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -40,27 +41,23 @@ public class AuthentificationActivity extends Activity implements
 		Button connexion = (Button) findViewById(R.id.connexion);
 		connexion.setOnClickListener(this);
 		
-		UserDatabaseHandler userhandler = new UserDatabaseHandler(getBaseContext());
+		UserDatabaseHandler userhandler = new UserDatabaseHandler(getApplicationContext());
 		userhandler.deleteAllUser();
 		
 		Patient patient = new Patient("pikro", "1234");
 		userhandler.create(patient);
 		
-//		// TESTS
-//		ArduinoData aData = new ArduinoData("DATA190;180|B|78;183|A|9;");
-//		String aDataStr = aData.getArduinoData();
-//
-//		// Split data
-//		String[] chunks = aData.getChunks(aDataStr);
-//
-//		System.out.println("chunk 0 :" + chunks[0]);
-//		System.out.println("chunk 1 :" + chunks[1]);
-//		System.out.println("chunk 2 :" + chunks[2]);
-//
-//		// Get data timestamp
-//		int dataTimestamp = aData.getDataTimestamp(chunks[0]);
-//
-//		System.out.println("data timestamp :" + dataTimestamp);
+		// TESTS
+		ArduinoData aData = new ArduinoData("DATA190;180|B|78;183|B|82;184|B|85;186|B|77;188|B|80;");
+		
+		String aDataStr = aData.getArduinoData();
+
+		// Split data
+		String[] chunks = aData.getChunks(aDataStr);
+		aData.stockData(chunks, userhandler);
+
+		// Get data timestamp
+		String date = aData.getDataTimestamp(chunks[0]);
 		
 	}
 
@@ -97,9 +94,9 @@ public class AuthentificationActivity extends Activity implements
 
 		// Si l'utilisateur veut accéder aux charts
 		case R.id.goToChart:
-//			Intent intent = new Intent(AuthentificationActivity.this,
-//					Measures.class);
-//			startActivity(intent);
+			Intent intent = new Intent(AuthentificationActivity.this,
+					Measures.class);
+			startActivity(intent);
 
 			break;
 		}

@@ -1,5 +1,8 @@
 package enseirb.t3.e_health.activity;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.PointStyle;
@@ -19,20 +22,30 @@ import android.widget.Button;
 
 import com.project.e_health.R;
 
+import enseirb.t3.e_health.DAO.UserDatabaseHandler;
+import enseirb.t3.e_health.entity.Data;
+import enseirb.t3.e_health.entity.Patient;
+
 public class Measures extends Activity {
 
 	private GraphicalView mChart;
 
+	UserDatabaseHandler dbHandler; 
+	
 	private String[] mMonth = new String[] {
 			"Jan", "Feb" , "Mar", "Apr", "May", "Jun",
 			"Jul", "Aug" , "Sep", "Oct", "Nov", "Dec"
 	};
 
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_measures);
-
+		
+		dbHandler = new UserDatabaseHandler(this.getApplicationContext());
+		
 		// Getting references to buttons
 		Button btnHeartBeats = (Button) findViewById(R.id.btn_heartBeats);
 		Button btnOxygen = (Button) findViewById(R.id.btn_oxygen);
@@ -67,14 +80,25 @@ public class Measures extends Activity {
 
 	// Heart beats chart
 	private void openChartHeartBeats(){
-		int[] x = { 1,2,3,4,5,6,7,8 };
-		int[] heartBeat = { 80, 81, 79, 80, 90, 87, 91, 92};
-
+		
+		List<Data> datas= dbHandler.getDatas("B");
+		String[] dates = new String[datas.size()];
+		int[] values = new int[datas.size()];
+		int[] x = new int[datas.size()];
+		Data dataTmp = new Data();
+		
+		for (int i = 0; i<datas.size() ; i++) {
+			dataTmp = datas.get(i);
+			dates[i] = dataTmp.getDate();
+			values[i] = Integer.parseInt(dataTmp.getValue());
+			x[i] = i;
+		}
+		
 		// Creating an  XYSeries for heart beat
 		XYSeries heartBeatSeries = new XYSeries("Heartbeats");
 		// Adding data to heartBeatSeries
 		for(int i=0;i<x.length;i++){
-			heartBeatSeries.add(x[i], heartBeat[i]);
+			heartBeatSeries.add(x[i], values[i]);
 		}
 
 		// Creating a dataset to hold each series
@@ -99,7 +123,7 @@ public class Measures extends Activity {
 		multiRenderer.setYTitle("Heart beats");
 		multiRenderer.setZoomButtonsVisible(true);
 		for(int i=0;i<x.length;i++){
-			multiRenderer.addXTextLabel(i+1, mMonth[i]);
+			multiRenderer.addXTextLabel(i+1, dates[i]);
 		}
 
 		// Adding heart beat renderer to multipleRenderer

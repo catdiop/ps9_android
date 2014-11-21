@@ -1,10 +1,15 @@
 package enseirb.t3.e_health.DAO;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import enseirb.t3.e_health.entity.Data;
 import enseirb.t3.e_health.entity.User;
 
 public class UserDatabaseHandler extends SQLiteOpenHelper implements GenericDatabaseHandler<User>{
@@ -18,11 +23,16 @@ public class UserDatabaseHandler extends SQLiteOpenHelper implements GenericData
 
 	// Users table name
 	private static final String TABLE_USERS = "Users";
+	// Data table name
+	private static final String TABLE_DATA = "Data";
 
-	// Users Table Columns names
+	// Table Columns names
 	private static final String KEY_ID = "id";
 	private static final String KEY_USERNAME = "username";
 	private static final String KEY_PASSWORD = "password";
+	private static final String KEY_DATANAME = "dataname";
+	private static final String KEY_VALUE = "value";
+	private static final String KEY_DATE = "date";
 
 	public UserDatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -34,6 +44,10 @@ public class UserDatabaseHandler extends SQLiteOpenHelper implements GenericData
 		String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USERS + "("
 				+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_USERNAME +  " TEXT," + KEY_PASSWORD +  " TEXT"+ ")";
 		db.execSQL(CREATE_USER_TABLE);
+		
+		String CREATE_DATA_TABLE = "CREATE TABLE " + TABLE_DATA + "("
+				+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATANAME +  " TEXT," + KEY_VALUE +  " TEXT," + KEY_DATE + " TEXT " + ")";
+		db.execSQL(CREATE_DATA_TABLE);
 	}
 
 	// Upgrading database
@@ -41,6 +55,7 @@ public class UserDatabaseHandler extends SQLiteOpenHelper implements GenericData
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// Drop older table if existed
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATA);
 
 		// Create tables again
 		onCreate(db);
@@ -56,6 +71,19 @@ public class UserDatabaseHandler extends SQLiteOpenHelper implements GenericData
 
 		// Inserting Row
 		db.insert(TABLE_USERS, null, values);
+		db.close(); // Closing database connection
+	}
+	
+	public void create(Data object) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_DATANAME, object.getDataname()); 
+		values.put(KEY_VALUE, object.getValue());
+		values.put(KEY_DATE, object.getDate());
+
+		// Inserting Row
+		db.insert(TABLE_DATA, null, values);
 		db.close(); // Closing database connection
 	}
 
@@ -75,6 +103,21 @@ public class UserDatabaseHandler extends SQLiteOpenHelper implements GenericData
 		return user;
 	}
 
+	public Data retriveData(int id) {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		Cursor cursor = db.query(TABLE_DATA, new String[] { KEY_DATANAME,
+				KEY_VALUE, KEY_DATE}, KEY_ID + "=?",
+				new String[] { Integer.toString(id) }, null, null, null, null);
+		if (cursor != null)
+			cursor.moveToFirst();
+
+		Data data = new Data(cursor.getString(0), cursor.getString(1), cursor.getString(2));
+		data.setId(id);
+
+		return data;
+	}
+	
 	@Override
 	public int update(User object) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -87,6 +130,19 @@ public class UserDatabaseHandler extends SQLiteOpenHelper implements GenericData
 		return db.update(TABLE_USERS, values, KEY_ID + " = ?",
 				new String[] { Integer.toString(object.getId()) });
 	}
+	
+	public int update(Data object) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_DATANAME, object.getDataname());
+		values.put(KEY_VALUE, object.getValue());
+		values.put(KEY_DATE, object.getDate());
+
+		// updating row
+		return db.update(TABLE_DATA, values, KEY_ID + " = ?",
+				new String[] { Integer.toString(object.getId()) });
+	}
 
 	@Override
 	public void delete(int id) {
@@ -96,6 +152,13 @@ public class UserDatabaseHandler extends SQLiteOpenHelper implements GenericData
 		db.close();
 	}
 	
+	public void deleteData(int id) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_DATA, KEY_ID + " = ?",
+				new String[] { Integer.toString(id)});
+		db.close();
+	}
+
 	public void deleteAllUser() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_USERS, null, null);
@@ -108,7 +171,35 @@ public class UserDatabaseHandler extends SQLiteOpenHelper implements GenericData
 		String selectQuery = "SELECT * FROM " + TABLE_USERS + " WHERE " + KEY_USERNAME + " = ?" + " AND " + KEY_PASSWORD + " = ?";
 
 		Cursor cursor = db.rawQuery(selectQuery, new String [] {username, password});
-
+		db.close();
 		return cursor.moveToFirst();	
+	}
+	
+	public void deleteAllData() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_DATA, null, null);
+		db.close();
+	}
+	
+	public List<Data> getDatas(String dataname) {
+		
+		Data data = new Data();
+		List<Data> datas=new LinkedList<Data>();
+		
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		/*Cursor cursor = db.query(TABLE_DATA, new String[] { KEY_DATANAME,
+				KEY_VALUE, KEY_DATE}, KEY_DATANAME + "=?",
+				new String[] {dataname}, null, null, null, null);*/
+		Cursor cursor=db.rawQuery("select " + KEY_DATANAME +","+KEY_VALUE+","+KEY_DATE + " from "+ TABLE_DATA +" where "+  KEY_DATANAME +"= ?", new String[]{"B"});
+		
+		while (cursor.moveToNext()) {
+			
+            data = new Data(cursor.getString(0), cursor.getString(1), cursor.getString(2));
+            datas.add(data);
+
+		}
+		db.close();
+		return datas;
 	}
 }
