@@ -30,7 +30,7 @@ public class Measures extends Activity {
 
 	private GraphicalView mChart;
 
-	UserDatabaseHandler dbHandler; 
+	DatabaseHandler dbHandler; 
 	
 	private String[] mMonth = new String[] {
 			"Jan", "Feb" , "Mar", "Apr", "May", "Jun",
@@ -44,7 +44,7 @@ public class Measures extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_measures);
 		
-		dbHandler = new UserDatabaseHandler(this.getApplicationContext());
+		dbHandler = new DatabaseHandler(this.getApplicationContext());
 		
 		// Getting references to buttons
 		Button btnHeartBeats = (Button) findViewById(R.id.btn_heartBeats);
@@ -148,52 +148,62 @@ public class Measures extends Activity {
 
 	// Oxygen chart
 	private void openChartOxygen(){
-		int[] x = { 1,2,3,4,5,6,7,8 };
-		int[] oxygen = {50, 51, 51, 50, 40, 39, 40, 37};
-
+		List<Data> datas= dbHandler.getDatas("O");
+		String[] dates = new String[datas.size()];
+		int[] values = new int[datas.size()];
+		int[] x = new int[datas.size()];
+		Data dataTmp = new Data();
+		
+		for (int i = 0; i<datas.size() ; i++) {
+			dataTmp = datas.get(i);
+			dates[i] = dataTmp.getDate();
+			values[i] = Integer.parseInt(dataTmp.getValue());
+			x[i] = i;
+		}
+		
 		// Creating an  XYSeries for heart beat
-		XYSeries oxygenSeries = new XYSeries("Oxygen");
-
-		// Adding data to oxygenSeries
+		XYSeries heartBeatSeries = new XYSeries("Oxygen");
+		// Adding data to heartBeatSeries
 		for(int i=0;i<x.length;i++){
-			oxygenSeries.add(x[i], oxygen[i]);
+			heartBeatSeries.add(x[i], values[i]);
 		}
 
 		// Creating a dataset to hold each series
 		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 
-		// Adding oxygenSeries to the dataset
-		dataset.addSeries(oxygenSeries);
+		// Adding heartBeatSeries to the dataset
+		dataset.addSeries(heartBeatSeries);
 
-		// Creating XYSeriesRenderer to customize oxygenSeries
-		XYSeriesRenderer oxygenRenderer = new XYSeriesRenderer();
-		oxygenRenderer.setColor(Color.GREEN);
-		oxygenRenderer.setPointStyle(PointStyle.CIRCLE);
-		oxygenRenderer.setFillPoints(true);
-		oxygenRenderer.setLineWidth(2);
-		oxygenRenderer.setDisplayChartValues(true);
+		// Creating XYSeriesRenderer to customize heartBeatSeries
+		XYSeriesRenderer heartBeatRenderer = new XYSeriesRenderer();
+		heartBeatRenderer.setColor(Color.GREEN);
+		heartBeatRenderer.setPointStyle(PointStyle.CIRCLE);
+		heartBeatRenderer.setFillPoints(true);
+		heartBeatRenderer.setLineWidth(2);
+		heartBeatRenderer.setDisplayChartValues(true);
 
 		// Creating a XYMultipleSeriesRenderer to customize the whole chart
 		XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
 		multiRenderer.setXLabels(0);
 		multiRenderer.setChartTitle("Oxygen rate of client X");
-		multiRenderer.setXTitle("Year 2012");
-		multiRenderer.setYTitle("Oxygen rate");
+		multiRenderer.setXTitle("Arduino timestamps");
+		multiRenderer.setYTitle("Heart beats");
 		multiRenderer.setZoomButtonsVisible(true);
 		multiRenderer.setAxisTitleTextSize(textSize);
 		multiRenderer.setLabelsTextSize(textSize);
 		multiRenderer.setChartTitleTextSize(titleTextSize);
 		for(int i=0;i<x.length;i++){
-			multiRenderer.addXTextLabel(i+1, mMonth[i]);
+			multiRenderer.addXTextLabel(i+1, dates[i]);
 		}
 
 		// Adding heart beat renderer to multipleRenderer
 		// Note: The order of adding dataseries to dataset and renderers to multipleRenderer
 		// should be same
-		multiRenderer.addSeriesRenderer(oxygenRenderer);
+		multiRenderer.addSeriesRenderer(heartBeatRenderer);
 
 		// Creating an intent to plot line chart using dataset and multipleRenderer
 		Intent intent = ChartFactory.getLineChartIntent(getBaseContext(), dataset, multiRenderer);
+
 
 		// Start Activity
 		startActivity(intent);
