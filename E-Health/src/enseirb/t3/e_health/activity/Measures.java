@@ -1,6 +1,5 @@
 package enseirb.t3.e_health.activity;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.achartengine.ChartFactory;
@@ -22,9 +21,8 @@ import android.widget.Button;
 
 import com.project.e_health.R;
 
-import enseirb.t3.e_health.DAO.UserDatabaseHandler;
+import enseirb.t3.e_health.DAO.DatabaseHandler;
 import enseirb.t3.e_health.entity.Data;
-import enseirb.t3.e_health.entity.Patient;
 
 public class Measures extends Activity {
 
@@ -85,7 +83,7 @@ public class Measures extends Activity {
 	// Heart beats chart
 	private void openChartHeartBeats(){
 		
-		List<Data> datas= dbHandler.getDatas("B");
+		List<Data> datas= dbHandler.retrieveDataList("B");
 		String[] dates = new String[datas.size()];
 		int[] values = new int[datas.size()];
 		int[] x = new int[datas.size()];
@@ -148,7 +146,7 @@ public class Measures extends Activity {
 
 	// Oxygen chart
 	private void openChartOxygen(){
-		List<Data> datas= dbHandler.getDatas("O");
+		List<Data> datas= dbHandler.retrieveDataList("O");
 		String[] dates = new String[datas.size()];
 		int[] values = new int[datas.size()];
 		int[] x = new int[datas.size()];

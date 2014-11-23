@@ -5,12 +5,12 @@ import enseirb.t3.e_health.entity.Data;
 
 public interface GenericDatabaseHandler<T> {
 
-	public void create(T object);
+	public void createUser(T object);
 	
-	public T retrive(int id);
+	public T retrieveUser(int id);
 	
-	public int update(T object);
+	public int updateUser(T object);
 	
-	public void delete(int id);
+	public void deleteUser(int id);
 
 }

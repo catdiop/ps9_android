@@ -1,13 +1,15 @@
 package enseirb.t3.e_health.activity;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-//import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -15,10 +17,13 @@ import android.widget.TextView;
 
 import com.project.e_health.R;
 
-//import enseirb.t3.e_health.DAO.UserDatabaseHandler;
+import enseirb.t3.e_health.DAO.DatabaseHandler;
 import enseirb.t3.e_health.bluetooth.Bluetooth;
 import enseirb.t3.e_health.entity.ArduinoData;
+import enseirb.t3.e_health.entity.Data;
 import enseirb.t3.e_health.entity.Patient;
+//import android.database.sqlite.SQLiteOpenHelper;
+//import enseirb.t3.e_health.DAO.UserDatabaseHandler;
 
 /**
  * @author catdiop
@@ -42,12 +47,13 @@ public class AuthentificationActivity extends Activity implements
 		connexion.setOnClickListener(this);
 		
 		DatabaseHandler dbHandler = new DatabaseHandler(getApplicationContext());
+		dbHandler.deleteAllData();
 		dbHandler.deleteAllUser();
 		
 		Patient patient = new Patient("pikro", "1234");
-		dbHandler.create(patient);
+		dbHandler.createUser(patient);
 		
-		// TESTS
+		// TESTS Mesures
 		ArduinoData aData = new ArduinoData("DATA190;180|B|78;180|O|78;183|B|82;184|B|85;184|O|85;186|B|77;188|B|80;188|O|80;");
 		
 		String aDataStr = aData.getArduinoData();
@@ -55,9 +61,15 @@ public class AuthentificationActivity extends Activity implements
 		// Split data
 		String[] chunks = aData.getChunks(aDataStr);
 		aData.stockData(chunks, dbHandler);
+		
+		//tests récuperation
+		List<Data> DataList = dbHandler.retrieveDataList("O");
+		Log.d("data", DataList.get(1).getDataname());
+		Log.d("data", DataList.get(1).getValue());
+		Log.d("data", DataList.get(1).getDate());
 
 		// Get data timestamp
-		String date = aData.getDataTimestamp(chunks[0]);
+//		String date = aData.getDataTimestamp(chunks[0]);
 		
 	}
 
