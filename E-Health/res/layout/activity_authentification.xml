@@ -4,56 +4,48 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#ffffff" >
-    
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_centerInParent="true"
-        android:hint="@string/username"
-        android:paddingBottom="5dp"
-        />
-    
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:layout_below="@id/username"
-        android:layout_centerHorizontal="true"
-        android:hint="@string/password"
-        />
-    
-    <Button 
-        android:id="@+id/connexion"
-        android:layout_width="160dp" 
-        android:layout_height="wrap_content"
-        android:background="@drawable/connect_button"
-        android:layout_below="@id/password"
-        android:layout_alignRight="@id/password"
-        android:text="@string/connect"
-        android:layout_marginTop="15dp"
-        />
 
     <Button
         android:id="@+id/bluetooth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/connexion"
-        android:layout_marginRight="36dp"
+        android:layout_alignParentLeft="true"
         android:text="@string/button_bluetooth" />
-    
-    <Button 
-        android:id="@+id/goToChart"
-        android:layout_width="160dp" 
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/password"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="54dp"
+        android:ems="10"
+        android:hint="@string/username"
+        android:inputType="text"
+        android:paddingBottom="5dp" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/connexion"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/connect_button"
-        android:layout_alignLeft="@id/connexion"
-        android:text="@string/goToChart"
-        android:layout_marginTop="15dp"
-        android:onClick="onClick"
-        />
+        android:text="@string/connect" />
     
 </RelativeLayout>

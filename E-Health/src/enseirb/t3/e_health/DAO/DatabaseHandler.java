@@ -122,7 +122,6 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		String selectQuery = "SELECT * FROM " + TABLE_USERS + " WHERE " + KEY_USERNAME + " = ?" + " AND " + KEY_PASSWORD + " = ?";
 
 		Cursor cursor = db.rawQuery(selectQuery, new String [] {username, password});
-		db.close();
 		return cursor.moveToFirst();	
 	}
 

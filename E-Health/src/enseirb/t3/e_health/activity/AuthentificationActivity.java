@@ -54,7 +54,7 @@ public class AuthentificationActivity extends Activity implements
 		dbHandler.createUser(patient);
 		
 		// TESTS Mesures
-		ArduinoData aData = new ArduinoData("DATA190;180|B|78;180|O|78;183|B|82;184|B|85;184|O|85;186|B|77;188|B|80;188|O|80;");
+		ArduinoData aData = new ArduinoData("DATA190;180|B|85;181|B|90;182|B|105;183|B|100;184|B|95;185|B|98;186|B|95;187|B|92;");
 		
 		String aDataStr = aData.getArduinoData();
 
@@ -63,7 +63,7 @@ public class AuthentificationActivity extends Activity implements
 		aData.stockData(chunks, dbHandler);
 		
 		//tests récuperation
-		List<Data> DataList = dbHandler.retrieveDataList("O");
+		List<Data> DataList = dbHandler.retrieveDataList("B");
 		Log.d("data", DataList.get(1).getDataname());
 		Log.d("data", DataList.get(1).getValue());
 		Log.d("data", DataList.get(1).getDate());
@@ -98,18 +98,10 @@ public class AuthentificationActivity extends Activity implements
 		case R.id.bluetooth:
 			Bluetooth bluetooth = new Bluetooth(this);
 			bluetooth.enableBluetooth();
-//			if (!bluetooth.queryingPairedDevices()) {
+			if (!bluetooth.queryingPairedDevices()) {
 				// discover
 				bluetooth.discoverDevices();
-//			}
-			break;
-
-		// Si l'utilisateur veut accÃ©der aux charts
-		case R.id.goToChart:
-			Intent intent = new Intent(AuthentificationActivity.this,
-					Measures.class);
-			startActivity(intent);
-
+			}
 			break;
 		}
 	}
@@ -128,21 +120,4 @@ public class AuthentificationActivity extends Activity implements
 		});
 		dialog.show();
 	}
-
-	Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			byte[] writeBuf = (byte[]) msg.obj;
-			int begin = (int) msg.arg1;
-			int end = (int) msg.arg2;
-
-			switch (msg.what) {
-			case 1:
-				String writeMessage = new String(writeBuf);
-				writeMessage = writeMessage.substring(begin, end);
-				break;
-			}
-		}
-	};
-
 }

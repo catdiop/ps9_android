@@ -114,15 +114,15 @@ public class Measures extends Activity {
 		heartBeatRenderer.setColor(Color.RED);
 		heartBeatRenderer.setPointStyle(PointStyle.CIRCLE);
 		heartBeatRenderer.setFillPoints(true);
-		heartBeatRenderer.setLineWidth(2);
+		heartBeatRenderer.setLineWidth(3);
 		heartBeatRenderer.setDisplayChartValues(true);
 
 		// Creating a XYMultipleSeriesRenderer to customize the whole chart
 		XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
 		multiRenderer.setXLabels(0);
-		multiRenderer.setChartTitle("Heart beats of client X");
+		multiRenderer.setChartTitle("Heart Beats");
 		multiRenderer.setXTitle("Arduino timestamps");
-		multiRenderer.setYTitle("Heart beats");
+		multiRenderer.setYTitle("Heart Beats");
 		multiRenderer.setZoomButtonsVisible(true);
 		multiRenderer.setAxisTitleTextSize(textSize);
 		multiRenderer.setLabelsTextSize(textSize);

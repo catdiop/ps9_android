@@ -1,9 +1,6 @@
 package enseirb.t3.e_health.bluetooth;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
@@ -37,7 +34,12 @@ public class ConnectThread extends Thread {
 	public void run() {
 		try{
 			BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-			mmSocket.connect();
+			if (!mmSocket.isConnected()) {
+				mmSocket.connect();
+				Log.d("Status", "Arduino connecté");
+			}
+			else
+				Log.d("Status", "Arduino déjà connecté");
 		}
 		catch(IOException e){
 			try{
