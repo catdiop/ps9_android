@@ -7,8 +7,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,8 +20,6 @@ import enseirb.t3.e_health.bluetooth.Bluetooth;
 import enseirb.t3.e_health.entity.ArduinoData;
 import enseirb.t3.e_health.entity.Data;
 import enseirb.t3.e_health.entity.Patient;
-//import android.database.sqlite.SQLiteOpenHelper;
-//import enseirb.t3.e_health.DAO.UserDatabaseHandler;
 
 /**
  * @author catdiop
@@ -54,7 +50,7 @@ public class AuthentificationActivity extends Activity implements
 		dbHandler.createUser(patient);
 		
 		// TESTS Mesures
-		ArduinoData aData = new ArduinoData("DATA190;180|B|85;181|B|90;182|B|105;183|B|100;184|B|95;185|B|98;186|B|95;187|B|92;");
+		ArduinoData aData = new ArduinoData("DATA190;180|B|85;180|O|95;181|B|90;181|O|92;182|B|105;183|B|100;183|O|91;184|B|95;185|B|98;187|B|95;189|B|92;");
 		
 		String aDataStr = aData.getArduinoData();
 
@@ -87,7 +83,7 @@ public class AuthentificationActivity extends Activity implements
 			if (dbHandler.isUser(view1.getText().toString(), view2.getText()
 					.toString())) {
 				// on se connecte
-				Intent intent = new Intent(AuthentificationActivity.this, Measures.class);
+				Intent intent = new Intent(AuthentificationActivity.this, Graph.class);
 				startActivity(intent);
 			} else {
 				createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
@@ -103,6 +99,13 @@ public class AuthentificationActivity extends Activity implements
 				bluetooth.discoverDevices();
 			}
 			break;
+//		case R.id.button1:
+//			Bluetooth bluetooth = new Bluetooth(this);
+//			bluetooth.enableBluetooth();
+//			if (!bluetooth.queryingPairedDevices()) {
+//				// discover
+//				bluetooth.discoverDevices();
+//			}
 		}
 	}
 
