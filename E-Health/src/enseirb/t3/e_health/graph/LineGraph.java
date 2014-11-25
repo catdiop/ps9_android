@@ -1,5 +1,7 @@
 package enseirb.t3.e_health.graph;
 
+import java.util.List;
+
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.PointStyle;
@@ -10,6 +12,7 @@ import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.content.Context;
 import android.graphics.Color;
+import enseirb.t3.e_health.entity.Data;
 
 public class LineGraph {
 	
@@ -23,9 +26,28 @@ public class LineGraph {
 	
 	private float textSize = 22;
 	private float titleTextSize = 24;
+	private int window = 10;
 	
-	public LineGraph(String dataname) {
-		dataset = new TimeSeries(dataname);
+	public LineGraph(int dataname, List<Data> datas) {
+		String xTitle = "Time";
+		String yTitle = null;
+		String chartTitle = null;
+		
+		switch (dataname) {
+		case 1:
+			yTitle = "Bpm";
+			chartTitle = "Heart Beats";
+			break;
+		case 2:
+			yTitle = "%";
+			chartTitle = "Oxygen Rate";
+			break;
+		default :
+			break;
+		}
+		
+		dataset = new TimeSeries(chartTitle);
+
 		mDataset.addSeries(dataset);
 		
 		renderer.setColor(Color.RED);
@@ -34,10 +56,10 @@ public class LineGraph {
 		renderer.setLineWidth(3);
 		renderer.setDisplayChartValues(true);
 		
-		mRenderer.setXLabels(0);
-		mRenderer.setChartTitle("Oxygen rate of client X");
-		mRenderer.setXTitle("Arduino timestamps");
-		mRenderer.setYTitle("Heart beats");
+		mRenderer.setXLabels(window);
+		mRenderer.setChartTitle(chartTitle);
+		mRenderer.setXTitle(xTitle);
+		mRenderer.setYTitle(yTitle);
 		mRenderer.setZoomButtonsVisible(true);
 		mRenderer.setAxisTitleTextSize(textSize);
 		mRenderer.setLabelsTextSize(textSize);
@@ -61,6 +83,10 @@ public class LineGraph {
 	
 	public void addNewPoint(Point p) {
 		dataset.add(p.getX(), p.getY());
+	}
+	
+	public void removePoint(int i) {
+		dataset.remove(i);
 	}
 
 }

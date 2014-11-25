@@ -2,23 +2,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
- 
+
     <Button
         android:id="@+id/btn_heartBeats"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="235dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:text="@string/str_btn_heartBeats"
         tools:context=".MainActivity" />
-    
+
     <Button
         android:id="@+id/btn_oxygen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_heartBeats"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="235dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/btn_heartBeats"
         android:text="@string/str_btn_oxygen"
         tools:context=".MainActivity" />
  

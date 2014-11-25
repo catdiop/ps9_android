@@ -27,9 +27,7 @@ import enseirb.t3.e_health.entity.Patient;
  */
 public class AuthentificationActivity extends Activity implements
 		OnClickListener {
-
-	private final static int REQUEST_ENABLE_BT = 0;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,7 +48,7 @@ public class AuthentificationActivity extends Activity implements
 		dbHandler.createUser(patient);
 		
 		// TESTS Mesures
-		ArduinoData aData = new ArduinoData("DATA190;180|B|85;180|O|95;181|B|90;181|O|92;182|B|105;183|B|100;183|O|91;184|B|95;185|B|98;187|B|95;189|B|92;");
+		ArduinoData aData = new ArduinoData("DATA190;180|B|85;181|B|90;182|B|105;183|B|100;184|B|95;185|B|98;186|B|95;187|B|95;188|B|95;189|B|92;190|B|85;191|B|90;192|B|105;193|B|100;194|B|95;195|B|98;196|B|95;197|B|95;198|B|95;199|B|92");
 		
 		String aDataStr = aData.getArduinoData();
 

@@ -4,44 +4,36 @@ import java.util.List;
 
 import org.achartengine.GraphicalView;
 
-import enseirb.t3.e_health.DAO.DatabaseHandler;
 import enseirb.t3.e_health.entity.Data;
 
 public class GraphThread extends Thread {
-	private DatabaseHandler dbHandler;
+	private List<Data> datas;
 	private LineGraph line;
 	private GraphicalView view;
-	private String dataname;
 	
-	public GraphThread(DatabaseHandler dbHandler, GraphicalView view, LineGraph line, String dataname) {
-		this.dbHandler = dbHandler;
+	public GraphThread(List<Data> datas, GraphicalView view, LineGraph line) {
+		this.datas = datas;
 		this.view = view;
 		this.line = line;
-		this.dataname = dataname;
 	}
 	
 	public void run() {
-		int i = 0;
-		while (true) {
+		int j = 0;
+		for (int i = 0; i < datas.size(); i++) {
 			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			List<Data> datas= dbHandler.retrieveDataList(dataname);
-			Data dataTmp = new Data();
-			try {
-				dataTmp = datas.get(i);
+				Thread.sleep(1000);
+				Point p = new Point(Integer.parseInt(datas.get(i).getDate()), Integer.parseInt(datas.get(i).getValue()));
+				line.addNewPoint(p);
+				j++;
+				if (j > 9) {
+					line.removePoint(j - 10);
+					j--;
+				}
 			}
 			catch (Exception e) {
 				break;
 			}
-
-			Point p = new Point(Integer.parseInt(dataTmp.getDate()), Integer.parseInt(dataTmp.getValue()));
-			line.addNewPoint(p);
 			view.repaint();
-			i++;
 		}
 	}
 

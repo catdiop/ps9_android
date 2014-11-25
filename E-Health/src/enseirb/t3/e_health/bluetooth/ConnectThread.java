@@ -57,7 +57,7 @@ public class ConnectThread extends Thread {
 				Log.d("Status", "Arduino connecté");
 				while (true) {
 					bytes=mmInStream.read(buffer);
-					String value = new String(buffer, "UTF-32");
+					String value = new String(buffer, "UTF-8");
 					Log.d("buffer", value);
 					mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
 	                .sendToTarget();

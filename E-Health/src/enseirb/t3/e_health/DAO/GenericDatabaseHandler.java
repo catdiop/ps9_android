@@ -1,6 +1,5 @@
 package enseirb.t3.e_health.DAO;
 
-import enseirb.t3.e_health.entity.Data;
 
 
 public interface GenericDatabaseHandler<T> {
