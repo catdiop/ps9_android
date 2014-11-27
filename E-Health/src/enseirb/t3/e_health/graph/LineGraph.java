@@ -55,6 +55,7 @@ public class LineGraph {
 		renderer.setFillPoints(true);
 		renderer.setLineWidth(3);
 		renderer.setDisplayChartValues(true);
+//		renderer.addXTextLabel(x, text);
 		
 		mRenderer.setXLabels(window);
 		mRenderer.setChartTitle(chartTitle);
@@ -69,7 +70,8 @@ public class LineGraph {
 	}
 	
 	public GraphicalView getView(Context context) {
-		view = ChartFactory.getLineChartView(context, mDataset, mRenderer);
+		view = ChartFactory.getTimeChartView(context, mDataset, mRenderer, "H:mm:ss");
+//		view = ChartFactory.getLineChartView(context, mDataset, mRenderer);
 		return view;
 	}
 	

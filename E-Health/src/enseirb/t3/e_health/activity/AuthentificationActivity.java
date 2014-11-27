@@ -48,7 +48,7 @@ public class AuthentificationActivity extends Activity implements
 		dbHandler.createUser(patient);
 		
 		// TESTS Mesures
-		ArduinoData aData = new ArduinoData("DATA190;180|B|85;181|B|90;182|B|105;183|B|100;184|B|95;185|B|98;186|B|95;187|B|95;188|B|95;189|B|92;190|B|85;191|B|90;192|B|105;193|B|100;194|B|95;195|B|98;196|B|95;197|B|95;198|B|95;199|B|92");
+		ArduinoData aData = new ArduinoData("DATA200000;180000|B|85;181000|B|90;182000|B|105;183000|B|100;184000|B|95;185000|B|98;186000|B|95;187000|B|95;188000|B|95;189000|B|92;190000|B|85;191000|B|90;192000|B|105;193000|B|100;194000|B|95;195000|B|98;196000|B|95;197000|B|95;198000|B|95;199000|B|92");
 		
 		String aDataStr = aData.getArduinoData();
 

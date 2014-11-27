@@ -33,22 +33,19 @@ public class ArduinoData  {
     
     // Get data timestamp
     public String getPaquetTimestamp(String firstChunk) {
-    	
-    	String date = new String();
-    	date = firstChunk.substring(4, firstChunk.length());
-    	
-    	return date;
+    	return firstChunk.substring(4, firstChunk.length());
     }
     
     public void stockData(String[] chunks, DatabaseHandler dataDB) {
     	
     	String[] chunkTmp;
     	Data dataTmp = new Data();
-    	String paquetTimestamp = getPaquetTimestamp(chunks[0]);
+    	Long paquetTimestamp = Long.parseLong(getPaquetTimestamp(chunks[0]));
     	
     	for (int i = 1; i < chunks.length; i++) {
     		chunkTmp = chunks[i].trim().split("\\|");
-    		dataTmp.setDate(chunkTmp[0]);
+    		dataTmp.setDate(Long.toString((System.currentTimeMillis()/1000) - (paquetTimestamp - Long.parseLong(chunkTmp[0]))));
+//    		dataTmp.setDate(chunkTmp[0]);
     		// TODO synchronize timestamp
     		dataTmp.setDataname(chunkTmp[1]);
     		dataTmp.setValue(chunkTmp[2]);
@@ -56,6 +53,7 @@ public class ArduinoData  {
     		//
     		Log.d("gt",dataTmp.getDataname());
     		Log.d("gt",dataTmp.getValue()+"\n");
+    		Log.d("date", dataTmp.getDate());
     		
     		dataDB.createData(dataTmp);
     	}

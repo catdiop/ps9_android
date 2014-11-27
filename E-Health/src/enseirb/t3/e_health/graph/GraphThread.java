@@ -1,5 +1,6 @@
 package enseirb.t3.e_health.graph;
 
+import java.util.Date;
 import java.util.List;
 
 import org.achartengine.GraphicalView;
@@ -22,7 +23,8 @@ public class GraphThread extends Thread {
 		for (int i = 0; i < datas.size(); i++) {
 			try {
 				Thread.sleep(1000);
-				Point p = new Point(Integer.parseInt(datas.get(i).getDate()), Integer.parseInt(datas.get(i).getValue()));
+				Date date = new Date(Long.parseLong(datas.get(i).getDate()));
+				Point p = new Point(date, Integer.parseInt(datas.get(i).getValue()));
 				line.addNewPoint(p);
 				j++;
 				if (j > 9) {

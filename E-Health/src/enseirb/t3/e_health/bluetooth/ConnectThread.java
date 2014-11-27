@@ -48,7 +48,7 @@ public class ConnectThread extends Thread {
 
 	@Override
 	public void run() {
-		byte[] buffer= new byte[4096]; //buffer store for the stream
+		byte[] buffer= new byte[32]; //buffer store for the stream
 		int bytes = 0;
 		try{
 			BluetoothAdapter.getDefaultAdapter().cancelDiscovery();

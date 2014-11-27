@@ -1,19 +1,21 @@
 package enseirb.t3.e_health.graph;
 
+import java.util.Date;
+
 public class Point {
-	private int x;
+	private Date x;
 	private int y;
 	
-	public Point(int x, int y) {
+	public Point(Date x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	public int getX() {
+	public Date getX() {
 		return x;
 	}
 
-	public void setX(int x) {
+	public void setX(Date x) {
 		this.x = x;
 	}
 
