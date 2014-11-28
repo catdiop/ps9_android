@@ -31,6 +31,20 @@ public class ArduinoData  {
     
     // Methods
     
+    // get data from arduino and store it to the database
+    public void getAndStoreData(DatabaseHandler dbHandler) {
+    	
+    	String[] aDataArrayStr = this.splitArduinoPaquets();
+
+		for (int i = 1; i < aDataArrayStr.length; i++) {
+
+			String aDataStr = aDataArrayStr[i];
+			
+			String[] chunks = this.getChunks(aDataStr);
+			this.stockData(chunks,  dbHandler);
+		}
+    }
+    
     // Get data timestamp
     public String getPaquetTimestamp(String firstChunk) {
     	return firstChunk.substring(4, firstChunk.length());
@@ -40,7 +54,9 @@ public class ArduinoData  {
     	
     	String[] chunkTmp;
     	Data dataTmp = new Data();
-    	Long paquetTimestamp = Long.parseLong(getPaquetTimestamp(chunks[0]));
+    	String paquetTimestampStr = this.getPaquetTimestamp(chunks[0]);
+    	Log.d("timestamp", paquetTimestampStr);
+    	Long paquetTimestamp = Long.parseLong(paquetTimestampStr);
     	
     	for (int i = 1; i < chunks.length; i++) {
     		chunkTmp = chunks[i].trim().split("\\|");
@@ -60,18 +76,19 @@ public class ArduinoData  {
     	dataDB.close();
     }
     
+    public String[] splitArduinoPaquets() {
+
+    	String aDataStr = this.getArduinoData();
+		String[] arduinoDataArray = aDataStr.split("(?=DATA)");
+
+    	return arduinoDataArray;
+    }
+    
     public String[] getChunks(String ArduinoData) {
     	
     	String[] chunks = ArduinoData.split(";");
     	
     	return chunks;
-    }
-    
-    public int getPaquetTimestamp(ArduinoData ArduinoData) {
-    	
-    	int paquetTimestamp = 0;
-    	
-    	return paquetTimestamp;
     }
     
     public Data convertArduinoData(ArduinoData ArduinoData) {

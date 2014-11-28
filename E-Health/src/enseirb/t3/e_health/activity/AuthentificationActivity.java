@@ -26,8 +26,8 @@ import enseirb.t3.e_health.entity.Patient;
  * 
  */
 public class AuthentificationActivity extends Activity implements
-		OnClickListener {
-	
+OnClickListener {
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,32 +39,36 @@ public class AuthentificationActivity extends Activity implements
 
 		Button connexion = (Button) findViewById(R.id.connexion);
 		connexion.setOnClickListener(this);
-		
+
 		DatabaseHandler dbHandler = new DatabaseHandler(getApplicationContext());
 		dbHandler.deleteAllData();
 		dbHandler.deleteAllUser();
-		
+
 		Patient patient = new Patient("pikro", "1234");
 		dbHandler.createUser(patient);
-		
+
 		// TESTS Mesures
-		ArduinoData aData = new ArduinoData("DATA200000;180000|B|85;181000|B|90;182000|B|105;183000|B|100;184000|B|95;185000|B|98;186000|B|95;187000|B|95;188000|B|95;189000|B|92;190000|B|85;191000|B|90;192000|B|105;193000|B|100;194000|B|95;195000|B|98;196000|B|95;197000|B|95;198000|B|95;199000|B|92");
+		ArduinoData aData = new ArduinoData("DATA200000;180000|B|85;181000|B|90;182000|B|105;183000|B|100;184000|B|95;185000|B|98;DATA220000;186000|B|95;187000|B|95;188000|B|95;189000|B|92;190000|B|85;191000|B|90;192000|B|105");
+
+		// Get data and store it to the db
+		aData.getAndStoreData(dbHandler);
+//		ArduinoData aData = new ArduinoData("DATA200000;180000|B|85;181000|B|90;182000|B|105;183000|B|100;184000|B|95;185000|B|98;186000|B|95;187000|B|95;188000|B|95;189000|B|92;190000|B|85;191000|B|90;192000|B|105;193000|B|100;194000|B|95;195000|B|98;196000|B|95;197000|B|95;198000|B|95;199000|B|92");
 		
-		String aDataStr = aData.getArduinoData();
+//		String aDataStr = aData.getArduinoData();
 
 		// Split data
-		String[] chunks = aData.getChunks(aDataStr);
-		aData.stockData(chunks, dbHandler);
-		
-		//tests récuperation
-		List<Data> DataList = dbHandler.retrieveDataList("B");
-		Log.d("data", DataList.get(1).getDataname());
-		Log.d("data", DataList.get(1).getValue());
-		Log.d("data", DataList.get(1).getDate());
+//		String[] chunks = aData.getChunks(aDataStr);
+//		aData.stockData(chunks, dbHandler);
+
+		//tests rï¿½cuperation
+//		List<Data> DataList = dbHandler.retrieveDataList("B");
+//		Log.d("data", DataList.get(1).getDataname());
+//		Log.d("data", DataList.get(1).getValue());
+//		Log.d("data", DataList.get(1).getDate());
 
 		// Get data timestamp
-//		String date = aData.getDataTimestamp(chunks[0]);
-		
+		//		String date = aData.getDataTimestamp(chunks[0]);
+
 	}
 
 	@Override
@@ -88,7 +92,7 @@ public class AuthentificationActivity extends Activity implements
 			}
 			break;
 
-		// Si l'utilisateur active le bluetooth
+			// Si l'utilisateur active le bluetooth
 		case R.id.bluetooth:
 			Bluetooth bluetooth = new Bluetooth(this);
 			bluetooth.enableBluetooth();
@@ -97,13 +101,13 @@ public class AuthentificationActivity extends Activity implements
 				bluetooth.discoverDevices();
 			}
 			break;
-//		case R.id.button1:
-//			Bluetooth bluetooth = new Bluetooth(this);
-//			bluetooth.enableBluetooth();
-//			if (!bluetooth.queryingPairedDevices()) {
-//				// discover
-//				bluetooth.discoverDevices();
-//			}
+			//		case R.id.button1:
+			//			Bluetooth bluetooth = new Bluetooth(this);
+			//			bluetooth.enableBluetooth();
+			//			if (!bluetooth.queryingPairedDevices()) {
+			//				// discover
+			//				bluetooth.discoverDevices();
+			//			}
 		}
 	}
 
