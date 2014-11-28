@@ -9,6 +9,10 @@ public class Patient extends User{
 	private Doctor doctor;
 	private List<Data> dataList;
 	
+	public Patient(){
+		super();
+	}
+	
 	public Patient(String username, String password) {
 		super(username, password);
 	}
