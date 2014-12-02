@@ -2,6 +2,10 @@ package enseirb.t3.e_health.activity;
 
 import java.util.List;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +41,14 @@ public class ListAlertAdapter extends ArrayAdapter<Alert>{
 
 			TextView lastname=(TextView)row.findViewById(R.id.lastname);
 			lastname.setText(alert.getPatient().getLastname());
+
+			TextView date=(TextView)row.findViewById(R.id.date);
+			DateTime dt=new DateTime(alert.getDate());
+			String str = dt.toString("dd/MM/yy à HH:mm");
+			date.setText(str);
+			
+			TextView dataName=(TextView)row.findViewById(R.id.alert_type);
+			dataName.setText(alert.getDataName());
 		}
 		return row;
 	}

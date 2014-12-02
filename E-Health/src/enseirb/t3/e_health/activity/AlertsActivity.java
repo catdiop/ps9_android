@@ -1,5 +1,6 @@
 package enseirb.t3.e_health.activity;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -74,11 +75,14 @@ public class AlertsActivity extends Activity {
 
 		});
 		List<Alert> alerts=new LinkedList<Alert>();
+		Calendar c=Calendar.getInstance();
 		Patient p=new Patient();
 		p.setFirstname("lili");
 		p.setLastname("lolo");
 		Alert a=new Alert();
 		a.setPatient(p);
+		a.setDate(c.getTime());
+		a.setDataName("B");
 		alerts.add(a);
 		p.setFirstname("titi");
 		p.setLastname("toto");
@@ -94,7 +98,7 @@ public class AlertsActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu items for use in the action bar
 		MenuInflater inflater = getMenuInflater();
-		//inflater.inflate(R.menu.activity_items, menu);
+		inflater.inflate(R.menu.authentificate, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 }

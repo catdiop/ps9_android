@@ -19,6 +19,29 @@
 			android:layout_height="wrap_content"
 			android:textStyle="bold"  
 			android:paddingLeft="5dp"
+			android:layout_toRightOf="@id/lastname" 
 			/>
-		
+	
+	 <TextView
+			android:id="@+id/alert_type"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:textStyle="bold"  
+			android:paddingLeft="5dp"
+			android:layout_below="@id/lastname" 
+			/>
+	
+	
+	<TextView
+			android:id="@+id/date"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:textStyle="bold"  
+			android:paddingLeft="5dp"
+			android:layout_toRightOf="@id/firstname" 
+			android:layout_below="@id/lastname" 
+			android:layout_alignParentRight="true"
+			/>
+	
+	
 </RelativeLayout>
