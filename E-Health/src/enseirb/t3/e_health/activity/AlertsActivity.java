@@ -79,11 +79,10 @@ public class AlertsActivity extends Activity {
 		Patient p=new Patient();
 		p.setFirstname("lili");
 		p.setLastname("lolo");
-		Alert a=new Alert();
+		Alert a=new Alert(p, c.getTime(), "Tachycardie");
 		a.setPatient(p);
 		a.setDate(c.getTime());
-		a.setDataName("B");
-		alerts.add(a);
+//		alerts.add(a);
 		p.setFirstname("titi");
 		p.setLastname("toto");
 		a.setPatient(p);

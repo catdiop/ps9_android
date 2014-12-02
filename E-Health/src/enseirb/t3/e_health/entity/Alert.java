@@ -6,12 +6,12 @@ public class Alert {
 
 	private Patient patient;
 	private Date date;
-	private String dataName;
+	private String alertName;
 	
-	public Alert(){
-		this.patient=null;
-		this.date=null;
-		this.dataName=null;
+	public Alert(Patient patient, Date date, String alertName){
+		this.patient=patient;
+		this.date=date;
+		this.alertName = alertName;
 	}
 	
 	public Patient getPatient(){
@@ -26,10 +26,10 @@ public class Alert {
 	public void setDate(Date date){
 		this.date=date;
 	}
-	public String getDataName(){
-		return this.dataName;
+	public String getAlertName(){
+		return this.alertName;
 	}
-	public void setDataName(String dataName){
-		this.dataName=dataName;
+	public void setAlertName(String alertName){
+		this.alertName = alertName;
 	}
 }

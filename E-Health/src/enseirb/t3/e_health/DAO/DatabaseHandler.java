@@ -1,5 +1,8 @@
 package enseirb.t3.e_health.DAO;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +17,9 @@ import enseirb.t3.e_health.entity.User;
 public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabaseHandler<User>{
 
 	// All Static variables
+	
+	private static DatabaseHandler sInstance;
+	
 	// Database Version
 	private static final int DATABASE_VERSION = 1;
 
@@ -38,7 +44,18 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 	private static final String CREATE_DATA_TABLE = "CREATE TABLE " + TABLE_DATA + "("
 			+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATANAME +  " TEXT," + KEY_VALUE +  " TEXT," + KEY_DATE + " TEXT )";
 
-	public DatabaseHandler(Context context) {
+	public static DatabaseHandler getInstance(Context context) {
+
+	    // Use the application context, which will ensure that you 
+	    // don't accidentally leak an Activity's context.
+	    // See this article for more information: http://bit.ly/6LRzfx
+	    if (sInstance == null) {
+	      sInstance = new DatabaseHandler(context.getApplicationContext());
+	    }
+	    return sInstance;
+	  }
+	
+	private DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
@@ -131,7 +148,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		ContentValues values = new ContentValues();
 		values.put(KEY_DATANAME, object.getDataname()); 
 		values.put(KEY_VALUE, object.getValue());
-		values.put(KEY_DATE, object.getDate());
+		values.put(KEY_DATE, object.getDate().toString());
 
 		// Inserting Row
 		db.insert(TABLE_DATA, null, values);
@@ -141,7 +158,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 
 	public List<Data> retrieveDataList(String dataname) {
 		SQLiteDatabase db = this.getReadableDatabase();
-		Data data = new Data();
+		Data data;
 		List<Data> dataList=new LinkedList<Data>();
 		
 		String selectQuery = "select " + KEY_DATANAME +","+KEY_VALUE+","+KEY_DATE + " from "+ TABLE_DATA +" where "+  KEY_DATANAME +"= ?";
@@ -150,7 +167,15 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		
 		while (cursor.moveToNext()) {
 			
-            data = new Data(cursor.getString(0), cursor.getString(1), cursor.getString(2));
+			Date date = null;
+			try {
+				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(cursor.getString(2));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+            data = new Data(cursor.getString(0), cursor.getString(1), date);
             dataList.add(data);
 
 		}
@@ -165,7 +190,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		ContentValues values = new ContentValues();
 		values.put(KEY_DATANAME, object.getDataname());
 		values.put(KEY_VALUE, object.getValue());
-		values.put(KEY_DATE, object.getDate());
+		values.put(KEY_DATE, object.getDate().toString());
 
 		// updating row
 		return db.update(TABLE_DATA, values, KEY_ID + " = ?",

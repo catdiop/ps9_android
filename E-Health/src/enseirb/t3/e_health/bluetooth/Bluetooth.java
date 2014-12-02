@@ -35,9 +35,9 @@ public class Bluetooth {
 		    for (BluetoothDevice device : pairedDevices) {
 		        // Add the name and address to an array adapter to show in a ListView
 		    	
-		    	if(device.getName().equals("H-C-2010-06-01")) {
+		    	if(device.getName().equals("Ehealth")) {
 	            	Log.d("msg", "Arduino déjà découvert....");
-	            	Thread ct=new ConnectThread(device);
+	            	Thread ct=new ConnectThread(device, activity);
 	            	
 	            	ct.start();
 	            	return true;

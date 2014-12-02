@@ -12,22 +12,20 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
     
 	@Override
 	 public void onReceive(Context context, Intent intent) {
-	        String action = intent.getAction();
-	        if(BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)){
-	        	Toast.makeText(context, "Discovery started...", Toast.LENGTH_LONG).show();
-	        }
-	        // When discovery finds a device
-	        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-	            // Get the BluetoothDevice object from the Intent
-	            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-	            if(device.getName().equals("H-C-2010-06-01")) {
-	            	Log.d("msg1", "Arduino découvert....");
-	            	Thread ct=new ConnectThread(device);
-	            	
-	            	ct.start();
-	            
-	            }
-			
-	        }
-	    }
+        String action = intent.getAction();
+        if(BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)){
+        	Toast.makeText(context, "Discovery started...", Toast.LENGTH_LONG).show();
+        }
+        // When discovery finds a device
+        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+            // Get the BluetoothDevice object from the Intent
+            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            if(device.getName().equals("Ehealth")) {
+            	Log.d("msg1", "Arduino découvert....");
+            	Thread ct=new ConnectThread(device, context);
+            	
+            	ct.start();
+            }
+        }
+	}
 }

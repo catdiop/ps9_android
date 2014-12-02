@@ -1,18 +1,14 @@
 package enseirb.t3.e_health.entity;
 
+import java.util.Date;
+
 public class Data {
 	private int id;
 	private String dataname;
 	private String value;
-	private String date;
+	private Date date;
 	
-	public Data() {
-		dataname = "";
-		value = "";
-		date = "";
-	}
-	
-	public Data (String dataname, String value, String date) {
+	public Data (String dataname, String value, Date date) {
 		this.dataname = dataname;
 		this.value = value;
 		this.date = date;
@@ -42,11 +38,11 @@ public class Data {
 		this.value = value;
 	}
 
-	public String getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 

@@ -28,19 +28,32 @@ public class LineGraph {
 	private float titleTextSize = 24;
 	private int window = 10;
 	
-	public LineGraph(int dataname, List<Data> datas) {
+	public LineGraph(String dataname, List<Data> datas) {
 		String xTitle = "Time";
 		String yTitle = null;
 		String chartTitle = null;
 		
 		switch (dataname) {
-		case 1:
+		case "A":
+			//0 -> 1024 : 0 -> 8L/s
+			yTitle = "L/s";
+			chartTitle = "Airflow";
+			break;
+		case "B":
 			yTitle = "Bpm";
 			chartTitle = "Heart Beats";
 			break;
-		case 2:
+		case "O":
 			yTitle = "%";
 			chartTitle = "Oxygen Rate";
+			break;
+		case "P":
+			yTitle = "??";
+			chartTitle = "Position";
+			break;
+		case "T":
+			yTitle = "°C";
+			chartTitle = "Température";
 			break;
 		default :
 			break;
@@ -71,7 +84,6 @@ public class LineGraph {
 	
 	public GraphicalView getView(Context context) {
 		view = ChartFactory.getTimeChartView(context, mDataset, mRenderer, "H:mm:ss");
-//		view = ChartFactory.getLineChartView(context, mDataset, mRenderer);
 		return view;
 	}
 	

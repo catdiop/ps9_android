@@ -48,7 +48,7 @@ public class ListAlertAdapter extends ArrayAdapter<Alert>{
 			date.setText(str);
 			
 			TextView dataName=(TextView)row.findViewById(R.id.alert_type);
-			dataName.setText(alert.getDataName());
+//			dataName.setText(alert.getDataName());
 		}
 		return row;
 	}

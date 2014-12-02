@@ -22,7 +22,7 @@ public class Graph extends Activity {
 	private GraphicalView view;
 	private LineGraph line;
 	private static Thread thread;
-	private DatabaseHandler dbHandler = new DatabaseHandler(this);
+	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(getApplicationContext());
 
 	
 	@Override
@@ -44,12 +44,12 @@ public class Graph extends Activity {
 
 				// HeatBeats chart
 				case R.id.btn_heartBeats:
-					openChartHeartBeats();
+					openChart("B");
 
 					break;
 				// Oxygen chart
 				case R.id.btn_oxygen:
-					openChartOxygen();
+					openChart("O");
 
 					break;
 				}
@@ -62,22 +62,10 @@ public class Graph extends Activity {
 		btnOxygen.setOnClickListener(clickListener);
 	}
 
-	private void openChartHeartBeats(){
-		List<Data> datas = dbHandler.retrieveDataList("B");
+	private void openChart(String dataname){
+		List<Data> datas = dbHandler.retrieveDataList(dataname);
 		
-		line = new LineGraph(1, datas);
-		view = line.getView(this);
-		setContentView(view);
-		
-		thread = new GraphThread(datas, view, line);
-		thread.start();
-	}
-
-	// Oxygen chart
-	private void openChartOxygen(){
-		List<Data> datas = dbHandler.retrieveDataList("O");
-		
-		line = new LineGraph(2, datas);
+		line = new LineGraph(dataname, datas);
 		view = line.getView(this);
 		setContentView(view);
 		

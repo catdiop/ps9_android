@@ -1,6 +1,7 @@
 package enseirb.t3.e_health.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import enseirb.t3.e_health.entity.Data;
 
@@ -24,7 +25,7 @@ public class Patient extends User{
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
 	}
-	public void newData (String name, String value, String date) {
+	public void newData (String name, String value, Date date) {
 		dataList = new ArrayList<Data>();
 		Data data = new Data(name, value, date);
 		dataList.add(data);

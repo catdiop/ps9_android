@@ -23,8 +23,7 @@ public class GraphThread extends Thread {
 		for (int i = 0; i < datas.size(); i++) {
 			try {
 				Thread.sleep(1000);
-				Date date = new Date(Long.parseLong(datas.get(i).getDate()));
-				Point p = new Point(date, Integer.parseInt(datas.get(i).getValue()));
+				Point p = new Point(datas.get(i).getDate(), Integer.parseInt(datas.get(i).getValue()));
 				line.addNewPoint(p);
 				j++;
 				if (j > 9) {

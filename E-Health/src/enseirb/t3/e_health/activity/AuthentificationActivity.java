@@ -1,13 +1,10 @@
 package enseirb.t3.e_health.activity;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,15 +15,16 @@ import com.project.e_health.R;
 import enseirb.t3.e_health.DAO.DatabaseHandler;
 import enseirb.t3.e_health.bluetooth.Bluetooth;
 import enseirb.t3.e_health.entity.ArduinoData;
-import enseirb.t3.e_health.entity.Data;
 import enseirb.t3.e_health.entity.Patient;
 
 /**
  * @author catdiop
  * 
  */
-public class AuthentificationActivity extends Activity implements
-OnClickListener {
+public class AuthentificationActivity extends Activity implements OnClickListener {
+	
+
+	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(getApplicationContext());
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +37,7 @@ OnClickListener {
 
 		Button connexion = (Button) findViewById(R.id.connexion);
 		connexion.setOnClickListener(this);
-
-		DatabaseHandler dbHandler = new DatabaseHandler(getApplicationContext());
+		
 		dbHandler.deleteAllData();
 		dbHandler.deleteAllUser();
 
@@ -78,8 +75,6 @@ OnClickListener {
 
 		// Si l'utilisateur appuie sur connexion
 		case R.id.connexion:
-			DatabaseHandler dbHandler = new DatabaseHandler(
-					this.getApplicationContext());
 			TextView view1 = (TextView) findViewById(R.id.username);
 			TextView view2 = (TextView) findViewById(R.id.password);
 			if (dbHandler.isUser(view1.getText().toString(), view2.getText()
