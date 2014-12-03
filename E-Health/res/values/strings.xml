@@ -1,9 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">E-Health</string>
-    
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="passwordCheck">Confirm password</string>
+    <string name="register">Sign Up</string>
     <string name="connect">Connect</string>
     <string name="welcome">Welcome</string>
     <string name="menu_popup_remove">Supprimer</string>
@@ -16,7 +18,7 @@
     <string name="measuresGraphicalActivity">Measures graphical activity</string>
     <string name="alerts_list_empty">Aucune alerte n\'a été détectée.</string>
     <string name="actions_settings">Settings</string>
-    
-   
+    <string name="title_activity_patient_registration">PatientRegistrationActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

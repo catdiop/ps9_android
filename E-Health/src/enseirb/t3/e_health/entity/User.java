@@ -6,12 +6,14 @@ public class User {
 	private String password;
 	private String lastname;
 	private String firstname;
+	private String type;
 	
 	public User(){
 		this.username=null;
 		this.password=null;
 		this.firstname=null;
 		this.lastname=null;
+		this.type = null;
 	}
 	
 	public User(String username, String password) {
@@ -48,5 +50,11 @@ public class User {
 	}
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 }
