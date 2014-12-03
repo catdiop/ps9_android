@@ -22,7 +22,7 @@ public class Graph extends Activity {
 	private GraphicalView view;
 	private LineGraph line;
 	private static Thread thread;
-	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(getApplicationContext());
+	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(this);
 
 	
 	@Override

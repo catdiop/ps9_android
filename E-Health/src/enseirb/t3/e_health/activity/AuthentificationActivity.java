@@ -24,7 +24,7 @@ import enseirb.t3.e_health.entity.Patient;
 public class AuthentificationActivity extends Activity implements OnClickListener {
 	
 
-	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(getApplicationContext());
+	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(this);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

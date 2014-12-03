@@ -50,7 +50,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 	    // don't accidentally leak an Activity's context.
 	    // See this article for more information: http://bit.ly/6LRzfx
 	    if (sInstance == null) {
-	      sInstance = new DatabaseHandler(context.getApplicationContext());
+	      sInstance = new DatabaseHandler(context);
 	    }
 	    return sInstance;
 	  }
