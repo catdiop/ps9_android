@@ -49,11 +49,14 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
-            <!-- <intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> -->
+            </intent-filter>
+            -->
         </activity>
         <activity
             android:name="enseirb.t3.e_health.activity.PatientRegistrationActivity"
@@ -62,7 +65,11 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="enseirb.t3.e_health.activity.DoctorRegistrationActivity"
+            android:label="@string/title_activity_doctor_registration" >
         </activity>
     </application>
 

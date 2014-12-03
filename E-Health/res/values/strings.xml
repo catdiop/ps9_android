@@ -20,5 +20,6 @@
     <string name="actions_settings">Settings</string>
     <string name="title_activity_patient_registration">PatientRegistrationActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_doctor_registration">DoctorRegistrationActivity</string>
 
 </resources>
