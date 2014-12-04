@@ -140,6 +140,9 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		String selectQuery = "SELECT * FROM " + TABLE_USERS + " WHERE " + KEY_USERNAME + " = ?" + " AND " + KEY_PASSWORD + " = ?";
 
 		Cursor cursor = db.rawQuery(selectQuery, new String [] {username, password});
+		
+//		db.close();
+		
 		return cursor.moveToFirst();	
 	}
 
@@ -149,6 +152,9 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		String selectQuery = "SELECT * FROM " + TABLE_USERS + " WHERE " + KEY_USERNAME + " = ?";
 
 		Cursor cursor = db.rawQuery(selectQuery, new String [] {username});
+		
+		db.close();
+		
 		return cursor.moveToFirst();	
 	}
 
@@ -169,7 +175,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		if (type.equals("doctor")) {
 			isDoctor = true;
 		}
-
+		db.close();
 		return isDoctor;
 	}
 
@@ -192,7 +198,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		Data data;
 		List<Data> dataList=new LinkedList<Data>();
 
-		String selectQuery = "select " + KEY_DATANAME +","+KEY_VALUE+","+KEY_DATE + " from "+ TABLE_DATA +" where "+  KEY_DATANAME +"= ?";
+		String selectQuery = "select " + KEY_DATANAME +","+KEY_VALUE+","+KEY_DATE + " from "+ TABLE_DATA +" where "+  KEY_DATANAME +" = ?";
 
 		Cursor cursor=db.rawQuery(selectQuery, new String[]{dataname});
 
@@ -219,7 +225,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		Data data = null;
 		Date date;
 		
-		String selectQuery = "select " + KEY_DATANAME +","+KEY_VALUE+","+KEY_DATE + " from "+ TABLE_DATA +" where "+  KEY_DATANAME +"= ?";
+		String selectQuery = "select " + KEY_DATANAME +","+KEY_VALUE+","+KEY_DATE + " from "+ TABLE_DATA +" where "+  KEY_DATANAME +" = ?";
 
 		Cursor cursor=db.rawQuery(selectQuery, new String[]{dataname});
 		cursor.moveToFirst();
@@ -233,7 +239,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		}
 
         
-		db.close();
+//		db.close();
 		return data;
 	}
 
@@ -244,6 +250,8 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		values.put(KEY_DATANAME, object.getDataname());
 		values.put(KEY_VALUE, object.getValue());
 		values.put(KEY_DATE, object.getDate().toString());
+		
+		db.close();
 
 		// updating row
 		return db.update(TABLE_DATA, values, KEY_ID + " = ?",

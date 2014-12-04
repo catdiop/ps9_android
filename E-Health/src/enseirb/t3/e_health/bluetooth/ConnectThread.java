@@ -81,7 +81,7 @@ public class ConnectThread extends Thread {
                    
                 }
 				
-				sleep(960);
+				sleep(900);
 			}
 		} catch(IOException e){
 			try{

@@ -61,6 +61,9 @@ public class AuthentificationActivity extends Activity implements OnClickListene
 		// Get data timestamp
 		//		String date = aData.getDataTimestamp(chunks[0]);
 
+		dbHandler.deleteAllUser();
+		Patient patient = new Patient("pikro", "1234");
+		dbHandler.createUser(patient);
 	}
 
 	@Override

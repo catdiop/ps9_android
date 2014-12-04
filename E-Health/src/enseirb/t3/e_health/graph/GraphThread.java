@@ -28,7 +28,7 @@ public class GraphThread extends Thread {
 		while(true) {
 			data = dbHandler.retrieveLastData(dataname);
 			
-			if (data.getDate() != lastDate) {
+			if ((i != 0) & (data.getDate() != lastDate)) {
 				Point p = new Point(data.getDate(), Integer.parseInt(data.getValue()));
 				line.addNewPoint(p);
 				i++;

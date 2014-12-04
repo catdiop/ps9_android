@@ -66,7 +66,7 @@ public class ArduinoData  {
     	//if (dataProcess.correlation() != null)
     		//store alert in DB
     	
-    	dataDB.close();
+//    	dataDB.close();
     }
     
     public String[] getChunks(String ArduinoData) {
