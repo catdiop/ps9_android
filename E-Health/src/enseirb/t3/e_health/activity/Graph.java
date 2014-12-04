@@ -22,13 +22,14 @@ public class Graph extends Activity {
 	private GraphicalView view;
 	private LineGraph line;
 	private static Thread thread;
-	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(this);
-
+	private DatabaseHandler dbHandler;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_measures);
+		
+		dbHandler = DatabaseHandler.getInstance(getApplicationContext());
 		
 		// Getting references to buttons
 		Button btnHeartBeats = (Button) findViewById(R.id.btn_heartBeats);

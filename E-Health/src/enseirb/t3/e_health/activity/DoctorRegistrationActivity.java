@@ -17,12 +17,14 @@ import enseirb.t3.e_health.entity.Patient;
 
 public class DoctorRegistrationActivity extends Activity implements OnClickListener {
 
-	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(this);
+	private DatabaseHandler dbHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_doctor_registration);
+		
+		dbHandler = DatabaseHandler.getInstance(getApplicationContext());
 
 		Button register = (Button) findViewById(R.id.register);
 		register.setOnClickListener(this);

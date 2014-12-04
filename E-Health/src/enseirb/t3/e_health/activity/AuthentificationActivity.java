@@ -24,13 +24,15 @@ import enseirb.t3.e_health.entity.Patient;
 public class AuthentificationActivity extends Activity implements OnClickListener {
 	
 
-	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(this);
+	private DatabaseHandler dbHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_authentification);
+		
+		dbHandler = DatabaseHandler.getInstance(getApplicationContext());
 
 		Button bluetooth = (Button) findViewById(R.id.bluetooth);
 		bluetooth.setOnClickListener(this);
@@ -94,13 +96,6 @@ public class AuthentificationActivity extends Activity implements OnClickListene
 				bluetooth.discoverDevices();
 			}
 			break;
-			//		case R.id.button1:
-			//			Bluetooth bluetooth = new Bluetooth(this);
-			//			bluetooth.enableBluetooth();
-			//			if (!bluetooth.queryingPairedDevices()) {
-			//				// discover
-			//				bluetooth.discoverDevices();
-			//			}
 		}
 	}
 
