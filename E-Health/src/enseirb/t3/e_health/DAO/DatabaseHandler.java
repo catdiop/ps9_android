@@ -213,7 +213,6 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		db.close();
 		return dataList;
 	}
-<<<<<<< HEAD
 	
 	public Data retrieveLastData(String dataname) {
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -237,11 +236,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		db.close();
 		return data;
 	}
-	
-=======
 
-
->>>>>>> d78de9cf1b2c75e5b8a5c60f7611bd3a8edd7931
 	public int updateData(Data object) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
