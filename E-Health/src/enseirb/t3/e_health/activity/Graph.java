@@ -63,13 +63,13 @@ public class Graph extends Activity {
 	}
 
 	private void openChart(String dataname){
-		List<Data> datas = dbHandler.retrieveDataList(dataname);
+//		List<Data> datas = dbHandler.retrieveDataList(dataname);
 		
-		line = new LineGraph(dataname, datas);
+		line = new LineGraph(dataname);
 		view = line.getView(this);
 		setContentView(view);
 		
-		thread = new GraphThread(datas, view, line);
+		thread = new GraphThread(dbHandler, view, line, dataname);
 		thread.start();
 	}
 }

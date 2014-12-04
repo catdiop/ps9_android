@@ -193,6 +193,28 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		return dataList;
 	}
 	
+	public Data retrieveLastData(String dataname) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		Data data = null;
+		Date date;
+		
+		String selectQuery = "select " + KEY_DATANAME +","+KEY_VALUE+","+KEY_DATE + " from "+ TABLE_DATA +" where "+  KEY_DATANAME +"= ?";
+
+		Cursor cursor=db.rawQuery(selectQuery, new String[]{dataname});
+		cursor.moveToFirst();
+		
+		try {
+			date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(cursor.getString(2));
+	        data = new Data(cursor.getString(0), cursor.getString(1), date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        
+		db.close();
+		return data;
+	}
 	
 	public int updateData(Data object) {
 		SQLiteDatabase db = this.getWritableDatabase();

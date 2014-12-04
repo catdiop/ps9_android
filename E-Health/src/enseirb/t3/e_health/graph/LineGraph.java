@@ -28,7 +28,7 @@ public class LineGraph {
 	private float titleTextSize = 24;
 	private int window = 10;
 	
-	public LineGraph(String dataname, List<Data> datas) {
+	public LineGraph(String dataname) {
 		String xTitle = "Time";
 		String yTitle = null;
 		String chartTitle = null;
