@@ -35,9 +35,9 @@ public class DataProcess {
 		case "P":
 			break;
 		case "T":
-			if (Integer.parseInt(data.getValue()) > 38)
+			if (Double.parseDouble(data.getValue()) > 38)
 				alertes.add("Hyperthermie");
-			else if (Integer.parseInt(data.getValue()) < 35)
+			else if (Double.parseDouble(data.getValue()) < 35)
 				alertes.add("Hypothermie");
 			break;
 		default :

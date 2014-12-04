@@ -35,11 +35,12 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 	private static final String KEY_ID = "id";
 	private static final String KEY_USERNAME = "username";
 	private static final String KEY_PASSWORD = "password";
+	private static final String KEY_TYPE = "type";
 	private static final String KEY_DATANAME = "dataname";
 	private static final String KEY_VALUE = "value";
 	private static final String KEY_DATE = "date";
 	private static final String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USERS + "("
-			+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_USERNAME +  " TEXT," + KEY_PASSWORD +  " TEXT )";
+			+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_USERNAME +  " TEXT," + KEY_PASSWORD +  " TEXT," + KEY_TYPE + " TEXT )";
 	
 	private static final String CREATE_DATA_TABLE = "CREATE TABLE " + TABLE_DATA + "("
 			+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATANAME +  " TEXT," + KEY_VALUE +  " TEXT," + KEY_DATE + " TEXT )";
@@ -50,7 +51,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 	    // don't accidentally leak an Activity's context.
 	    // See this article for more information: http://bit.ly/6LRzfx
 	    if (sInstance == null) {
-	      sInstance = new DatabaseHandler(context.getApplicationContext());
+	      sInstance = new DatabaseHandler(context);
 	    }
 	    return sInstance;
 	  }
@@ -84,7 +85,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		ContentValues values = new ContentValues();
 		values.put(KEY_USERNAME, object.getUsername()); 
 		values.put(KEY_PASSWORD, object.getPassword());
-
+		values.put(KEY_TYPE, object.getType());
 		// Inserting Row
 		db.insert(TABLE_USERS, null, values);
 		db.close(); // Closing database connection
@@ -139,6 +140,15 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		String selectQuery = "SELECT * FROM " + TABLE_USERS + " WHERE " + KEY_USERNAME + " = ?" + " AND " + KEY_PASSWORD + " = ?";
 
 		Cursor cursor = db.rawQuery(selectQuery, new String [] {username, password});
+		return cursor.moveToFirst();	
+	}
+	
+	public boolean doesUserExist(String username){
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String selectQuery = "SELECT * FROM " + TABLE_USERS + " WHERE " + KEY_USERNAME + " = ?";
+
+		Cursor cursor = db.rawQuery(selectQuery, new String [] {username});
 		return cursor.moveToFirst();	
 	}
 

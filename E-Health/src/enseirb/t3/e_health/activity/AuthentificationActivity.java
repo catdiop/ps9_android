@@ -24,7 +24,7 @@ import enseirb.t3.e_health.entity.Patient;
 public class AuthentificationActivity extends Activity implements OnClickListener {
 	
 
-	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(getApplicationContext());
+	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(this);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +37,12 @@ public class AuthentificationActivity extends Activity implements OnClickListene
 
 		Button connexion = (Button) findViewById(R.id.connexion);
 		connexion.setOnClickListener(this);
-		
-		dbHandler.deleteAllData();
-		dbHandler.deleteAllUser();
-
-		Patient patient = new Patient("pikro", "1234");
-		dbHandler.createUser(patient);
 
 		// TESTS Mesures
 		ArduinoData aData = new ArduinoData("DATA200000;180000|B|85;181000|B|90;182000|B|105;183000|B|100;184000|B|95;185000|B|98;DATA220000;186000|B|95;187000|B|95;188000|B|95;189000|B|92;190000|B|85;191000|B|90;192000|B|105");
 
 		// Get data and store it to the db
+		
 		aData.getAndStoreData(dbHandler);
 //		ArduinoData aData = new ArduinoData("DATA200000;180000|B|85;181000|B|90;182000|B|105;183000|B|100;184000|B|95;185000|B|98;186000|B|95;187000|B|95;188000|B|95;189000|B|92;190000|B|85;191000|B|90;192000|B|105;193000|B|100;194000|B|95;195000|B|98;196000|B|95;197000|B|95;198000|B|95;199000|B|92");
 		
@@ -75,9 +70,9 @@ public class AuthentificationActivity extends Activity implements OnClickListene
 
 		// Si l'utilisateur appuie sur connexion
 		case R.id.connexion:
-			TextView view1 = (TextView) findViewById(R.id.username);
-			TextView view2 = (TextView) findViewById(R.id.password);
-			if (dbHandler.isUser(view1.getText().toString(), view2.getText()
+			TextView usernameView = (TextView) findViewById(R.id.username);
+			TextView passwordView = (TextView) findViewById(R.id.password);
+			if (dbHandler.isUser(usernameView.getText().toString(), passwordView.getText()
 					.toString())) {
 				// on se connecte
 				Intent intent = new Intent(AuthentificationActivity.this, Graph.class);
