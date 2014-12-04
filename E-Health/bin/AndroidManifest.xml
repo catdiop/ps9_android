@@ -32,6 +32,14 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
+<<<<<<< .merge_file_a10280
+=======
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+>>>>>>> .merge_file_a10316
         </activity>
         <activity
             android:name="enseirb.t3.e_health.activity.Graph"
@@ -61,11 +69,15 @@
         <activity
             android:name="enseirb.t3.e_health.activity.PatientRegistrationActivity"
             android:label="@string/title_activity_patient_registration" >
+<<<<<<< .merge_file_a10280
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+=======
+            
+>>>>>>> .merge_file_a10316
         </activity>
         <activity
             android:name="enseirb.t3.e_health.activity.DoctorRegistrationActivity"

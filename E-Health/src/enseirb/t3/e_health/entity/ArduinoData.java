@@ -42,7 +42,12 @@ public class ArduinoData  {
     	
     	for (int i = 1; i < chunks.length; i++) {
     		
-    		chunkTmp = chunks[i].trim().split("\\|");
+    		chunkTmp = chunks[i].trim().split("\\||\\\n");
+    		
+    		if(chunkTmp.length < 3){
+    			Log.d("erreur","données invalides");
+    			break;
+    		}
     		
     		date = new Date((System.currentTimeMillis()/1000) - (paquetTimestamp - Long.parseLong(chunkTmp[0])));
 
@@ -58,7 +63,7 @@ public class ArduinoData  {
     		
     		dataDB.createData(dataTmp);
     	}
-    	if (dataProcess.correlation() != null)
+    	//if (dataProcess.correlation() != null)
     		//store alert in DB
     	
     	dataDB.close();
