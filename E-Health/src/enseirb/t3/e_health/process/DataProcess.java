@@ -23,13 +23,13 @@ public class DataProcess {
 		case "A":
 			break;
 		case "B":
-			if (Integer.parseInt(data.getValue()) > 100)
+			if (Double.parseDouble(data.getValue()) > 100)
 				alertes.add("Tachycardie");
-			else if (Integer.parseInt(data.getValue()) < 60)
+			else if (Double.parseDouble(data.getValue()) < 60)
 				alertes.add("Bradycardie");
 			break;
 		case "O":
-			if (Integer.parseInt(data.getValue()) < 90)
+			if (Double.parseDouble(data.getValue()) < 90)
 				alertes.add("Hypoxémie");
 			break;
 		case "P":

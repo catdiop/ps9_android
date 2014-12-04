@@ -60,24 +60,37 @@ public class ConnectThread extends Thread {
 			if (!mmSocket.isConnected()) {
 				mmSocket.connect();
 				Log.d("Status", "Arduino connecté");
-				while (true) {
-					bytes=mmInStream.read(buffer);
-					String value = new String(buffer, "UTF-8");
-					Log.d("buffer", value);
-					ArduinoData arduinoData = new ArduinoData(value);
-					arduinoData.getAndStoreData(dbHandler);
-					mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
-	                .sendToTarget();
-				}
 			}
 			else
 				Log.d("Status", "Arduino déjà connecté");
-		}
-		catch(IOException e){
+			
+			while (true) {
+				bytes=mmInStream.read(buffer, 0, 100);
+				if(bytes > 20) {
+                    // On convertit les données en String
+                    byte rawdata[] = new byte[bytes];
+                    for(int i=0;i<bytes;i++)
+                        rawdata[i] = buffer[i];
+                     
+                    String value = new String(rawdata);
+                    
+                    Log.d("buffer", value);
+                    
+                    ArduinoData arduinoData = new ArduinoData(value);
+					arduinoData.getAndStoreData(dbHandler);
+                   
+                }
+				
+				sleep(960);
+			}
+		} catch(IOException e){
 			try{
 				mmSocket.close();
 			}
 			catch(IOException closeException){return;}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} 
 	}
 	
@@ -87,20 +100,4 @@ public class ConnectThread extends Thread {
 		} catch(IOException e) {};
 	}
 	
-	static Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			byte[] writeBuf = (byte[]) msg.obj;
-			int begin = (int) msg.arg1;
-			int end = (int) msg.arg2;
-
-			switch (msg.what) {
-			case MESSAGE_READ:
-				Log.d("handler", "message read");
-				//Enregistrement des mesure réceptionnées dans la BDD
-				
-				break;
-			}
-		}
-	};
 }
