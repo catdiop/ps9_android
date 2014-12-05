@@ -18,6 +18,7 @@ import com.project.e_health.R;
 
 import enseirb.t3.e_health.bluetooth.Bluetooth;
 import enseirb.t3.e_health.entity.ArduinoData;
+import enseirb.t3.e_health.entity.Doctor;
 import enseirb.t3.e_health.entity.Patient;
 
 /**
@@ -40,7 +41,7 @@ public class AuthentificationActivity extends Activity implements OnClickListene
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			break;
-			
+
 		case R.id.menu_bluetooth:
 			Bluetooth bluetooth = new Bluetooth(this);
 			bluetooth.enableBluetooth();
@@ -49,12 +50,12 @@ public class AuthentificationActivity extends Activity implements OnClickListene
 				bluetooth.discoverDevices();
 			}
 			break;
-			
+
 		case R.id.menu_alerts:
 			Intent intent = new Intent(AuthentificationActivity.this, AlertsActivity.class);
 			startActivity(intent);
 			break;
-			
+
 		default:;	
 		}
 		return super.onOptionsItemSelected(item);
@@ -92,9 +93,17 @@ public class AuthentificationActivity extends Activity implements OnClickListene
 		// Get data timestamp
 		//		String date = aData.getDataTimestamp(chunks[0]);
 
-		//EHealth.db.deleteAllUser();
-		//Patient patient = new Patient("pikro", "1234");
-		//EHealth.db.createUser(patient);
+		// TESTS patients / docteurs
+		EHealth.db.deleteAllUser();
+
+		Patient patient = new Patient("jo", "ab");
+		patient.setType("patient");
+
+		Doctor doctor = new Doctor("bob", "ba");
+		doctor.setType("doctor");
+
+		EHealth.db.createUser(patient);
+		EHealth.db.createUser(doctor);
 	}
 
 	@Override
@@ -106,30 +115,52 @@ public class AuthentificationActivity extends Activity implements OnClickListene
 		case R.id.connexion:
 			TextView usernameView = (TextView) findViewById(R.id.username);
 			TextView passwordView = (TextView) findViewById(R.id.password);
-			//if (dbHandler.isUser(usernameView.getText().toString(), passwordView.getText()
-			//	.toString())) {
-			// on se connecte
-			Intent intent = new Intent(AuthentificationActivity.this, Graph.class);
-			startActivity(intent);
-			//} else {
-			//createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
-			//}
-			break;
+
+			if (EHealth.db.isUser(usernameView.getText().toString(), passwordView.getText()
+					.toString())) {
+				// on se connecte
+				//Intent intent = new Intent(AuthentificationActivity.this, Graph.class);
+				//startActivity(intent);
+				 //else {
+				//createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
+				//}
+
+				if (EHealth.db.isUser(usernameView.getText().toString(), passwordView.getText()
+						.toString())) {
+					// on se connecte
+					if (EHealth.db.isUserADoctor(usernameView.getText().toString())) {
+
+						Intent intent = new Intent(AuthentificationActivity.this, AlertsActivity.class);
+						startActivity(intent);
+					}
+					else {
+
+						Intent intent = new Intent(AuthentificationActivity.this, Graph.class);
+						startActivity(intent);
+					}
+				}
+
+				else {
+
+					createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
+				}
+				break;
+			}
+			}
+		}
+
+		private void createDialog(String msg) {
+
+			AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+			dialog.setMessage(msg);
+			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+			dialog.show();
 		}
 	}
-
-	private void createDialog(String msg) {
-
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-		dialog.setMessage(msg);
-		dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		dialog.show();
-	}
-}

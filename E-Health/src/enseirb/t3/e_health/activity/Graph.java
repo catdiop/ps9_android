@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import com.project.e_health.R;
 
 import enseirb.t3.e_health.bluetooth.Bluetooth;
-import enseirb.t3.e_health.bluetooth.ConnectThread;
+import enseirb.t3.e_health.bluetooth.BtThread;
 import enseirb.t3.e_health.entity.ArduinoData;
 import enseirb.t3.e_health.graph.LineGraph;
 import enseirb.t3.e_health.graph.Point;
@@ -92,7 +92,7 @@ public class Graph extends Activity {
 					// discover
 					bt.discoverDevices();
 				} else {
-					Thread ct = new ConnectThread(bt.device, this, handler);
+					Thread ct = new BtThread(bt.device, handler);
 					ct.start();
 				}
 	            return true;
