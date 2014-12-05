@@ -2,9 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     
     <item 
-        android:id="@+id/actions_settings"
+        android:id="@+id/menu_bluetooth"
         android:orderInCategory="300"
         android:showAsAction="never"
         android:title="@string/button_bluetooth"/>
+    
+     <item 
+        android:id="@+id/menu_alerts"
+        android:orderInCategory="300"
+        android:showAsAction="never"
+        android:title="Voir les alertes"/>
 
 </menu>
