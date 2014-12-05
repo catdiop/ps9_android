@@ -36,13 +36,4 @@
         android:hint="@string/passwordCheck"
         android:inputType="textPassword" />
 
-    <Button
-        android:id="@+id/register"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/passwordCheck"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/connect_button"
-        android:text="@string/register" />
-
 </RelativeLayout>

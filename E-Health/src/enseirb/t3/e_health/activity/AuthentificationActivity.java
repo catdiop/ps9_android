@@ -5,6 +5,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -25,13 +29,44 @@ public class AuthentificationActivity extends Activity implements
 		OnClickListener {
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu items for use in the action bar
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.authentificate, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(this);
+			break;
+
+		case R.id.menu_bluetooth:
+			Bluetooth bluetooth = new Bluetooth(this);
+			bluetooth.enableBluetooth();
+			if (!bluetooth.queryingPairedDevices()) {
+				// discover
+				bluetooth.discoverDevices();
+			}
+			break;
+
+		case R.id.menu_alerts:
+			Intent intent = new Intent(AuthentificationActivity.this, AlertsActivity.class);
+			startActivity(intent);
+			break;
+
+		default:;	
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_authentification);
-
-		Button bluetooth = (Button) findViewById(R.id.bluetooth);
-		bluetooth.setOnClickListener(this);
 
 		Button connexion = (Button) findViewById(R.id.connexion);
 		connexion.setOnClickListener(this);
@@ -58,6 +93,7 @@ public class AuthentificationActivity extends Activity implements
 		case R.id.connexion:
 			TextView usernameView = (TextView) findViewById(R.id.username);
 			TextView passwordView = (TextView) findViewById(R.id.password);
+<<<<<<< HEAD
 			if (EHealth.db.isUser(usernameView.getText().toString(),
 					passwordView.getText().toString())) {
 				// on se connecte
@@ -71,8 +107,40 @@ public class AuthentificationActivity extends Activity implements
 					Intent intent = new Intent(AuthentificationActivity.this,
 							Graph.class);
 					startActivity(intent);
+=======
+
+			if (EHealth.db.isUser(usernameView.getText().toString(), passwordView.getText()
+					.toString())) {
+				// on se connecte
+				//Intent intent = new Intent(AuthentificationActivity.this, Graph.class);
+				//startActivity(intent);
+				 //else {
+				//createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
+				//}
+
+				if (EHealth.db.isUser(usernameView.getText().toString(), passwordView.getText()
+						.toString())) {
+					// on se connecte
+					if (EHealth.db.isUserADoctor(usernameView.getText().toString())) {
+
+						Intent intent = new Intent(AuthentificationActivity.this, AlertsActivity.class);
+						startActivity(intent);
+					}
+					else {
+
+						Intent intent = new Intent(AuthentificationActivity.this, Graph.class);
+						startActivity(intent);
+					}
 				}
+
+				else {
+
+					createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
+>>>>>>> 0b6847468ac8e6ac0318def9c8f0fa4644352eb8
+				}
+				break;
 			}
+<<<<<<< HEAD
 
 			else {
 
@@ -89,21 +157,23 @@ public class AuthentificationActivity extends Activity implements
 				bluetooth.discoverDevices();
 			}
 			break;
+=======
+			}
+>>>>>>> 0b6847468ac8e6ac0318def9c8f0fa4644352eb8
+		}
+
+		private void createDialog(String msg) {
+
+			AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+			dialog.setMessage(msg);
+			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+			dialog.show();
 		}
 	}
-
-	private void createDialog(String msg) {
-
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-		dialog.setMessage(msg);
-		dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		dialog.show();
-	}
-}

@@ -28,5 +28,7 @@
     <string name="title_activity_patient_registration">PatientRegistrationActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_doctor_registration">DoctorRegistrationActivity</string>
+     <string name="menu_add_patient">Add patient</string>
+     <string name="cancel">Cancel</string>
 
 </resources>
