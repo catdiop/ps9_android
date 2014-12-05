@@ -10,6 +10,13 @@
     <string name="welcome">Welcome</string>
     <string name="menu_popup_remove">Supprimer</string>
     <string name="button_bluetooth">Bluetooth</string>
+    <string name="button_A">Airflow</string>
+    <string name="button_B">Pouls</string>
+    <string name="button_C">Conductivity</string>
+    <string name="button_O">SPO2</string>
+    <string name="button_P">Position</string>
+    <string name="button_R">Résistance</string>
+    <string name="button_T">Température</string>
     <string name="debuggable">true</string>
     <string name="str_btn_heartBeats">Heartbeats</string>
     <string name="str_btn_oxygen">Oxygen</string>

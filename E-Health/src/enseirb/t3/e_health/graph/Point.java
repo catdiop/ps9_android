@@ -5,7 +5,7 @@ import java.util.Date;
 public class Point {
 	private Date x;
 	private double y;
-	
+
 	public Point(Date x, double y) {
 		this.x = x;
 		this.y = y;

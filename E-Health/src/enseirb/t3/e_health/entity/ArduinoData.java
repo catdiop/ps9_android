@@ -1,5 +1,6 @@
 package enseirb.t3.e_health.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import android.util.Log;
@@ -8,34 +9,20 @@ import enseirb.t3.e_health.process.DataProcess;
 
 public class ArduinoData  {
 
-	private String arduinoData;
 	private Date date;
-	
-	public double value;
+	public ArrayList<Data> arrayData = new ArrayList<Data>();
 
-	public ArduinoData(String arduinoData) {
-		this.arduinoData = arduinoData;
+	public ArduinoData() {
 	}
     
     // Methods
-    
-    // get data from arduino and store it to the database
-    public double getAndStoreData() {
-    	
-    	String[] aDataArrayStr = arduinoData.split("(?=DATA)");
-
-		for (int i = 1; i < aDataArrayStr.length; i++)	
-			stockData(getChunks(aDataArrayStr[i]));
-		
-		return value;
-    }
     
     // Get data timestamp
     public String getPaquetTimestamp(String firstChunk) {
     	return firstChunk.substring(4, firstChunk.length());
     }
     
-    public void stockData(String[] chunks) {
+    public ArrayList<Data> stockData(String[] chunks) {
     	
     	DataProcess dataProcess = null;
     	String[] chunkTmp;
@@ -57,10 +44,6 @@ public class ArduinoData  {
 
     		dataTmp = new Data(chunkTmp[1], chunkTmp[2], date);
     		
-    		if(chunkTmp[1].equals("O")){
-    			value = Double.parseDouble(chunkTmp[2]);
-    		}
-    		
     		Log.d("gt",dataTmp.getDataname());
     		Log.d("gt",dataTmp.getValue()+"\n");
     		Log.d("date", dataTmp.getDate().toString());
@@ -69,11 +52,14 @@ public class ArduinoData  {
     		dataProcess.process(dataTmp);
     		
     		EHealth.db.createData(dataTmp);
+    		
+    		arrayData.add(dataTmp);
     	}
     	//if (dataProcess.correlation() != null)
     		//store alert in DB
     	
 //    	dataDB.close();
+    	return arrayData;
     }
     
     public String[] getChunks(String ArduinoData) {

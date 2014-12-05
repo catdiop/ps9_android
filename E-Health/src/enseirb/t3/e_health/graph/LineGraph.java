@@ -12,61 +12,64 @@ import android.content.Context;
 import android.graphics.Color;
 
 public class LineGraph {
-	
+
 	private GraphicalView view;
-	
 	private TimeSeries dataset;
 	private XYMultipleSeriesDataset mDataset = new XYMultipleSeriesDataset();
-	
 	private XYSeriesRenderer renderer = new XYSeriesRenderer();
 	private XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
-	
 	private float textSize = 22;
 	private float titleTextSize = 24;
 	private int window = 10;
-	
+
 	public LineGraph(String dataname) {
 		String xTitle = "Time";
 		String yTitle = null;
 		String chartTitle = null;
-		
+
 		switch (dataname) {
 		case "A":
-			//0 -> 1024 : 0 -> 8L/s
+			// 0 -> 1024 : 0 -> 8L/s
 			yTitle = "L/s";
 			chartTitle = "Airflow";
 			break;
 		case "B":
 			yTitle = "Bpm";
-			chartTitle = "Heart Beats";
+			chartTitle = "Pouls";
+			break;
+		case "C":
+			yTitle = "µS";
+			chartTitle = "Conductance";
 			break;
 		case "O":
 			yTitle = "%";
-			chartTitle = "Oxygen Rate";
+			chartTitle = "SPO2";
 			break;
 		case "P":
-			yTitle = "??";
+			yTitle = "Position";
 			chartTitle = "Position";
+			break;
+		case "R":
+			yTitle = "Ohm";
+			chartTitle = "Résistance";
 			break;
 		case "T":
 			yTitle = "°C";
 			chartTitle = "Température";
 			break;
-		default :
+		default:
 			break;
 		}
-		
+
 		dataset = new TimeSeries(chartTitle);
 
 		mDataset.addSeries(dataset);
-		
+
 		renderer.setColor(Color.RED);
 		renderer.setPointStyle(PointStyle.CIRCLE);
 		renderer.setFillPoints(true);
 		renderer.setLineWidth(3);
 		renderer.setDisplayChartValues(true);
-//		renderer.addXTextLabel(x, text);
-		
 		mRenderer.setXLabels(window);
 		mRenderer.setChartTitle(chartTitle);
 		mRenderer.setXTitle(xTitle);
@@ -75,27 +78,28 @@ public class LineGraph {
 		mRenderer.setAxisTitleTextSize(textSize);
 		mRenderer.setLabelsTextSize(textSize);
 		mRenderer.setChartTitleTextSize(titleTextSize);
-		
+
 		mRenderer.addSeriesRenderer(renderer);
 	}
-	
+
 	public GraphicalView getView(Context context) {
-		view = ChartFactory.getTimeChartView(context, mDataset, mRenderer, "H:mm:ss");
+		view = ChartFactory.getTimeChartView(context, mDataset, mRenderer,
+				"H:mm:ss");
 		return view;
 	}
-	
+
 	public XYMultipleSeriesRenderer getmRenderer() {
 		return mRenderer;
 	}
-	
+
 	public XYMultipleSeriesDataset getDataset() {
 		return mDataset;
 	}
-	
+
 	public void addNewPoint(Point p) {
 		dataset.add(p.getX(), p.getY());
 	}
-	
+
 	public void removePoint(int i) {
 		dataset.remove(i);
 	}

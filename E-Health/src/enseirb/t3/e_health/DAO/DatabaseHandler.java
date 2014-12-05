@@ -14,7 +14,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import enseirb.t3.e_health.entity.Data;
 import enseirb.t3.e_health.entity.User;
 
-public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabaseHandler<User>{
+public class DatabaseHandler extends SQLiteOpenHelper implements
+		GenericDatabaseHandler<User> {
 
 	// Database Version
 	private static final int DATABASE_VERSION = 1;
@@ -35,11 +36,15 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 	private static final String KEY_DATANAME = "dataname";
 	private static final String KEY_VALUE = "value";
 	private static final String KEY_DATE = "date";
-	private static final String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USERS + "("
-			+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_USERNAME +  " TEXT," + KEY_PASSWORD +  " TEXT," + KEY_TYPE + " TEXT )";
+	private static final String CREATE_USER_TABLE = "CREATE TABLE "
+			+ TABLE_USERS + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
+			+ KEY_USERNAME + " TEXT," + KEY_PASSWORD + " TEXT," + KEY_TYPE
+			+ " TEXT )";
 
-	private static final String CREATE_DATA_TABLE = "CREATE TABLE " + TABLE_DATA + "("
-			+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATANAME +  " TEXT," + KEY_VALUE +  " TEXT," + KEY_DATE + " TEXT )";
+	private static final String CREATE_DATA_TABLE = "CREATE TABLE "
+			+ TABLE_DATA + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
+			+ KEY_DATANAME + " TEXT," + KEY_VALUE + " TEXT," + KEY_DATE
+			+ " TEXT )";
 
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -48,7 +53,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 	// Creating Tables
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(CREATE_USER_TABLE);		
+		db.execSQL(CREATE_USER_TABLE);
 		db.execSQL(CREATE_DATA_TABLE);
 	}
 
@@ -68,7 +73,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(KEY_USERNAME, object.getUsername()); 
+		values.put(KEY_USERNAME, object.getUsername());
 		values.put(KEY_PASSWORD, object.getPassword());
 		values.put(KEY_TYPE, object.getType());
 		// Inserting Row
@@ -81,7 +86,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor cursor = db.query(TABLE_USERS, new String[] { KEY_USERNAME,
-				KEY_PASSWORD}, KEY_ID + "=?",
+				KEY_PASSWORD }, KEY_ID + "=?",
 				new String[] { Integer.toString(id) }, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
@@ -109,7 +114,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 	public void deleteUser(int id) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_USERS, KEY_ID + " = ?",
-				new String[] { Integer.toString(id)});
+				new String[] { Integer.toString(id) });
 		db.close();
 	}
 
@@ -119,28 +124,31 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		db.close();
 	}
 
-	public boolean isUser(String username, String password){
+	public boolean isUser(String username, String password) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		String selectQuery = "SELECT * FROM " + TABLE_USERS + " WHERE " + KEY_USERNAME + " = ?" + " AND " + KEY_PASSWORD + " = ?";
+		String selectQuery = "SELECT * FROM " + TABLE_USERS + " WHERE "
+				+ KEY_USERNAME + " = ?" + " AND " + KEY_PASSWORD + " = ?";
 
-		Cursor cursor = db.rawQuery(selectQuery, new String [] {username, password});
-		
-//		db.close();
-		
-		return cursor.moveToFirst();	
+		Cursor cursor = db.rawQuery(selectQuery, new String[] { username,
+				password });
+
+		// db.close();
+
+		return cursor.moveToFirst();
 	}
 
-	public boolean doesUserExist(String username){
+	public boolean doesUserExist(String username) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		String selectQuery = "SELECT * FROM " + TABLE_USERS + " WHERE " + KEY_USERNAME + " = ?";
+		String selectQuery = "SELECT * FROM " + TABLE_USERS + " WHERE "
+				+ KEY_USERNAME + " = ?";
 
-		Cursor cursor = db.rawQuery(selectQuery, new String [] {username});
-		
+		Cursor cursor = db.rawQuery(selectQuery, new String[] { username });
+
 		db.close();
-		
-		return cursor.moveToFirst();	
+
+		return cursor.moveToFirst();
 	}
 
 	public boolean isUserADoctor(String username) {
@@ -150,7 +158,8 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		boolean isDoctor = false;
 
 		SQLiteDatabase db = this.getReadableDatabase();
-		String selectQuery = "SELECT * FROM " + TABLE_USERS + " WHERE " + KEY_USERNAME + " = '" + username + "' ";
+		String selectQuery = "SELECT * FROM " + TABLE_USERS + " WHERE "
+				+ KEY_USERNAME + " = '" + username + "' ";
 		Cursor cursorOnType = db.rawQuery(selectQuery, null);
 		if (cursorOnType != null)
 			cursorOnType.moveToFirst();
@@ -168,7 +177,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(KEY_DATANAME, object.getDataname()); 
+		values.put(KEY_DATANAME, object.getDataname());
 		values.put(KEY_VALUE, object.getValue());
 		values.put(KEY_DATE, object.getDate().toString());
 
@@ -177,21 +186,23 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		db.close(); // Closing database connection
 	}
 
-
 	public List<Data> retrieveDataList(String dataname) {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Data data;
-		List<Data> dataList=new LinkedList<Data>();
+		List<Data> dataList = new LinkedList<Data>();
 
-		String selectQuery = "select " + KEY_DATANAME +","+KEY_VALUE+","+KEY_DATE + " from "+ TABLE_DATA +" where "+  KEY_DATANAME +" = ?";
+		String selectQuery = "select " + KEY_DATANAME + "," + KEY_VALUE + ","
+				+ KEY_DATE + " from " + TABLE_DATA + " where " + KEY_DATANAME
+				+ " = ?";
 
-		Cursor cursor=db.rawQuery(selectQuery, new String[]{dataname});
+		Cursor cursor = db.rawQuery(selectQuery, new String[] { dataname });
 
 		while (cursor.moveToNext()) {
 
 			Date date = null;
 			try {
-				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(cursor.getString(2));
+				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy")
+						.parse(cursor.getString(2));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -204,28 +215,30 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		db.close();
 		return dataList;
 	}
-	
+
 	public Data retrieveLastData(String dataname) {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Data data = null;
 		Date date;
-		
-		String selectQuery = "select " + KEY_DATANAME +","+KEY_VALUE+","+KEY_DATE + " from "+ TABLE_DATA +" where "+  KEY_DATANAME +" = ?";
 
-		Cursor cursor=db.rawQuery(selectQuery, new String[]{dataname});
+		String selectQuery = "select " + KEY_DATANAME + "," + KEY_VALUE + ","
+				+ KEY_DATE + " from " + TABLE_DATA + " where " + KEY_DATANAME
+				+ " = ?";
+
+		Cursor cursor = db.rawQuery(selectQuery, new String[] { dataname });
 		cursor.moveToFirst();
-		
-		//try {
-			//date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(cursor.getString(2));
-	        date = new Date();
-			data = new Data(cursor.getString(0), cursor.getString(1), date);
-		//} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		//}
 
-        
-//		db.close();
+		// try {
+		// date = new
+		// SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(cursor.getString(2));
+		date = new Date();
+		data = new Data(cursor.getString(0), cursor.getString(1), date);
+		// } catch (ParseException e) {
+		// TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+
+		// db.close();
 		return data;
 	}
 
@@ -236,7 +249,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		values.put(KEY_DATANAME, object.getDataname());
 		values.put(KEY_VALUE, object.getValue());
 		values.put(KEY_DATE, object.getDate().toString());
-		
+
 		db.close();
 
 		// updating row
@@ -247,7 +260,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 	public void deleteData(int id) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_DATA, KEY_ID + " = ?",
-				new String[] { Integer.toString(id)});
+				new String[] { Integer.toString(id) });
 		db.close();
 	}
 
