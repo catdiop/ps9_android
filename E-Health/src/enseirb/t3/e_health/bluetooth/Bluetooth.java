@@ -14,6 +14,7 @@ public class Bluetooth {
 	private final static int REQUEST_CODE_ENABLE_BLUETOOTH = 0;
 	private Activity activity;
 	private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+	public BluetoothDevice device;
 	
 	public Bluetooth (Activity activity) {
 		this.activity = activity;
@@ -27,7 +28,7 @@ public class Bluetooth {
 		}
 	}
 	
-	public boolean queryingPairedDevices () {
+	public boolean queryingPairedDevices() {
 		Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
 		// If there are paired devices
 		if (pairedDevices.size() > 0) {
@@ -37,9 +38,8 @@ public class Bluetooth {
 		    	
 		    	if(device.getName().equals("Ehealth")) {
 	            	Log.d("msg", "Arduino déjà découvert....");
-	            	Thread ct=new ConnectThread(device, activity);
-	            	
-	            	ct.start();
+	            	this.device = device;
+
 	            	return true;
 	            
 	            }

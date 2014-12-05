@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.project.e_health.R;
 
-import enseirb.t3.e_health.DAO.DatabaseHandler;
 import enseirb.t3.e_health.bluetooth.Bluetooth;
 import enseirb.t3.e_health.entity.ArduinoData;
 import enseirb.t3.e_health.entity.Patient;
@@ -22,17 +21,12 @@ import enseirb.t3.e_health.entity.Patient;
  * 
  */
 public class AuthentificationActivity extends Activity implements OnClickListener {
-	
-
-	private DatabaseHandler dbHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_authentification);
-		
-		dbHandler = DatabaseHandler.getInstance(getApplicationContext());
 
 		Button bluetooth = (Button) findViewById(R.id.bluetooth);
 		bluetooth.setOnClickListener(this);
@@ -45,7 +39,7 @@ public class AuthentificationActivity extends Activity implements OnClickListene
 
 		// Get data and store it to the db
 		
-		aData.getAndStoreData(dbHandler);
+		aData.getAndStoreData();
 //		ArduinoData aData = new ArduinoData("DATA200000;180000|B|85;181000|B|90;182000|B|105;183000|B|100;184000|B|95;185000|B|98;186000|B|95;187000|B|95;188000|B|95;189000|B|92;190000|B|85;191000|B|90;192000|B|105;193000|B|100;194000|B|95;195000|B|98;196000|B|95;197000|B|95;198000|B|95;199000|B|92");
 		
 //		String aDataStr = aData.getArduinoData();
@@ -63,9 +57,9 @@ public class AuthentificationActivity extends Activity implements OnClickListene
 		// Get data timestamp
 		//		String date = aData.getDataTimestamp(chunks[0]);
 
-		dbHandler.deleteAllUser();
-		Patient patient = new Patient("pikro", "1234");
-		dbHandler.createUser(patient);
+		//EHealth.db.deleteAllUser();
+		//Patient patient = new Patient("pikro", "1234");
+		//EHealth.db.createUser(patient);
 	}
 
 	@Override
@@ -77,14 +71,14 @@ public class AuthentificationActivity extends Activity implements OnClickListene
 		case R.id.connexion:
 			TextView usernameView = (TextView) findViewById(R.id.username);
 			TextView passwordView = (TextView) findViewById(R.id.password);
-			if (dbHandler.isUser(usernameView.getText().toString(), passwordView.getText()
-					.toString())) {
+			//if (dbHandler.isUser(usernameView.getText().toString(), passwordView.getText()
+				//	.toString())) {
 				// on se connecte
 				Intent intent = new Intent(AuthentificationActivity.this, Graph.class);
 				startActivity(intent);
-			} else {
-				createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
-			}
+			//} else {
+				//createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
+			//}
 			break;
 
 			// Si l'utilisateur active le bluetooth

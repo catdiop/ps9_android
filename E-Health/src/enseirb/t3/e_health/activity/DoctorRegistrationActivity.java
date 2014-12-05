@@ -12,25 +12,20 @@ import android.widget.TextView;
 
 import com.project.e_health.R;
 
-import enseirb.t3.e_health.DAO.DatabaseHandler;
 import enseirb.t3.e_health.entity.Patient;
 
 public class DoctorRegistrationActivity extends Activity implements OnClickListener {
-
-	private DatabaseHandler dbHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_doctor_registration);
-		
-		dbHandler = DatabaseHandler.getInstance(getApplicationContext());
 
 		Button register = (Button) findViewById(R.id.register);
 		register.setOnClickListener(this);
 		
-		dbHandler.deleteAllData();
-		dbHandler.deleteAllUser();
+		EHealth.db.deleteAllData();
+		EHealth.db.deleteAllUser();
 	}
 
 	@Override
@@ -47,7 +42,7 @@ public class DoctorRegistrationActivity extends Activity implements OnClickListe
 			if (usernameView.getText().length() > 0 && passwordView.getText().length() > 0 && passwordCheckView.getText().length() > 0) {
 
 				// If username is already being used
-				if (dbHandler.doesUserExist(usernameView.getText().toString())) {
+				if (EHealth.db.doesUserExist(usernameView.getText().toString())) {
 
 					createDialog("Username already in use.");
 				} else {
@@ -57,7 +52,7 @@ public class DoctorRegistrationActivity extends Activity implements OnClickListe
 						
 					Patient patient = new Patient(usernameView.getText().toString(), passwordView.getText().toString());
 					patient.setType("doctor");
-					dbHandler.createUser(patient);
+					EHealth.db.createUser(patient);
 					
 					createDialog("Doctor account created !");
 					

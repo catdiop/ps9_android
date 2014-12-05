@@ -3,35 +3,40 @@ package enseirb.t3.e_health.bluetooth;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
-
-import enseirb.t3.e_health.DAO.DatabaseHandler;
-import enseirb.t3.e_health.entity.ArduinoData;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
 public class ConnectThread extends Thread {
 
-	Context context;
-	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(context);
+	private Context context;
 	private static final int MESSAGE_READ = 999;
 	private  UUID SERIAL_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 	private BluetoothSocket mmSocket = null;
 	private final BluetoothDevice mmDevice;
 	private InputStream mmInStream;
 	private OutputStream mmOutStream;
+	private Handler handler;
 	
-	public ConnectThread(BluetoothDevice device, Context context){
+	private String TAG = "ConnectThread";
+	
+	public ConnectThread(BluetoothDevice device, Context context, Handler handler){
 		this.context = context;
-		Log.d("device name", device.getName());
-		BluetoothSocket tmp=null;
+		this.handler = handler;
+		Log.d(TAG, device.getName());
+		BluetoothSocket tmp = null;
 		mmDevice=device;
+		
+		
 		//get a BluetoothSocket to connect with the given BluetoothDevice
 		try{
 //			mmSocket = device.createRfcommSocketToServiceRecord(SERIAL_UUID);
@@ -59,10 +64,10 @@ public class ConnectThread extends Thread {
 			BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
 			if (!mmSocket.isConnected()) {
 				mmSocket.connect();
-				Log.d("Status", "Arduino connecté");
+				Log.d(TAG, "Arduino connecté");
 			}
 			else
-				Log.d("Status", "Arduino déjà connecté");
+				Log.d(TAG, "Arduino déjà connecté");
 			
 			while (true) {
 				bytes=mmInStream.read(buffer, 0, 100);
@@ -74,10 +79,17 @@ public class ConnectThread extends Thread {
                      
                     String value = new String(rawdata);
                     
-                    Log.d("buffer", value);
-                    
-                    ArduinoData arduinoData = new ArduinoData(value);
-					arduinoData.getAndStoreData(dbHandler);
+                    Log.d(TAG, value);
+					
+					Message msg = handler.obtainMessage();
+	    			Bundle bundle = new Bundle();
+	    			SimpleDateFormat dateformat = 
+	                             new SimpleDateFormat("HH:mm:ss MM/dd/yyyy");
+	    			String dateString = dateformat.format(new Date());
+	    			bundle.putString("date", dateString);
+	    			bundle.putString("msg", value);
+	                msg.setData(bundle);
+	                handler.sendMessage(msg);
                    
                 }
 				

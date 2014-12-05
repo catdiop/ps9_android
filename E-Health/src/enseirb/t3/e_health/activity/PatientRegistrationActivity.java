@@ -17,20 +17,16 @@ import enseirb.t3.e_health.entity.Patient;
 
 public class PatientRegistrationActivity extends Activity implements OnClickListener {
 
-	private DatabaseHandler dbHandler;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_patient_registration);
-		
-		dbHandler = DatabaseHandler.getInstance(getApplicationContext());
 
 		Button register = (Button) findViewById(R.id.register);
 		register.setOnClickListener(this);
 		
-		dbHandler.deleteAllData();
-		dbHandler.deleteAllUser();
+		EHealth.db.deleteAllData();
+		EHealth.db.deleteAllUser();
 	}
 
 	@Override
@@ -47,7 +43,7 @@ public class PatientRegistrationActivity extends Activity implements OnClickList
 			if (usernameView.getText().length() > 0 && passwordView.getText().length() > 0 && passwordCheckView.getText().length() > 0) {
 
 				// If user's name is already being used
-				if (dbHandler.doesUserExist(usernameView.getText().toString())) {
+				if (EHealth.db.doesUserExist(usernameView.getText().toString())) {
 
 					createDialog("Username already in use.");
 					//				Intent intent = new Intent(AuthentificationActivity.this, Graph.class);
@@ -59,7 +55,7 @@ public class PatientRegistrationActivity extends Activity implements OnClickList
 						
 					Patient patient = new Patient(usernameView.getText().toString(), passwordView.getText().toString());
 					patient.setType("patient");
-					dbHandler.createUser(patient);
+					EHealth.db.createUser(patient);
 					
 					createDialog("Patient account created !");
 					

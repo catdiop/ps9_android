@@ -3,8 +3,6 @@ package enseirb.t3.e_health.activity;
 import java.util.List;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

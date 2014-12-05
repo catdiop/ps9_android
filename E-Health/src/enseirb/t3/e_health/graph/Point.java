@@ -4,9 +4,9 @@ import java.util.Date;
 
 public class Point {
 	private Date x;
-	private int y;
+	private double y;
 	
-	public Point(Date x, int y) {
+	public Point(Date x, double y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -19,11 +19,11 @@ public class Point {
 		this.x = x;
 	}
 
-	public int getY() {
+	public double getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setY(double y) {
 		this.y = y;
 	}
 

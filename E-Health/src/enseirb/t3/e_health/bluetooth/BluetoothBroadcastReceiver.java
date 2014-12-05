@@ -22,9 +22,6 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             if(device.getName().equals("Ehealth")) {
             	Log.d("msg1", "Arduino découvert....");
-            	Thread ct=new ConnectThread(device, context);
-            	
-            	ct.start();
             }
         }
 	}

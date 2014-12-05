@@ -1,7 +1,5 @@
 package enseirb.t3.e_health.graph;
 
-import java.util.List;
-
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.PointStyle;
@@ -12,7 +10,6 @@ import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.content.Context;
 import android.graphics.Color;
-import enseirb.t3.e_health.entity.Data;
 
 public class LineGraph {
 	

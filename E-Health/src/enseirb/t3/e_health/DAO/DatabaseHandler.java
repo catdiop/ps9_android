@@ -16,10 +16,6 @@ import enseirb.t3.e_health.entity.User;
 
 public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabaseHandler<User>{
 
-	// All Static variables
-
-	private static DatabaseHandler sInstance;
-
 	// Database Version
 	private static final int DATABASE_VERSION = 1;
 
@@ -45,18 +41,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 	private static final String CREATE_DATA_TABLE = "CREATE TABLE " + TABLE_DATA + "("
 			+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATANAME +  " TEXT," + KEY_VALUE +  " TEXT," + KEY_DATE + " TEXT )";
 
-	public static DatabaseHandler getInstance(Context context) {
-
-		// Use the application context, which will ensure that you 
-		// don't accidentally leak an Activity's context.
-		// See this article for more information: http://bit.ly/6LRzfx
-		if (sInstance == null) {
-			sInstance = new DatabaseHandler(context);
-		}
-		return sInstance;
-	}
-
-	private DatabaseHandler(Context context) {
+	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
@@ -230,13 +215,14 @@ public class DatabaseHandler extends SQLiteOpenHelper implements GenericDatabase
 		Cursor cursor=db.rawQuery(selectQuery, new String[]{dataname});
 		cursor.moveToFirst();
 		
-		try {
-			date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(cursor.getString(2));
-	        data = new Data(cursor.getString(0), cursor.getString(1), date);
-		} catch (ParseException e) {
+		//try {
+			//date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(cursor.getString(2));
+	        date = new Date();
+			data = new Data(cursor.getString(0), cursor.getString(1), date);
+		//} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			//e.printStackTrace();
+		//}
 
         
 //		db.close();
