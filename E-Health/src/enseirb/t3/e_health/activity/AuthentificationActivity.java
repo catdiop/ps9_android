@@ -53,11 +53,13 @@ public class AuthentificationActivity extends Activity implements
 			break;
 
 		case R.id.menu_alerts:
-			Intent intent = new Intent(AuthentificationActivity.this, AlertsActivity.class);
+			Intent intent = new Intent(AuthentificationActivity.this,
+					AlertsActivity.class);
 			startActivity(intent);
 			break;
 
-		default:;	
+		default:
+			;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -93,42 +95,31 @@ public class AuthentificationActivity extends Activity implements
 		case R.id.connexion:
 			TextView usernameView = (TextView) findViewById(R.id.username);
 			TextView passwordView = (TextView) findViewById(R.id.password);
-<<<<<<< HEAD
+
 			if (EHealth.db.isUser(usernameView.getText().toString(),
 					passwordView.getText().toString())) {
 				// on se connecte
-				if (EHealth.db.isUserADoctor(usernameView.getText().toString())) {
+				// Intent intent = new Intent(AuthentificationActivity.this,
+				// Graph.class);
+				// startActivity(intent);
+				// else {
+				// createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
+				// }
 
-					Intent intent = new Intent(AuthentificationActivity.this,
-							AlertsActivity.class);
-					startActivity(intent);
-				} else {
-
-					Intent intent = new Intent(AuthentificationActivity.this,
-							Graph.class);
-					startActivity(intent);
-=======
-
-			if (EHealth.db.isUser(usernameView.getText().toString(), passwordView.getText()
-					.toString())) {
-				// on se connecte
-				//Intent intent = new Intent(AuthentificationActivity.this, Graph.class);
-				//startActivity(intent);
-				 //else {
-				//createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
-				//}
-
-				if (EHealth.db.isUser(usernameView.getText().toString(), passwordView.getText()
-						.toString())) {
+				if (EHealth.db.isUser(usernameView.getText().toString(),
+						passwordView.getText().toString())) {
 					// on se connecte
-					if (EHealth.db.isUserADoctor(usernameView.getText().toString())) {
+					if (EHealth.db.isUserADoctor(usernameView.getText()
+							.toString())) {
 
-						Intent intent = new Intent(AuthentificationActivity.this, AlertsActivity.class);
+						Intent intent = new Intent(
+								AuthentificationActivity.this,
+								AlertsActivity.class);
 						startActivity(intent);
-					}
-					else {
+					} else {
 
-						Intent intent = new Intent(AuthentificationActivity.this, Graph.class);
+						Intent intent = new Intent(
+								AuthentificationActivity.this, Graph.class);
 						startActivity(intent);
 					}
 				}
@@ -136,44 +127,24 @@ public class AuthentificationActivity extends Activity implements
 				else {
 
 					createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
->>>>>>> 0b6847468ac8e6ac0318def9c8f0fa4644352eb8
 				}
 				break;
 			}
-<<<<<<< HEAD
-
-			else {
-
-				createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
-			}
-			break;
-
-		// Si l'utilisateur active le bluetooth
-		case R.id.bluetooth:
-			Bluetooth bluetooth = new Bluetooth(this);
-			bluetooth.enableBluetooth();
-			if (!bluetooth.queryingPairedDevices()) {
-				// discover
-				bluetooth.discoverDevices();
-			}
-			break;
-=======
-			}
->>>>>>> 0b6847468ac8e6ac0318def9c8f0fa4644352eb8
-		}
-
-		private void createDialog(String msg) {
-
-			AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-			dialog.setMessage(msg);
-			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-			dialog.show();
 		}
 	}
+
+	private void createDialog(String msg) {
+
+		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		dialog.setMessage(msg);
+		dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		dialog.show();
+	}
+}
