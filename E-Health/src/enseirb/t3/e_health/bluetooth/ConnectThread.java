@@ -3,8 +3,6 @@ package enseirb.t3.e_health.bluetooth;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
@@ -69,40 +67,33 @@ public class ConnectThread extends Thread {
 			else
 				Log.d(TAG, "Arduino déjà connecté");
 			
+			String value = "";
 			while (true) {
-				bytes=mmInStream.read(buffer, 0, 100);
-				if(bytes > 20) {
+				bytes=mmInStream.read(buffer, 0, 128);
+				if(bytes > 0) {
                     // On convertit les données en String
                     byte rawdata[] = new byte[bytes];
                     for(int i=0;i<bytes;i++)
                         rawdata[i] = buffer[i];
                      
-                    String value = new String(rawdata);
-                    
-                    Log.d(TAG, value);
+                    value = value + new String(rawdata);
 					
-					Message msg = handler.obtainMessage();
-	    			Bundle bundle = new Bundle();
-	    			SimpleDateFormat dateformat = 
-	                             new SimpleDateFormat("HH:mm:ss MM/dd/yyyy");
-	    			String dateString = dateformat.format(new Date());
-	    			bundle.putString("date", dateString);
-	    			bundle.putString("msg", value);
-	                msg.setData(bundle);
-	                handler.sendMessage(msg);
-                   
+                    if(value.contains("\n")) {
+                    	Log.d(TAG, value);
+						Message msg = handler.obtainMessage();
+		    			Bundle bundle = new Bundle();
+		    			bundle.putString("msg", value);
+		                msg.setData(bundle);
+		                handler.sendMessage(msg);
+		                value = "";
+                    }
                 }
-				
-				sleep(900);
 			}
 		} catch(IOException e){
 			try{
 				mmSocket.close();
 			}
 			catch(IOException closeException){return;}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} 
 	}
 	
