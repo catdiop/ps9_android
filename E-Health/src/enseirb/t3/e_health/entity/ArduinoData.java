@@ -10,7 +10,7 @@ import enseirb.t3.e_health.process.DataProcess;
 public class ArduinoData  {
 
 	private Date date;
-	public ArrayList<Data> arrayData = new ArrayList<Data>();
+	private ArrayList<Data> arrayData = new ArrayList<Data>();
 
 	public ArduinoData() {
 	}
@@ -22,7 +22,7 @@ public class ArduinoData  {
     	return firstChunk.substring(4, firstChunk.length());
     }
     
-    public ArrayList<Data> stockData(String[] chunks) {
+    public ArrayList<Data> stockData(String[] chunks, int idPatient) {
     	
     	DataProcess dataProcess = null;
     	String[] chunkTmp;
@@ -42,7 +42,7 @@ public class ArduinoData  {
     		
     		date = new Date((System.currentTimeMillis()/1000) - (paquetTimestamp - Long.parseLong(chunkTmp[0])));
 
-    		dataTmp = new Data(chunkTmp[1], chunkTmp[2], date);
+    		dataTmp = new Data(chunkTmp[1], chunkTmp[2], date, idPatient);
     		
     		Log.d("gt",dataTmp.getDataname());
     		Log.d("gt",dataTmp.getValue()+"\n");

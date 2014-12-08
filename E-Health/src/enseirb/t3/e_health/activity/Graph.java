@@ -19,11 +19,14 @@ import enseirb.t3.e_health.bluetooth.Bluetooth;
 import enseirb.t3.e_health.bluetooth.BtThread;
 import enseirb.t3.e_health.entity.ArduinoData;
 import enseirb.t3.e_health.entity.Data;
+import enseirb.t3.e_health.entity.Patient;
 import enseirb.t3.e_health.graph.LineGraph;
 import enseirb.t3.e_health.graph.Point;
+import enseirb.t3.e_health.session.SessionManager;
 
 public class Graph extends Activity {
 
+	SessionManager session;
 	private GraphicalView view;
 	private LineGraph line;
 	private Bluetooth bt;
@@ -31,11 +34,15 @@ public class Graph extends Activity {
 	private static String TAG = "Graph";
 	private int cmpt = 0;
 	private static int nbreMesuresPrint = 9;
+	private Patient patient;
+	private int idPatient;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_measures);
+
+		session = new SessionManager(getApplicationContext());
 
 		bt = new Bluetooth(this);
 		bt.enableBluetooth();
@@ -43,6 +50,9 @@ public class Graph extends Activity {
 			// discover
 			bt.discoverDevices();
 		}
+
+		idPatient = session.getUserDetails();
+
 		openChart();
 	}
 
@@ -101,6 +111,9 @@ public class Graph extends Activity {
 			cmpt = 0;
 			openChart();
 			return true;
+		case R.id.deconnexion:
+			onBackPressed();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -119,8 +132,8 @@ public class Graph extends Activity {
 				if (aDataArrayStr[i].length() > 35) {
 
 					ArduinoData arduinoData = new ArduinoData();
-					arrayData = arduinoData.stockData(arduinoData
-							.getChunks(aDataArrayStr[i]));
+					arrayData = arduinoData.stockData(
+							arduinoData.getChunks(aDataArrayStr[i]), idPatient);
 
 					for (Data dataTmp : arrayData) {
 						if (dataTmp.getDataname().equals(dataname))
@@ -131,7 +144,6 @@ public class Graph extends Activity {
 							.getValue()));
 					line.addNewPoint(p);
 					cmpt++;
-					// TODO : changer le 9 en variable globale
 					if (cmpt > nbreMesuresPrint) {
 						line.removePoint(cmpt - (nbreMesuresPrint + 1));
 						cmpt--;
@@ -149,5 +161,10 @@ public class Graph extends Activity {
 		line = new LineGraph(dataname);
 		view = line.getView(this);
 		setContentView(view);
+	}
+
+	public void onBackPressed() {
+		session.logoutUser();
+		super.onBackPressed();
 	}
 }

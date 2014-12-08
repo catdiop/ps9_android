@@ -3,7 +3,6 @@ package enseirb.t3.e_health.activity;
 import android.app.Application;
 import android.util.Log;
 import enseirb.t3.e_health.DAO.DatabaseHandler;
-import enseirb.t3.e_health.bluetooth.Bluetooth;
 
 public class EHealth extends Application {
 	

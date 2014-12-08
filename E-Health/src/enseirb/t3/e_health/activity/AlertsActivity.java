@@ -6,12 +6,8 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,26 +23,29 @@ import android.widget.ListView;
 import com.project.e_health.R;
 
 import enseirb.t3.e_health.entity.Alert;
+import enseirb.t3.e_health.entity.Doctor;
 import enseirb.t3.e_health.entity.Patient;
-import enseirb.t3.e_health.entity.User;
+import enseirb.t3.e_health.session.SessionManager;
 
 public class AlertsActivity extends Activity {
 
-	private ListView list; 
-	private Context context;
+	SessionManager session;
+	private ListView list;
 	private ListAlertAdapter adapter;
 	static View view;
+	private Doctor doctor;
+	private int idDoctor;
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
-			break;
 		case R.id.add_patient:
 			add();
 			break;
-		default:;	
+		case R.id.deconnexion:
+			super.onBackPressed();
+			return true;
+		default:
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -56,17 +55,22 @@ public class AlertsActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_alerts);
-		//Hide the status Bar
+
+		session = new SessionManager(getApplicationContext());
+
+		// Hide the status Bar
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-		list = (ListView)findViewById(R.id.list_alerts);
-		list.setOnItemClickListener( new OnItemClickListener() {
+		idDoctor = session.getUserDetails();
+
+		list = (ListView) findViewById(R.id.list_alerts);
+		list.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-					long arg3) {
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
 				// TODO Auto-generated method stub
 
 			}
@@ -79,27 +83,25 @@ public class AlertsActivity extends Activity {
 					int arg2, long arg3) {
 				// TODO Auto-generated method stub
 
-
 				return false;
 			}
 
 		});
-		List<Alert> alerts=new LinkedList<Alert>();
-		Calendar c=Calendar.getInstance();
-		Patient p=new Patient();
+		List<Alert> alerts = new LinkedList<Alert>();
+		Calendar c = Calendar.getInstance();
+		Patient p = new Patient();
 		p.setFirstname("titi");
 		p.setLastname("toto");
-		Alert a=new Alert(p, c.getTime(), "Tachycardie");
+		Alert a = new Alert(p, c.getTime(), "Tachycardie");
 		a.setPatient(p);
 		a.setDate(c.getTime());
-		//		alerts.add(a);
+		// alerts.add(a);
 		a.setPatient(p);
 		alerts.add(a);
 
-		adapter=new ListAlertAdapter(AlertsActivity.this, alerts);
+		adapter = new ListAlertAdapter(AlertsActivity.this, alerts);
 		list.setAdapter(adapter);
 	}
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,39 +111,44 @@ public class AlertsActivity extends Activity {
 		return super.onCreateOptionsMenu(menu);
 	}
 
-	//ajout d'un patient
-	//add new feed
+	// ajout d'un patient
+	// add new feed
 	private void add() {
 		LayoutInflater inflater = LayoutInflater.from(this);
-		View addPatient = inflater.inflate(R.layout.activity_patient_registration,
-				null);
+		View addPatient = inflater.inflate(
+				R.layout.activity_patient_registration, null);
 
 		final DialogWrapper wrapper = new DialogWrapper(addPatient);
 
 		new AlertDialog.Builder(this)
-		.setTitle(R.string.menu_add_patient)
-		.setView(addPatient)
-		.setPositiveButton(R.string.register,
-				new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,
-					int whichButton) {
-				processAdd(wrapper);
-			}
-		})
-		.setNegativeButton(R.string.cancel,
-				new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,
-					int whichButton) {
-				// ignore, just dismiss
-			}
-		}).show();
+				.setTitle(R.string.menu_add_patient)
+				.setView(addPatient)
+				.setPositiveButton(R.string.register,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								processAdd(wrapper);
+							}
+						})
+				.setNegativeButton(R.string.cancel,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								// ignore, just dismiss
+							}
+						}).show();
 	}
 
 	@SuppressWarnings("deprecation")
 	private void processAdd(DialogWrapper wrapper) {
-		addPatient(wrapper.getUsername(), wrapper.getPassword(), wrapper.getConfirmPwd());
+		addPatient(wrapper.getFirstname(), wrapper.getLastname(),
+				wrapper.getUsername(), wrapper.getPassword(),
+				wrapper.getConfirmPwd());
 	}
+
 	class DialogWrapper {
+		EditText firstname = null;
+		EditText lastname = null;
 		EditText username = null;
 		EditText password = null;
 		EditText confirmPwd = null;
@@ -149,9 +156,19 @@ public class AlertsActivity extends Activity {
 
 		DialogWrapper(View base) {
 			this.base = base;
+			this.firstname = (EditText) base.findViewById(R.id.firstname);
+			this.lastname = (EditText) base.findViewById(R.id.lastname);
 			this.username = (EditText) base.findViewById(R.id.username);
 			this.password = (EditText) base.findViewById(R.id.password);
 			this.confirmPwd = (EditText) base.findViewById(R.id.passwordCheck);
+		}
+
+		String getFirstname() {
+			return (getFirstnameField().getText().toString());
+		}
+
+		String getLastname() {
+			return (getLastnameField().getText().toString());
 		}
 
 		String getUsername() {
@@ -166,6 +183,21 @@ public class AlertsActivity extends Activity {
 			return (getConfirmPwdField().getText().toString());
 		}
 
+		private EditText getFirstnameField() {
+			if (this.firstname == null) {
+				this.firstname = (EditText) base.findViewById(R.id.firstname);
+			}
+
+			return (this.firstname);
+		}
+
+		private EditText getLastnameField() {
+			if (this.lastname == null) {
+				this.lastname = (EditText) base.findViewById(R.id.lastname);
+			}
+
+			return (this.lastname);
+		}
 
 		private EditText getUsernameField() {
 			if (this.username == null) {
@@ -185,40 +217,38 @@ public class AlertsActivity extends Activity {
 
 		private EditText getConfirmPwdField() {
 			if (this.confirmPwd == null) {
-				this.confirmPwd = (EditText) base.findViewById(R.id.passwordCheck);
+				this.confirmPwd = (EditText) base
+						.findViewById(R.id.passwordCheck);
 			}
 
 			return (this.confirmPwd);
 		}
 	}
 
-	private void addPatient(String username, String password, String confirmPwd){
-		if (username.length() > 0 && password.length() > 0 && confirmPwd.length() >0) {
+	private void addPatient(String firstname, String lastname, String username,
+			String password, String confirmPwd) {
+		if (firstname.length() > 0 && lastname.length() > 0
+				&& username.length() > 0 && password.length() > 0
+				&& confirmPwd.length() > 0) {
 
 			// If user's name is already being used
-			if (EHealth.db.doesUserExist(username)) {
-
+			if (EHealth.db.doesUserExist(username))
 				createDialog("Username already in use.");
-				//				Intent intent = new Intent(AuthentificationActivity.this, Graph.class);
-				//				startActivity(intent);
-			} else {
-
+			else {
 				// Check password
-				if (password.equals(confirmPwd.toString())) {
+				if (password.equals(confirmPwd)) {
 
-					Patient patient = new Patient(username, password);
-					patient.setType("patient");
-					EHealth.db.createUser(patient);
+					Patient patient = new Patient(firstname, lastname,
+							idDoctor, username, password);
+					EHealth.db.createPatient(patient);
 
 					createDialog("Patient account created !");
-				}
-				else {
+				} else {
 
 					createDialog("Passwords don't match.");
 				}
 			}
-		}
-		else {
+		} else {
 
 			createDialog("Empty field(s).");
 		}
@@ -237,5 +267,10 @@ public class AlertsActivity extends Activity {
 			}
 		});
 		dialog.show();
+	}
+
+	public void onBackPressed() {
+		session.logoutUser();
+		super.onBackPressed();
 	}
 }

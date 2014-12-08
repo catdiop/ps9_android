@@ -12,10 +12,8 @@ import android.widget.TextView;
 
 import com.project.e_health.R;
 
-import enseirb.t3.e_health.DAO.DatabaseHandler;
-import enseirb.t3.e_health.entity.Patient;
-
-public class PatientRegistrationActivity extends Activity implements OnClickListener {
+public class PatientRegistrationActivity extends Activity implements
+		OnClickListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +22,7 @@ public class PatientRegistrationActivity extends Activity implements OnClickList
 
 		Button register = (Button) findViewById(R.id.register);
 		register.setOnClickListener(this);
-		
+
 		EHealth.db.deleteAllData();
 		EHealth.db.deleteAllUser();
 	}
@@ -40,35 +38,41 @@ public class PatientRegistrationActivity extends Activity implements OnClickList
 			TextView passwordView = (TextView) findViewById(R.id.password);
 			TextView passwordCheckView = (TextView) findViewById(R.id.passwordCheck);
 
-			if (usernameView.getText().length() > 0 && passwordView.getText().length() > 0 && passwordCheckView.getText().length() > 0) {
+			if (usernameView.getText().length() > 0
+					&& passwordView.getText().length() > 0
+					&& passwordCheckView.getText().length() > 0) {
 
 				// If user's name is already being used
 				if (EHealth.db.doesUserExist(usernameView.getText().toString())) {
 
 					createDialog("Username already in use.");
-					//				Intent intent = new Intent(AuthentificationActivity.this, Graph.class);
-					//				startActivity(intent);
+					// Intent intent = new Intent(AuthentificationActivity.this,
+					// Graph.class);
+					// startActivity(intent);
 				} else {
-					
+
 					// Check password
-					if (passwordView.getText().toString().equals(passwordCheckView.getText().toString())) {
-						
-					Patient patient = new Patient(usernameView.getText().toString(), passwordView.getText().toString());
-					patient.setType("patient");
-					EHealth.db.createUser(patient);
-					
-					createDialog("Patient account created !");
-					
-					Intent intent = new Intent(PatientRegistrationActivity.this, AuthentificationActivity.class);
-					startActivity(intent);
-					}
-					else {
-						
+					if (passwordView.getText().toString()
+							.equals(passwordCheckView.getText().toString())) {
+
+						// Patient patient = new
+						// Patient(usernameView.getText().toString(),
+						// passwordView.getText().toString());
+						// patient.setType("patient");
+						// EHealth.db.createUser(patient);
+
+						createDialog("Patient account created !");
+
+						Intent intent = new Intent(
+								PatientRegistrationActivity.this,
+								AuthentificationActivity.class);
+						startActivity(intent);
+					} else {
+
 						createDialog("Passwords don't match.");
 					}
 				}
-			}
-			else {
+			} else {
 
 				createDialog("Empty field(s).");
 			}

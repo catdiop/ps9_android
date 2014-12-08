@@ -16,10 +16,10 @@ import android.widget.TextView;
 
 import com.project.e_health.R;
 
-import enseirb.t3.e_health.bluetooth.Bluetooth;
-import enseirb.t3.e_health.entity.ArduinoData;
 import enseirb.t3.e_health.entity.Doctor;
 import enseirb.t3.e_health.entity.Patient;
+import enseirb.t3.e_health.entity.User;
+import enseirb.t3.e_health.session.SessionManager;
 
 /**
  * @author catdiop
@@ -27,6 +27,15 @@ import enseirb.t3.e_health.entity.Patient;
  */
 public class AuthentificationActivity extends Activity implements
 		OnClickListener {
+	SessionManager session;
+	private Intent intent;
+	public static final String myPREFERENCES = "userSession";
+	private TextView usernameView;
+	private TextView passwordView;
+	public static final String name = "nameKey";
+	public static final String pass = "passwordKey";
+	public static final String type = "typeKey";
+	public static final String idUser = "idUserKey";
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -43,17 +52,15 @@ public class AuthentificationActivity extends Activity implements
 			NavUtils.navigateUpFromSameTask(this);
 			break;
 
-		case R.id.menu_bluetooth:
-			Bluetooth bluetooth = new Bluetooth(this);
-			bluetooth.enableBluetooth();
-			if (!bluetooth.queryingPairedDevices()) {
-				// discover
-				bluetooth.discoverDevices();
-			}
+		case R.id.add_doctor:
+			// Add Doctor
+			intent = new Intent(AuthentificationActivity.this,
+					DoctorRegistrationActivity.class);
+			startActivity(intent);
 			break;
 
 		case R.id.menu_alerts:
-			Intent intent = new Intent(AuthentificationActivity.this,
+			intent = new Intent(AuthentificationActivity.this,
 					AlertsActivity.class);
 			startActivity(intent);
 			break;
@@ -67,69 +74,73 @@ public class AuthentificationActivity extends Activity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_authentification);
+
+		session = new SessionManager(getApplicationContext());
 
 		Button connexion = (Button) findViewById(R.id.connexion);
 		connexion.setOnClickListener(this);
 
-		// TESTS patients / docteurs
 		EHealth.db.deleteAllUser();
 
-		Patient patient = new Patient("jo", "ab");
-		patient.setType("patient");
+		//firstname = bla1, lastname = bla2, idoctor = 1, username = ja, password = ab
+		Patient patient = new Patient("bla1", "bla2", 1, "ja", "ab");
+		// patient.setType("patient");
 
-		Doctor doctor = new Doctor("bob", "ba");
-		doctor.setType("doctor");
+		Doctor doctor = new Doctor("doc", "doc");
+		// doctor.setType("doctor");
 
-		EHealth.db.createUser(patient);
-		EHealth.db.createUser(doctor);
+		EHealth.db.createPatient(patient);
+		EHealth.db.createDoctor(doctor);
+	}
+
+	// @Override
+	protected void onResume() {
+		if (session.isContains(SessionManager.KEY_ID_USER)) {
+			switch (EHealth.db.retrieveUser(session.getUserDetails()).getType()) {
+			case "Doctor":
+				intent = new Intent(AuthentificationActivity.this,
+						AlertsActivity.class);
+				break;
+			case "Patient":
+				intent = new Intent(AuthentificationActivity.this, Graph.class);
+				startActivity(intent);
+			default:
+				break;
+			}
+			startActivity(intent);
+		}
+		super.onResume();
 	}
 
 	@Override
 	public void onClick(View v) {
+		User user;
+		String username;
+		String password;
 
 		switch (v.getId()) {
 
 		// Si l'utilisateur appuie sur connexion
 		case R.id.connexion:
-			TextView usernameView = (TextView) findViewById(R.id.username);
-			TextView passwordView = (TextView) findViewById(R.id.password);
+			usernameView = (TextView) findViewById(R.id.username);
+			passwordView = (TextView) findViewById(R.id.password);
 
-			if (EHealth.db.isUser(usernameView.getText().toString(),
-					passwordView.getText().toString())) {
-				// on se connecte
-				// Intent intent = new Intent(AuthentificationActivity.this,
-				// Graph.class);
-				// startActivity(intent);
-				// else {
-				// createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
-				// }
+			username = usernameView.getText().toString();
+			password = passwordView.getText().toString();
 
-				if (EHealth.db.isUser(usernameView.getText().toString(),
-						passwordView.getText().toString())) {
-					// on se connecte
-					if (EHealth.db.isUserADoctor(usernameView.getText()
-							.toString())) {
-
-						Intent intent = new Intent(
-								AuthentificationActivity.this,
-								AlertsActivity.class);
-						startActivity(intent);
-					} else {
-
-						Intent intent = new Intent(
-								AuthentificationActivity.this, Graph.class);
-						startActivity(intent);
-					}
-				}
-
-				else {
-
-					createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
-				}
-				break;
-			}
+			if ((user = EHealth.db.retrieveUser(username, password)) != null) {
+				session.createLoginSession(user.getIDUser());
+				if (user.getType().equals("Doctor"))
+					intent = new Intent(AuthentificationActivity.this,
+							AlertsActivity.class);
+				else if (user.getType().equals("Patient"))
+					intent = new Intent(AuthentificationActivity.this,
+							Graph.class);
+				startActivity(intent);
+			} else
+				createDialog("Le nom d'utilisateur ou le mot de passe est incorrect");
+			break;
 		}
 	}
 

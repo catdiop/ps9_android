@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">E-Health</string>
+    <string name="add_doctor">Nouveau Médecin</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="passwordCheck">Confirm password</string>
@@ -9,6 +10,7 @@
     <string name="connect">Connect</string>
     <string name="welcome">Welcome</string>
     <string name="menu_popup_remove">Supprimer</string>
+    <string name="menu_alerts">Voir les alertes</string>
     <string name="button_bluetooth">Bluetooth</string>
     <string name="button_A">Airflow</string>
     <string name="button_B">Pouls</string>
@@ -18,8 +20,6 @@
     <string name="button_R">Résistance</string>
     <string name="button_T">Température</string>
     <string name="debuggable">true</string>
-    <string name="str_btn_heartBeats">Heartbeats</string>
-    <string name="str_btn_oxygen">Oxygen</string>
     <string name="goToChart">Charts</string>
     <string name="measuresLabel">Measures</string>
     <string name="measuresGraphicalActivity">Measures graphical activity</string>
@@ -28,7 +28,10 @@
     <string name="title_activity_patient_registration">PatientRegistrationActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_doctor_registration">DoctorRegistrationActivity</string>
-     <string name="menu_add_patient">Add patient</string>
-     <string name="cancel">Cancel</string>
+    <string name="menu_add_patient">Add patient</string>
+    <string name="cancel">Cancel</string>
+    <string name="deconnexion">Deconnexion</string>
+    <string name="lastname">LastName</string>  
+    <string name="firstname">FirstName</string>  
 
 </resources>
