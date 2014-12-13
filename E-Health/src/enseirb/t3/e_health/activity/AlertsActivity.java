@@ -92,12 +92,13 @@ public class AlertsActivity extends Activity {
 		Patient p = new Patient();
 		p.setFirstname("titi");
 		p.setLastname("toto");
-		Alert a = new Alert(p, c.getTime(), "Tachycardie");
-		a.setPatient(p);
-		a.setDate(c.getTime());
+//		Alert a = new Alert(p, c.getTime(), "Tachycardie");
+		Alert alert = EHealth.db.retrieveLastAlert();
+//		a.setPatient(p);
+//		a.setDate(c.getTime());
 		// alerts.add(a);
-		a.setPatient(p);
-		alerts.add(a);
+//		a.setPatient(p);
+		alerts.add(alert);
 
 		adapter = new ListAlertAdapter(AlertsActivity.this, alerts);
 		list.setAdapter(adapter);

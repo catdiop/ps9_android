@@ -35,10 +35,12 @@ public class ListAlertAdapter extends ArrayAdapter<Alert>{
 		Alert alert=alerts.get(position);
 		if(alert!=null) {
 			TextView firstname=(TextView)row.findViewById(R.id.firstname);
-			firstname.setText(alert.getPatient().getFirstname());
+//			firstname.setText(alert.getPatient().getFirstname());
+			firstname.setText(EHealth.db.retrievePatient(alert.getIDPatient()).getFirstname());
 
 			TextView lastname=(TextView)row.findViewById(R.id.lastname);
-			lastname.setText(alert.getPatient().getLastname());
+//			lastname.setText(alert.getPatient().getLastname());
+			firstname.setText(EHealth.db.retrievePatient(alert.getIDPatient()).getLastname());
 
 			TextView date=(TextView)row.findViewById(R.id.date);
 			DateTime dt=new DateTime(alert.getDate());

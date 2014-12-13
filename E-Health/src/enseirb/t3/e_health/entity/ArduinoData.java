@@ -11,6 +11,8 @@ public class ArduinoData  {
 
 	private Date date;
 	private ArrayList<Data> arrayData = new ArrayList<Data>();
+	private final static int numberSensor = 3;
+	private final static int numberData = 15*numberSensor;
 
 	public ArduinoData() {
 	}
@@ -30,6 +32,7 @@ public class ArduinoData  {
     	String paquetTimestampStr = this.getPaquetTimestamp(chunks[0]);
     	Log.d("timestamp", paquetTimestampStr);
     	long paquetTimestamp = Long.parseLong(paquetTimestampStr);
+    	int idAlert;
     	
     	for (int i = 1; i < chunks.length; i++) {
     		
@@ -53,10 +56,28 @@ public class ArduinoData  {
     		
     		EHealth.db.createData(dataTmp);
     		
+    		if (EHealth.db.getNumberData() > numberData)
+    			EHealth.db.deleteLastData();
+    		
     		arrayData.add(dataTmp);
     	}
-    	//if (dataProcess.correlation() != null)
+    	if (dataProcess.correlation() != null) {
     		//store alert in DB
+    		Alert alert = new Alert(dataTmp.getIdPatient(), dataTmp.getDate(), "Apnée");
+    		idAlert = EHealth.db.createAlert(alert);
+    		
+    		ArrayList<Data> arraySavedData = new ArrayList<Data>();
+    		ArrayList<String> arrayDataname = new ArrayList<String>();
+    		arrayDataname.add("A");
+    		arrayDataname.add("B");
+    		arrayDataname.add("O");
+    		
+    		for (String dataname : arrayDataname) {
+	    		arraySavedData = EHealth.db.retrieveDataList(dataname);
+	    		for (Data data : arraySavedData)
+	    			EHealth.db.createSavedData(data, idAlert);
+    		}
+    	}
     	
 //    	dataDB.close();
     	return arrayData;
