@@ -28,6 +28,7 @@ public class ListAlertAdapter extends ArrayAdapter<Alert>{
 	}
 	private LayoutInflater inflater;
 	private List<Alert> alerts;
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
@@ -52,6 +53,7 @@ public class ListAlertAdapter extends ArrayAdapter<Alert>{
 		}
 		return row;
 	}
+
 	public ListAlertAdapter(Context context, List<Alert> alerts) {
 		super(context, R.layout.activity_alert_row, alerts);
 		this.inflater = LayoutInflater.from(context);

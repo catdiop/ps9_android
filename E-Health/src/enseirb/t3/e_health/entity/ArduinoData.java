@@ -13,8 +13,13 @@ public class ArduinoData  {
 	private ArrayList<Data> arrayData = new ArrayList<Data>();
 	private final static int numberSensor = 3;
 	private final static int numberData = 15*numberSensor;
+	private DataProcess dataprocess;
 
 	public ArduinoData() {
+	}
+	
+	public ArduinoData(DataProcess dataprocess) {
+		this.dataprocess = dataprocess;
 	}
     
     // Methods
@@ -27,6 +32,10 @@ public class ArduinoData  {
     public ArrayList<Data> stockData(String[] chunks, int idPatient) {
     	
     	DataProcess dataProcess = null;
+//      DataProcess dataProcess = null;
+//      DataProcess dataProcess = new DataProcess();
+//      dataProcess.setZeroOxygenCount(0);
+
     	String[] chunkTmp;
     	Data dataTmp = null;
     	String paquetTimestampStr = this.getPaquetTimestamp(chunks[0]);
@@ -52,6 +61,7 @@ public class ArduinoData  {
     		Log.d("date", dataTmp.getDate().toString());
     		
     		dataProcess = new DataProcess(dataTmp);
+    		
     		dataProcess.process(dataTmp);
     		
     		EHealth.db.createData(dataTmp);

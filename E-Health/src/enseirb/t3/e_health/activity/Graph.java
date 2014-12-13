@@ -22,6 +22,7 @@ import enseirb.t3.e_health.entity.Data;
 import enseirb.t3.e_health.entity.Patient;
 import enseirb.t3.e_health.graph.LineGraph;
 import enseirb.t3.e_health.graph.Point;
+import enseirb.t3.e_health.process.DataProcess;
 import enseirb.t3.e_health.session.SessionManager;
 
 public class Graph extends Activity {
@@ -36,6 +37,7 @@ public class Graph extends Activity {
 	private static int nbreMesuresPrint = 9;
 	private Patient patient;
 	private int idPatient;
+	private DataProcess dataProcess;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,11 @@ public class Graph extends Activity {
 
 		session = new SessionManager(getApplicationContext());
 
+		// Initialize data process
+		dataProcess = new DataProcess();
+		dataProcess.setZeroOxygenCount(0);
+		dataProcess.setNoAirflowCount(0);
+		
 		bt = new Bluetooth(this);
 		bt.enableBluetooth();
 		if (!bt.queryingPairedDevices()) {
@@ -131,7 +138,7 @@ public class Graph extends Activity {
 			for (int i = 1; i < aDataArrayStr.length; i++) {
 				if (aDataArrayStr[i].length() > 35) {
 
-					ArduinoData arduinoData = new ArduinoData();
+					ArduinoData arduinoData = new ArduinoData(dataProcess);
 					arrayData = arduinoData.stockData(
 							arduinoData.getChunks(aDataArrayStr[i]), idPatient);
 

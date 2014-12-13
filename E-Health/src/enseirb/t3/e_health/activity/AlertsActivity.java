@@ -94,6 +94,7 @@ public class AlertsActivity extends Activity {
 		p.setLastname("toto");
 //		Alert a = new Alert(p, c.getTime(), "Tachycardie");
 		Alert alert = EHealth.db.retrieveLastAlert();
+
 //		a.setPatient(p);
 //		a.setDate(c.getTime());
 		// alerts.add(a);
