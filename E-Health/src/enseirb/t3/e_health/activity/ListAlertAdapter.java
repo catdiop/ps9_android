@@ -28,28 +28,28 @@ public class ListAlertAdapter extends ArrayAdapter<Alert>{
 	}
 	private LayoutInflater inflater;
 	private List<Alert> alerts;
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-		View row=inflater.inflate(R.layout.activity_alert_row, null);
-		Alert alert=alerts.get(position);
-		if(alert!=null) {
-			TextView firstname=(TextView)row.findViewById(R.id.firstname);
-			firstname.setText(alert.getPatient().getFirstname());
-
-			TextView lastname=(TextView)row.findViewById(R.id.lastname);
-			lastname.setText(alert.getPatient().getLastname());
-
-			TextView date=(TextView)row.findViewById(R.id.date);
-			DateTime dt=new DateTime(alert.getDate());
-			String str = dt.toString("dd/MM/yy à HH:mm");
-			date.setText(str);
-			
-			TextView dataName=(TextView)row.findViewById(R.id.alert_type);
-//			dataName.setText(alert.getDataName());
-		}
-		return row;
-	}
+//	@Override
+//	public View getView(int position, View convertView, ViewGroup parent) {
+//		// TODO Auto-generated method stub
+//		View row=inflater.inflate(R.layout.activity_alert_row, null);
+//		Alert alert=alerts.get(position);
+//		if(alert!=null) {
+//			TextView firstname=(TextView)row.findViewById(R.id.firstname);
+//			firstname.setText(alert.getPatient().getFirstname());
+//
+//			TextView lastname=(TextView)row.findViewById(R.id.lastname);
+//			lastname.setText(alert.getPatient().getLastname());
+//
+//			TextView date=(TextView)row.findViewById(R.id.date);
+//			DateTime dt=new DateTime(alert.getDate());
+//			String str = dt.toString("dd/MM/yy à HH:mm");
+//			date.setText(str);
+//			
+//			TextView dataName=(TextView)row.findViewById(R.id.alert_type);
+////			dataName.setText(alert.getDataName());
+////		}
+//		return row;
+//	}
 	public ListAlertAdapter(Context context, List<Alert> alerts) {
 		super(context, R.layout.activity_alert_row, alerts);
 		this.inflater = LayoutInflater.from(context);
