@@ -61,8 +61,8 @@ public class DataProcess {
 				alertes.add("Bradycardie");
 			break;
 		case "O":
-			if (Double.parseDouble(data.getValue()) < 100) {
-				if (Double.parseDouble(data.getValue()) < 99) {
+			if (Double.parseDouble(data.getValue()) < 90) {
+				if (Double.parseDouble(data.getValue()) < 5) {
 
 					this.setZeroOxygenCount(this.getZeroOxygenCount() + 1);	
 					Log.d("oxygen", "< 5");
