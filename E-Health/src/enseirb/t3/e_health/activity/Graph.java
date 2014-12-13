@@ -49,6 +49,7 @@ public class Graph extends Activity {
 		// Initialize data process
 		dataProcess = new DataProcess();
 		dataProcess.setZeroOxygenCount(0);
+		dataProcess.setNoAirflowCount(0);
 		
 		bt = new Bluetooth(this);
 		bt.enableBluetooth();

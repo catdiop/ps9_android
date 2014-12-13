@@ -31,9 +31,6 @@ public class ArduinoData  {
     
     public ArrayList<Data> stockData(String[] chunks, int idPatient) {
     	
-//    	DataProcess dataProcess = null;
-//    	DataProcess dataProcess = new DataProcess();
-//    	dataProcess.setZeroOxygenCount(0);
     	String[] chunkTmp;
     	Data dataTmp = null;
     	String paquetTimestampStr = this.getPaquetTimestamp(chunks[0]);
@@ -57,7 +54,6 @@ public class ArduinoData  {
     		Log.d("gt",dataTmp.getValue()+"\n");
     		Log.d("date", dataTmp.getDate().toString());
     		
-//    		dataProcess = new DataProcess(dataTmp);
     		dataProcess.process(dataTmp);
     		
     		EHealth.db.createData(dataTmp);
