@@ -4,27 +4,31 @@ import java.util.Date;
 
 public class Alert {
 
-	private Patient patient;
+	private int idAlert;
+	private int idPatient;
 	private Date date;
 	private String alertName;
 	
-	public Alert(Patient patient, Date date, String alertName){
-		this.patient=patient;
+	public Alert(int idPatient, Date date, String alertName){
+		this.idPatient = idPatient;
 		this.date=date;
 		this.alertName = alertName;
 	}
 	
-	public Patient getPatient(){
-		return this.patient;
+	public int getIDAlert() {
+		return idAlert;
 	}
-	public void setPatient(Patient patient){
-		this.patient=patient;
+	public int getIDPatient(){
+		return this.idPatient;
+	}
+	public void setPatient(int idPatient){
+		this.idPatient = idPatient;
 	}
 	public Date getDate(){
 		return this.date;
 	}
 	public void setDate(Date date){
-		this.date=date;
+		this.date = date;
 	}
 	public String getAlertName(){
 		return this.alertName;
