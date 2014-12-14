@@ -78,7 +78,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	
 	private static final String CREATE_SAVEDDATA_TABLE = "CREATE TABLE "
 			+ TABLE_SAVEDDATA + "(" + KEY_ID_SAVEDDATA + " INTEGER PRIMARY KEY,"
-			+ KEY_ID_ALERT + " INTEGER PRIMARY KEY" + KEY_DATANAME + " TEXT," + KEY_VALUE + " TEXT," + KEY_DATE
+			+ KEY_ID_ALERT + " INTEGER," + KEY_DATANAME + " TEXT," + KEY_VALUE + " TEXT," + KEY_DATE
 			+ " TEXT" + "" + " )";
 
 	public DatabaseHandler(Context context) {
