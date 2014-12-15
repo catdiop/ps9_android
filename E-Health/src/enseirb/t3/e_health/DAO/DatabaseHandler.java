@@ -364,7 +364,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		Cursor cursor = db.query(TABLE_ALERT, null, KEY_ID_ALERT + "=?",
 				new String[] { Integer.toString(retrieveLastIdAlert()) }, null, null, null, null);
 		
-		if (cursor.moveToFirst())
+		if (cursor.moveToFirst()){
 			try {
 				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(cursor.getString(2));
 			} catch (ParseException e) {
@@ -372,6 +372,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				e.printStackTrace();
 			}
 			alert = new Alert(cursor.getInt(1), date, cursor.getString(3));
+		}
 		
 		return alert;
 	}

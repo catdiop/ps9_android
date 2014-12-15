@@ -20,6 +20,8 @@ public class BtThread extends Thread {
 	private Handler handler;
 	private String TAG = "BtThread";
 	private boolean stop = false;
+	
+	private int WAITING_TIME = 15;
 
 	public BtThread(BluetoothDevice device, Handler handler) {
 		this.handler = handler;
@@ -49,11 +51,13 @@ public class BtThread extends Thread {
 				Log.d(TAG, "Arduino connecté");
 			} else
 				Log.d(TAG, "Arduino déjà connecté");
+			
+			int time = 0;
 
 			String value = "";
 			while (!stop) {
 				bytes = mmInStream.read(buffer, 0, 128);
-				if (bytes > 0) {
+				if (bytes > 0 && time > WAITING_TIME) {
 					// On convertit les données en String
 					byte rawdata[] = new byte[bytes];
 					for (int i = 0; i < bytes; i++)
@@ -71,6 +75,7 @@ public class BtThread extends Thread {
 						value = "";
 					}
 				}
+				time++;
 			}
 		} catch (IOException e) {
 			try {
