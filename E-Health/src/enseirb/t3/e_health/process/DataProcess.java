@@ -9,63 +9,34 @@ import enseirb.t3.e_health.entity.Data;
 import enseirb.t3.e_health.entity.Patient;
 
 public class DataProcess {
-	private static Alert alert;
+	private Alert alert = null;
 	private Data data;
 	private ArrayList<String> alertes = new ArrayList<String>();
-	private ArrayList<String> dataNames= new ArrayList<String>();
+	private ArrayList<String> dataNames = new ArrayList<String>();
+	private String TAG = "DataProcess";
 	
 	// Oxygen processing variables
 	private int zeroOxygenCount;
-	private int zeroOxygenBlockCount;
-	private int noAirflowCount;
-	private int noAirflowBlockCount;
+	private int zeroOxygenBlockCount = 0;
+	private int noAirflowCount = 0;
+	private final static int noAirflowBlockCount = 10;
 	private boolean positiveOxygen;
 	
 	public ArrayList<String> getDataNames() {
 		return this.dataNames;
 	}
 	
-	public int getZeroOxygenCount() {
-		return this.zeroOxygenCount;
-	}
-
-	public void setZeroOxygenCount(int zeroOxygenCount) {
-		this.zeroOxygenCount = zeroOxygenCount;
-	}
-	
-	public int getZeroOxygenBlockCount() {
-		return this.zeroOxygenBlockCount;
-	}
-
-	public void setZeroOxygenBlockCount(int zeroOxygenBlockCount) {
-		this.zeroOxygenBlockCount = zeroOxygenBlockCount;
-	}
-
-	public void setPositiveOxygen (boolean positiveOxygen) {
-
-		this.positiveOxygen = positiveOxygen;
-	}
-	
-	public int getNoAirflowCount() {
-		return this.noAirflowCount;
-	}
-
-	public void setNoAirflowCount(int noAirflowCount) {
-		this.noAirflowCount = noAirflowCount;
-	}
-	
-	public DataProcess () {
-		
-		this.data = null;
-	}
-	
 	public DataProcess (Data data) {
 		this.data = data;
+	}	
+	
+	public DataProcess() {
 	}
-	
-	
-	
+
 	public void process (Data data) {
+		
+		this.data = data;
+		dataNames = new ArrayList<String>();
 
 		switch (data.getDataname()) {
 		/* Voir calcul d'IAH
@@ -74,80 +45,74 @@ public class DataProcess {
 		 Pour l'instant : pas de différenciation des deux vu qu'on ne calcule pas l'IAH */
 		case "A":
 			if (Double.parseDouble(data.getValue()) < 512) {
-				
-				Log.d("airflow", "< 512");
-				this.setNoAirflowCount(this.noAirflowCount + 1);
+				Log.d(TAG, "airflow < 128");
+				noAirflowCount++;
 			}
-			else {
-				
-				this.setNoAirflowCount(0);
-			}
-			if (this.noAirflowCount == 10) {
-				
-				Log.d("airflow", "Apnée");
-				alertes.add("Apnée");
-				this.dataNames.add("A");
-				this.noAirflowBlockCount = 0;
+			else 
+				noAirflowCount = 0;
+			if (noAirflowCount == noAirflowBlockCount) {
+				Log.d(TAG, "airflow = 10");
+				alertes.add("Apnee");
+				noAirflowCount = 0;
 			}
 			break;
 		case "B":
-			if (Double.parseDouble(data.getValue()) > 100) {
-				alertes.add("Tachycardie");
-				this.dataNames.add("B");
-			}
-			else if (Double.parseDouble(data.getValue()) < 60) {
-				alertes.add("Bradycardie");
-				this.dataNames.add("B");
-			}
+//			if (Double.parseDouble(data.getValue()) > 95) {
+//				alertes.add("Tachycardie");
+//				dataNames.add("B");
+//			}
+//			else if (Double.parseDouble(data.getValue()) < 60) {
+//				alertes.add("Bradycardie");
+//				dataNames.add("B");
+//			}
 			break;
 		case "O":
-			if (Double.parseDouble(data.getValue()) < 90) {
-				if (Double.parseDouble(data.getValue()) < 5) {
-
-					this.setZeroOxygenCount(this.getZeroOxygenCount() + 1);	
-					Log.d("oxygen", "< 5");
-					Log.d("zeroOxygenCount", "" + this.getZeroOxygenCount());
-					if (this.zeroOxygenBlockCount > 0 && this.positiveOxygen == true) {
-						
-						alertes.add("Apnée");
-						this.setZeroOxygenBlockCount(0);
-						this.dataNames.add("O");
-						break;
-					}
-					
-					if (this.getZeroOxygenCount() == 10) {
-						
-						this.setZeroOxygenBlockCount(this
-								.getZeroOxygenBlockCount() + 1);
-						this.setZeroOxygenCount(0);
-					}
-
-					this.positiveOxygen = false;
-				}
-				else {
-
-					alertes.add("Hypoxémie");
-					this.dataNames.add("O");
-				}
-			}
-			else {
-				
-				Log.d("Oxygen", "Remis à 0");
-				this.setZeroOxygenCount(0);
-				this.positiveOxygen = true;
-			}
+//			if (Double.parseDouble(data.getValue()) < 90) {
+//				if (Double.parseDouble(data.getValue()) < 5) {
+//
+//					zeroOxygenCount++;	
+//					Log.d("oxygen", "< 5");
+//					Log.d(TAG, "oxygencount" + zeroOxygenCount);
+//					if (zeroOxygenBlockCount > 0 && positiveOxygen == true) {
+//						
+//						alertes.add("Apnée");
+//						zeroOxygenBlockCount = 0;
+//						dataNames.add("O");
+//						break;
+//					}
+//					
+//					if (zeroOxygenCount == 10) {
+//						
+//						zeroOxygenBlockCount++;
+//						zeroOxygenCount = 0;
+//					}
+//
+//					positiveOxygen = false;
+//				}
+//				else {
+//
+//					alertes.add("Hypoxémie");
+//					dataNames.add("O");
+//				}
+//			}
+//			else {
+//				
+//				Log.d(TAG, "Oxygen Remis à 0");
+//				zeroOxygenCount = 0;
+//				positiveOxygen = true;
+//			}
 			break;
 		case "P":
 			break;
 		case "T":
-			if (Double.parseDouble(data.getValue()) > 38) {
-				alertes.add("Hyperthermie");
-				this.dataNames.add("T");
-			}
-			else if (Double.parseDouble(data.getValue()) < 35) {
-				alertes.add("Hypothermie");
-				this.dataNames.add("T");
-			}
+//			if (Double.parseDouble(data.getValue()) > 38) {
+//				alertes.add("Hyperthermie");
+//				dataNames.add("T");
+//			}
+//			else if (Double.parseDouble(data.getValue()) < 35) {
+//				alertes.add("Hypothermie");
+//				dataNames.add("T");
+//			}
 			break;
 		default :
 			break;
@@ -156,26 +121,34 @@ public class DataProcess {
 	
 	public Alert correlation () {
 		
-		if (alertes.contains("Bradycardie")) {
-			if (alertes.contains("Hypoxémie")) {
-				/* Ajouter valeurs du capteur galvanique pour déterminer une angine de poitrine */ 
-				alert = new Alert(data.getIdPatient(), data.getDate(), "Apnée");
-				return alert;
-			} else {
-				alert = new Alert(data.getIdPatient(), data.getDate(), "Bradycardie");
-				return alert;
-			}
-		} else if (alertes.contains("Apnée")) {
-			alert = new Alert(data.getIdPatient(), data.getDate(), "Apnée");
-		} else if (alertes.contains("Hypoxémie")) {
-			alert = new Alert(data.getIdPatient(), data.getDate(), "Hypoxémie");
-			return alert;
-		} else if  (alertes.contains("Hypothermie")) {
-			alert = new Alert(data.getIdPatient(), data.getDate(), "Hypothermie");
-			return alert;
-		} else if  (alertes.contains("Hyperthermie")) {
-			alert = new Alert(data.getIdPatient(), data.getDate(), "Hyperthermie");
-			return alert;
+//		if (alertes.contains("Bradycardie")) {
+//			if (alertes.contains("Hypoxemie")) {
+//				/* Ajouter valeurs du capteur galvanique pour déterminer une angine de poitrine */ 
+//				alert = new Alert(data.getIdPatient(), data.getDate(), "Apnee");
+//				return alert;
+//			} else {
+//				alert = new Alert(data.getIdPatient(), data.getDate(), "Bradycardie");
+//				return alert;
+//			}
+//		} else if (alertes.contains("Apnee")) {
+//			alert = new Alert(data.getIdPatient(), data.getDate(), "Apnée");
+//		} else if (alertes.contains("Hypoxémie")) {
+//			alert = new Alert(data.getIdPatient(), data.getDate(), "Hypoxémie");
+//			return alert;
+//		} else if  (alertes.contains("Hypothermie")) {
+//			alert = new Alert(data.getIdPatient(), data.getDate(), "Hypothermie");
+//			return alert;
+//		} else if  (alertes.contains("Hyperthermie")) {
+//			alert = new Alert(data.getIdPatient(), data.getDate(), "Hyperthermie");
+//			return alert;
+//		}
+		if (alertes.contains("Apnee")) {
+			alertes = new ArrayList<String>();
+			alert = new Alert(this.data.getIdPatient(), this.data.getDate(), "Apnee");
+			dataNames.add("A");
+			dataNames.add("B");
+			dataNames.add("O");
+		return alert;
 		}
 		return null;
 	}

@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -212,21 +213,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		ArrayList<Data> arraySavedData = new ArrayList<Data>();
 		Data data = null;
-		Date date = null;
+//		 DATE = NULL;
 
 		Cursor cursor = db.query(TABLE_DATA, null, KEY_DATANAME + "=?",
 				new String[] { dataname }, null, null, null, null);
 
-		if (cursor.moveToNext()) {
+		while (cursor.moveToNext()) {
 			try {
-				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(cursor.getString(2));
+				String sdate = cursor.getString(3);
+				Date date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).parse(sdate);
+				data = new Data(cursor.getString(1),
+						cursor.getString(2), date,
+						cursor.getInt(4));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			data = new Data(cursor.getString(0),
-					cursor.getString(1), date,
-					Integer.parseInt(cursor.getString(3)));
+			
 			arraySavedData.add(data);
 		}
 		return arraySavedData;
@@ -343,7 +346,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(KEY_ID_ALERT, object.getIDAlert());
 		values.put(KEY_ID_PATIENT, object.getIDPatient());
 		values.put(KEY_DATE, object.getDate().toString());
 		values.put(KEY_ALERTNAME, object.getAlertName());
@@ -369,7 +371,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			alert = new Alert(Integer.parseInt(cursor.getString(1)), date, cursor.getString(3));
+			alert = new Alert(cursor.getInt(1), date, cursor.getString(3));
 		
 		return alert;
 	}
@@ -377,11 +379,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public int retrieveLastIdAlert() {
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		String selectQuery = "SELECT " + KEY_ID_ALERT + " FROM " + TABLE_ALERT;
+		String selectQuery = "SELECT *" + " FROM " + TABLE_ALERT;
 
 		Cursor cursor = db.rawQuery(selectQuery, null);
-
-		return Integer.parseInt(cursor.getString(0));
+		
+		if (cursor.moveToLast()) {
+			return cursor.getInt(0);
+		}
+		else {
+			return 0;
+		}
+	}
+	
+	public void deleteAllAlert() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_ALERT, null, null);
+		db.close();
 	}
 	
 	public void createSavedData(Data object, int idAlert) {

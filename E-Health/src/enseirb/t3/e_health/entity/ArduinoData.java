@@ -12,17 +12,16 @@ public class ArduinoData  {
 	private Date date;
 	private ArrayList<Data> arrayData = new ArrayList<Data>();
 	private final static int numberSensor = 3;
-	private final static int numberData = 15*numberSensor;
-	private DataProcess dataprocess;
+	private final static int numberDataPerSensor = 15;
+	private final static int numberData = numberDataPerSensor*numberSensor;
+	private DataProcess dataProcess = null;
+	private final static String TAG = "ArduinoData";
+	private Alert alert;
+	private int cmpNeedToSave = 0;
 
-	public ArduinoData() {
+	public ArduinoData(DataProcess dataProcess) {
+		this.dataProcess = dataProcess;
 	}
-	
-	public ArduinoData(DataProcess dataprocess) {
-		this.dataprocess = dataprocess;
-	}
-    
-    // Methods
     
     // Get data timestamp
     public String getPaquetTimestamp(String firstChunk) {
@@ -41,7 +40,7 @@ public class ArduinoData  {
     	String paquetTimestampStr = this.getPaquetTimestamp(chunks[0]);
     	Log.d("timestamp", paquetTimestampStr);
     	long paquetTimestamp = Long.parseLong(paquetTimestampStr);
-    	int idAlert;
+    	int idAlert = 0;
     	
     	for (int i = 1; i < chunks.length; i++) {
     		
@@ -53,35 +52,38 @@ public class ArduinoData  {
     		}
     		
     		date = new Date((System.currentTimeMillis()/1000) - (paquetTimestamp - Long.parseLong(chunkTmp[0])));
-
     		dataTmp = new Data(chunkTmp[1], chunkTmp[2], date, idPatient);
     		
     		Log.d("gt",dataTmp.getDataname());
     		Log.d("gt",dataTmp.getValue()+"\n");
     		Log.d("date", dataTmp.getDate().toString());
     		
-    		dataProcess = new DataProcess(dataTmp);
-    		
-    		dataProcess.process(dataTmp);
-    		
-    		EHealth.db.createData(dataTmp);
-    		
-    		if (EHealth.db.getNumberData() > numberData)
-    			EHealth.db.deleteLastData();
+    		if (cmpNeedToSave != 0) {
+    			EHealth.db.createSavedData(dataTmp, idAlert);
+    			EHealth.db.deleteAllData();
+    			cmpNeedToSave--;
+    		} else {
+        		this.dataProcess.process(dataTmp);
+    			EHealth.db.createData(dataTmp);
+        		if (EHealth.db.getNumberData() > numberData)
+        			EHealth.db.deleteLastData();
+    		}
     		
     		arrayData.add(dataTmp);
     	}
-    	if (dataProcess.correlation() != null) {
+    	if ((alert = this.dataProcess.correlation()) != null) {
     		//store alert in DB
-    		Alert alert = new Alert(dataTmp.getIdPatient(), dataTmp.getDate(), "Apnée");
+//    		Alert alert = new Alert(dataTmp.getIdPatient(), dataTmp.getDate(), "Apnée");
+    		EHealth.db.deleteAllAlert();
     		idAlert = EHealth.db.createAlert(alert);
+    		cmpNeedToSave = numberDataPerSensor;
     		
     		ArrayList<Data> arraySavedData = new ArrayList<Data>();
-    		ArrayList<String> arrayDataname = new ArrayList<String>();
-    		arrayDataname.add("A");
-    		arrayDataname.add("B");
-    		arrayDataname.add("O");
-    		
+    		ArrayList<String> arrayDataname = this.dataProcess.getDataNames();
+//    		arrayDataname.add("A");
+//    		arrayDataname.add("B");
+//    		arrayDataname.add("O");
+//    		
     		for (String dataname : arrayDataname) {
 	    		arraySavedData = EHealth.db.retrieveDataList(dataname);
 	    		for (Data data : arraySavedData)

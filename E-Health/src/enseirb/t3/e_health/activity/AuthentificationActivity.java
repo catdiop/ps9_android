@@ -29,14 +29,9 @@ public class AuthentificationActivity extends Activity implements
 		OnClickListener {
 	SessionManager session;
 	private Intent intent;
-	public static final String myPREFERENCES = "userSession";
 	private TextView usernameView;
 	private TextView passwordView;
-	public static final String name = "nameKey";
-	public static final String pass = "passwordKey";
-	public static final String type = "typeKey";
-	public static final String idUser = "idUserKey";
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu items for use in the action bar

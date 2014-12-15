@@ -18,7 +18,8 @@ public class BtThread extends Thread {
 	private InputStream mmInStream;
 	private OutputStream mmOutStream;
 	private Handler handler;
-	private String TAG = "ConnectThread";
+	private String TAG = "BtThread";
+	private boolean stop = false;
 
 	public BtThread(BluetoothDevice device, Handler handler) {
 		this.handler = handler;
@@ -38,6 +39,7 @@ public class BtThread extends Thread {
 
 	@Override
 	public void run() {
+		stop = false;
 		byte[] buffer = new byte[128]; // buffer store for the stream
 		int bytes = 0;
 		try {
@@ -49,7 +51,7 @@ public class BtThread extends Thread {
 				Log.d(TAG, "Arduino déjà connecté");
 
 			String value = "";
-			while (true) {
+			while (!stop) {
 				bytes = mmInStream.read(buffer, 0, 128);
 				if (bytes > 0) {
 					// On convertit les données en String
@@ -93,11 +95,14 @@ public class BtThread extends Thread {
 		}
 	}
 
-	public void cancel() {
+	
+	public void close() {
+		this.stop = true;
 		try {
 			mmSocket.close();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		;
 	}
 }

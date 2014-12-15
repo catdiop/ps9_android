@@ -37,7 +37,9 @@ public class Graph extends Activity {
 	private static int nbreMesuresPrint = 9;
 	private Patient patient;
 	private int idPatient;
-	private DataProcess dataProcess;
+	public static DataProcess dataProcess = new DataProcess();
+	public static ArduinoData arduinoData = new ArduinoData(dataProcess);
+	Thread ct = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,18 +47,13 @@ public class Graph extends Activity {
 		setContentView(R.layout.activity_measures);
 
 		session = new SessionManager(getApplicationContext());
-
-		// Initialize data process
-		dataProcess = new DataProcess();
-		dataProcess.setZeroOxygenCount(0);
-		dataProcess.setNoAirflowCount(0);
 		
 		bt = new Bluetooth(this);
 		bt.enableBluetooth();
-		if (!bt.queryingPairedDevices()) {
+//		if (!bt.queryingPairedDevices()) {
 			// discover
-			bt.discoverDevices();
-		}
+//			bt.discoverDevices();
+//		}
 
 		idPatient = session.getUserDetails();
 
@@ -79,7 +76,7 @@ public class Graph extends Activity {
 				// discover
 				bt.discoverDevices();
 			} else {
-				Thread ct = new BtThread(bt.device, handler);
+				ct = new BtThread(bt.device, handler);
 				ct.start();
 			}
 			return true;
@@ -119,7 +116,7 @@ public class Graph extends Activity {
 			openChart();
 			return true;
 		case R.id.deconnexion:
-			onBackPressed();
+			onBackPressed(ct);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -127,6 +124,8 @@ public class Graph extends Activity {
 	}
 
 	public Handler handler = new Handler() {
+//		private DataProcess dataProcess;
+		
 		@Override
 		public void handleMessage(Message msg) {
 			Bundle bundle = msg.getData();
@@ -134,11 +133,12 @@ public class Graph extends Activity {
 			ArrayList<Data> arrayData = null;
 			String message = bundle.getString("msg");
 			String[] aDataArrayStr = message.split("(?=DATA)");
+//			dataProcess  = new DataProcess();
+//			ArduinoData arduinoData = new ArduinoData(Graph.dataProcess);
 
 			for (int i = 1; i < aDataArrayStr.length; i++) {
 				if (aDataArrayStr[i].length() > 35) {
-
-					ArduinoData arduinoData = new ArduinoData(dataProcess);
+					
 					arrayData = arduinoData.stockData(
 							arduinoData.getChunks(aDataArrayStr[i]), idPatient);
 
@@ -170,8 +170,10 @@ public class Graph extends Activity {
 		setContentView(view);
 	}
 
-	public void onBackPressed() {
+	public void onBackPressed(Thread ct) {
 		session.logoutUser();
+		if (ct != null)
+			((BtThread)ct).close();
 		super.onBackPressed();
 	}
 }
