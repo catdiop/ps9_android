@@ -15,6 +15,9 @@ public class Alert {
 		this.alertName = alertName;
 	}
 	
+	public void setIDAlert(int idAlert) {
+		this.idAlert = idAlert;
+	}
 	public int getIDAlert() {
 		return idAlert;
 	}

@@ -15,10 +15,8 @@ public class ArduinoData  {
 	private final static int numberDataPerSensor = 15;
 	private final static int numberData = numberDataPerSensor*numberSensor;
 	private DataProcess dataProcess = null;
-	private final static String TAG = "ArduinoData";
 	private Alert alert;
 	private int cmpNeedToSave = 0;
-	private int compteurdata = 0;
 
 	public ArduinoData(DataProcess dataProcess) {
 		this.dataProcess = dataProcess;
@@ -37,7 +35,6 @@ public class ArduinoData  {
     	long paquetTimestamp = Long.parseLong(paquetTimestampStr);
     	int idAlert = 0;
     	arrayData = new ArrayList<Data>();
-    	compteurdata++;
     	
     	for (int i = 1; i < chunks.length; i++) {
     		
@@ -64,7 +61,6 @@ public class ArduinoData  {
         		if (EHealth.db.getNumberData() > numberData)
         			EHealth.db.deleteLastData();
     		}
-    		Log.d(TAG, "compteur " + compteurdata);
     		arrayData.add(dataTmp);
     	}
     	if ((alert = this.dataProcess.correlation()) != null) {

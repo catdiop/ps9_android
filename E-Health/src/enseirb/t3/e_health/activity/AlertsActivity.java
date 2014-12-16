@@ -1,9 +1,6 @@
 package enseirb.t3.e_health.activity;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -36,7 +33,6 @@ public class AlertsActivity extends Activity {
 	static View view;
 	private Doctor doctor;
 	private int idDoctor;
-	private int idAlert;
 	public static final int NbreAlertPrint = 10;
 
 	@Override
@@ -92,7 +88,7 @@ public class AlertsActivity extends Activity {
 		});
 		
 		ArrayList<Integer> idPatientList = EHealth.db.retrieveIdPatientListByDoctor(idDoctor);
-		ArrayList<Alert> alertList = EHealth.db.retrieveAlert(idAlert, idPatientList);
+		ArrayList<Alert> alertList = EHealth.db.retrieveAlert(idPatientList);
 		
 		adapter = new ListAlertAdapter(AlertsActivity.this, alertList);
 		list.setAdapter(adapter);

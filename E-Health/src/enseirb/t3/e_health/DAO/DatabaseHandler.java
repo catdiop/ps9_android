@@ -154,7 +154,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		User user = null;
 
-		Cursor cursor = db.query(TABLE_USERS, null, KEY_ID_DATA + "=?",
+		Cursor cursor = db.query(TABLE_USERS, null, KEY_ID_USER + "=?",
 				new String[] { Integer.toString(id) }, null, null, null, null);
 
 		if (cursor.moveToFirst())
@@ -172,20 +172,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put(KEY_PASSWORD, object.getPassword());
 
 		// updating row
-		return db.update(TABLE_USERS, values, KEY_ID_DATA + " = ?",
+		return db.update(TABLE_USERS, values, KEY_ID_USER + " = ?",
 				new String[] { Integer.toString(object.getIDUser()) });
 	}
 
 	private void deleteUser(int id) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		db.delete(TABLE_USERS, KEY_ID_DATA + " = ?",
+		db.delete(TABLE_USERS, KEY_ID_USER + " = ?",
 				new String[] { Integer.toString(id) });
-		db.close();
-	}
-
-	public void deleteAllUser() {
-		SQLiteDatabase db = this.getWritableDatabase();
-		db.delete(TABLE_USERS, null, null);
 		db.close();
 	}
 
@@ -315,32 +309,39 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				new String[] { Integer.toString(id) }, null, null, null, null);
 
 		if (cursor.moveToFirst()) {
-			i = cursor.getInt(3);
-			patient = new Patient(cursor.getString(1), cursor.getString(2),
-					i, user.getUsername(),
-					user.getPassword());
+			i = cursor.getType(3);
+			patient = new Patient(cursor.getString(1), cursor.getString(2), i,
+					user.getUsername(), user.getPassword());
 			patient.setIDPatient(id);
 			patient.setIDUser(id);
 		}
 		Log.d("i", Integer.toString(i));
 		return patient;
 	}
-	
+
 	public ArrayList<Integer> retrieveIdPatientListByDoctor(int idDoctor) {
 		SQLiteDatabase db = this.getReadableDatabase();
 		ArrayList<Integer> idPatientList = new ArrayList<Integer>();
 
-//		Cursor cursor = db.query(TABLE_PATIENT, null, KEY_ID_DOCTOR + "=?",
-//				new String[] { Integer.toString(idDoctor) }, null, null, null, null);
-//		
+		// Cursor cursor = db.query(TABLE_PATIENT, null, KEY_ID_DOCTOR + "=?",
+		// new String[] { Integer.toString(idDoctor) }, null, null, null, null);
+		//
 		String selectQuery = "SELECT * FROM " + TABLE_PATIENT + " WHERE "
 				+ KEY_ID_DOCTOR + " = ?";
 
-		Cursor cursor = db.rawQuery(selectQuery, new String[] { Integer.toString(idDoctor) });
+		Cursor cursor = db.rawQuery(selectQuery,
+				new String[] { Integer.toString(idDoctor) });
 
 		while (cursor.moveToNext())
 			idPatientList.add(cursor.getInt(0));
 		return idPatientList;
+	}
+
+	public void deleteAllPatient() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_PATIENT, null, null);
+		db.delete(TABLE_USERS, KEY_TYPE + "=?", new String[] { "Patient" });
+		db.close();
 	}
 
 	public void createDoctor(Doctor object) {
@@ -372,6 +373,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return doctor;
 	}
 
+	public void deleteAllDoctor() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_DOCTOR, null, null);
+		db.delete(TABLE_USERS, KEY_TYPE + "=?", new String[] { "Doctor" });
+		db.close();
+	}
+
 	public int createAlert(Alert object) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
@@ -386,17 +394,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return retrieveLastIdAlert();
 	}
 
-	public ArrayList<Alert> retrieveAlert(int idAlert, ArrayList<Integer> idPatientList) {
+	public ArrayList<Alert> retrieveAlert(ArrayList<Integer> idPatientList) {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Alert alert = null;
 		ArrayList<Alert> alertList = new ArrayList<Alert>();
 		Date date = null;
 		int cmpt = 0;
-		
-		Cursor cursor = db.query(TABLE_ALERT, null, KEY_ID_ALERT + "=?",
-				new String[] { Integer.toString(idAlert) }, null, null, null, null);
 
-		while (cursor.moveToFirst() && cmpt < AlertsActivity.NbreAlertPrint)
+		Cursor cursor = db.query(TABLE_ALERT, null, null, null, null, null,
+				null, null);
+
+		cursor.moveToLast();
+		cursor.moveToNext();
+		while (cursor.moveToPrevious() && cmpt < AlertsActivity.NbreAlertPrint)
 			if (idPatientList.contains(cursor.getInt(1))) {
 				try {
 					date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",
@@ -405,10 +415,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			alert = new Alert(cursor.getInt(1), date, cursor.getString(3));
-			alertList.add(alert);
+				alert = new Alert(cursor.getInt(1), date, cursor.getString(3));
+				alert.setIDAlert(cursor.getInt(0));
+				alertList.add(alert);
 			}
-			
+
 		return alertList;
 	}
 

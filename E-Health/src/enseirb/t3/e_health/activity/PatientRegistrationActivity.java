@@ -24,7 +24,7 @@ public class PatientRegistrationActivity extends Activity implements
 		register.setOnClickListener(this);
 
 		EHealth.db.deleteAllData();
-		EHealth.db.deleteAllUser();
+		EHealth.db.deleteAllPatient();
 	}
 
 	@Override

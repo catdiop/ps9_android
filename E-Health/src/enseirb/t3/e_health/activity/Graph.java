@@ -19,7 +19,6 @@ import enseirb.t3.e_health.bluetooth.Bluetooth;
 import enseirb.t3.e_health.bluetooth.BtThread;
 import enseirb.t3.e_health.entity.ArduinoData;
 import enseirb.t3.e_health.entity.Data;
-import enseirb.t3.e_health.entity.Patient;
 import enseirb.t3.e_health.graph.LineGraph;
 import enseirb.t3.e_health.graph.Point;
 import enseirb.t3.e_health.process.DataProcess;
@@ -35,7 +34,6 @@ public class Graph extends Activity {
 	private static String TAG = "Graph";
 	private int cmpt = 0;
 	private static int nbreMesuresPrint = 9;
-	private Patient patient;
 	private int idPatient;
 	public static DataProcess dataProcess = new DataProcess();
 	public static ArduinoData arduinoData = new ArduinoData(dataProcess);
@@ -47,13 +45,13 @@ public class Graph extends Activity {
 		setContentView(R.layout.activity_measures);
 
 		session = new SessionManager(getApplicationContext());
-		
+
 		bt = new Bluetooth(this);
 		bt.enableBluetooth();
-//		if (!bt.queryingPairedDevices()) {
-			// discover
-//			bt.discoverDevices();
-//		}
+		// if (!bt.queryingPairedDevices()) {
+		// discover
+		// bt.discoverDevices();
+		// }
 
 		idPatient = session.getUserDetails();
 
@@ -124,8 +122,8 @@ public class Graph extends Activity {
 	}
 
 	public Handler handler = new Handler() {
-//		private DataProcess dataProcess;
-		
+		// private DataProcess dataProcess;
+
 		@Override
 		public void handleMessage(Message msg) {
 			Bundle bundle = msg.getData();
@@ -133,12 +131,12 @@ public class Graph extends Activity {
 			ArrayList<Data> arrayData = null;
 			String message = bundle.getString("msg");
 			String[] aDataArrayStr = message.split("(?=DATA)");
-//			dataProcess  = new DataProcess();
-//			ArduinoData arduinoData = new ArduinoData(Graph.dataProcess);
+			// dataProcess = new DataProcess();
+			// ArduinoData arduinoData = new ArduinoData(Graph.dataProcess);
 
 			for (int i = 1; i < aDataArrayStr.length; i++) {
 				if (aDataArrayStr[i].length() > 35) {
-					
+
 					arrayData = arduinoData.stockData(
 							arduinoData.getChunks(aDataArrayStr[i]), idPatient);
 
@@ -173,7 +171,7 @@ public class Graph extends Activity {
 	public void onBackPressed(Thread ct) {
 		session.logoutUser();
 		if (ct != null)
-			((BtThread)ct).close();
+			((BtThread) ct).close();
 		super.onBackPressed();
 	}
 }

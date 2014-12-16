@@ -41,13 +41,14 @@ public class ListAlertAdapter extends ArrayAdapter<Alert>{
 
 			TextView lastname=(TextView)row.findViewById(R.id.lastname);
 //			lastname.setText(alert.getPatient().getLastname());
-			firstname.setText(EHealth.db.retrievePatient(alert.getIDPatient()).getLastname());
+			lastname.setText(EHealth.db.retrievePatient(alert.getIDPatient()).getLastname());
 
 			TextView date=(TextView)row.findViewById(R.id.date);
 			DateTime dt=new DateTime(alert.getDate());
 			date.setText(dt.toString("dd/MM/yyyy, HH:mm:ss"));
 			
 			TextView dataName=(TextView)row.findViewById(R.id.alert_type);
+			dataName.setText(Integer.toString(alert.getIDAlert()));
 //			dataName.setText(alert.getDataName());
 		}
 		return row;
