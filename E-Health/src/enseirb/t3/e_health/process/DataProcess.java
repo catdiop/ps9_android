@@ -44,12 +44,13 @@ public class DataProcess {
 		 Hypopnée : diminution du flux respiratoire de 50 % pendant au moins 10 s
 		 Pour l'instant : pas de différenciation des deux vu qu'on ne calcule pas l'IAH */
 		case "A":
-			if (Double.parseDouble(data.getValue()) < 512) {
+			if (Double.parseDouble(data.getValue()) < 30) {
 				Log.d(TAG, "airflow < 128");
 				noAirflowCount++;
 			}
 			else 
 				noAirflowCount = 0;
+			Log.d(TAG, "noAirflowCmpt =" + noAirflowCount);
 			if (noAirflowCount == noAirflowBlockCount) {
 				Log.d(TAG, "airflow = 10");
 				alertes.add("Apnee");

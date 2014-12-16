@@ -1,5 +1,6 @@
 package enseirb.t3.e_health.activity;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +36,8 @@ public class AlertsActivity extends Activity {
 	static View view;
 	private Doctor doctor;
 	private int idDoctor;
+	private int idAlert;
+	public static final int NbreAlertPrint = 10;
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -87,21 +90,11 @@ public class AlertsActivity extends Activity {
 			}
 
 		});
-		List<Alert> alerts = new LinkedList<Alert>();
-		Calendar c = Calendar.getInstance();
-		Patient p = new Patient();
-		p.setFirstname("titi");
-		p.setLastname("toto");
-//		Alert a = new Alert(p, c.getTime(), "Tachycardie");
-		Alert alert = EHealth.db.retrieveLastAlert();
-
-//		a.setPatient(p);
-//		a.setDate(c.getTime());
-		// alerts.add(a);
-//		a.setPatient(p);
-		alerts.add(alert);
-
-		adapter = new ListAlertAdapter(AlertsActivity.this, alerts);
+		
+		ArrayList<Integer> idPatientList = EHealth.db.retrieveIdPatientListByDoctor(idDoctor);
+		ArrayList<Alert> alertList = EHealth.db.retrieveAlert(idAlert, idPatientList);
+		
+		adapter = new ListAlertAdapter(AlertsActivity.this, alertList);
 		list.setAdapter(adapter);
 	}
 

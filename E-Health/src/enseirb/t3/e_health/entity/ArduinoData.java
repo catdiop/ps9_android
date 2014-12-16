@@ -18,6 +18,7 @@ public class ArduinoData  {
 	private final static String TAG = "ArduinoData";
 	private Alert alert;
 	private int cmpNeedToSave = 0;
+	private int compteurdata = 0;
 
 	public ArduinoData(DataProcess dataProcess) {
 		this.dataProcess = dataProcess;
@@ -29,18 +30,14 @@ public class ArduinoData  {
     }
     
     public ArrayList<Data> stockData(String[] chunks, int idPatient) {
-    	
-    	DataProcess dataProcess = null;
-//      DataProcess dataProcess = null;
-//      DataProcess dataProcess = new DataProcess();
-//      dataProcess.setZeroOxygenCount(0);
-
     	String[] chunkTmp;
     	Data dataTmp = null;
     	String paquetTimestampStr = this.getPaquetTimestamp(chunks[0]);
     	Log.d("timestamp", paquetTimestampStr);
     	long paquetTimestamp = Long.parseLong(paquetTimestampStr);
     	int idAlert = 0;
+    	arrayData = new ArrayList<Data>();
+    	compteurdata++;
     	
     	for (int i = 1; i < chunks.length; i++) {
     		
@@ -60,7 +57,6 @@ public class ArduinoData  {
     		
     		if (cmpNeedToSave != 0) {
     			EHealth.db.createSavedData(dataTmp, idAlert);
-    			EHealth.db.deleteAllData();
     			cmpNeedToSave--;
     		} else {
         		this.dataProcess.process(dataTmp);
@@ -68,38 +64,29 @@ public class ArduinoData  {
         		if (EHealth.db.getNumberData() > numberData)
         			EHealth.db.deleteLastData();
     		}
-    		
+    		Log.d(TAG, "compteur " + compteurdata);
     		arrayData.add(dataTmp);
     	}
     	if ((alert = this.dataProcess.correlation()) != null) {
-    		//store alert in DB
-//    		Alert alert = new Alert(dataTmp.getIdPatient(), dataTmp.getDate(), "Apnée");
-    		EHealth.db.deleteAllAlert();
+
     		idAlert = EHealth.db.createAlert(alert);
-    		cmpNeedToSave = numberDataPerSensor;
+    		cmpNeedToSave = numberData;
     		
     		ArrayList<Data> arraySavedData = new ArrayList<Data>();
     		ArrayList<String> arrayDataname = this.dataProcess.getDataNames();
-//    		arrayDataname.add("A");
-//    		arrayDataname.add("B");
-//    		arrayDataname.add("O");
-//    		
+ 		
     		for (String dataname : arrayDataname) {
 	    		arraySavedData = EHealth.db.retrieveDataList(dataname);
 	    		for (Data data : arraySavedData)
 	    			EHealth.db.createSavedData(data, idAlert);
     		}
+			EHealth.db.deleteAllData();
     	}
-    	
-//    	dataDB.close();
     	return arrayData;
     }
     
     public String[] getChunks(String ArduinoData) {
-    	
-    	String[] chunks = ArduinoData.split(";");
-    	
-    	return chunks;
+    	return ArduinoData.split(";");
     }
 }
 

@@ -45,8 +45,7 @@ public class ListAlertAdapter extends ArrayAdapter<Alert>{
 
 			TextView date=(TextView)row.findViewById(R.id.date);
 			DateTime dt=new DateTime(alert.getDate());
-			String str = dt.toString("dd/MM/yy à HH:mm");
-			date.setText(str);
+			date.setText(dt.toString("dd/MM/yyyy, HH:mm:ss"));
 			
 			TextView dataName=(TextView)row.findViewById(R.id.alert_type);
 //			dataName.setText(alert.getDataName());

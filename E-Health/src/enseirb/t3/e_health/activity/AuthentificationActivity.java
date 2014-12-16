@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -77,16 +78,22 @@ public class AuthentificationActivity extends Activity implements
 		connexion.setOnClickListener(this);
 
 		EHealth.db.deleteAllUser();
-
-		//firstname = bla1, lastname = bla2, idoctor = 1, username = ja, password = ab
-		Patient patient = new Patient("bla1", "bla2", 1, "ja", "ab");
-		// patient.setType("patient");
+		EHealth.db.deleteAllData();
+		EHealth.db.deleteAllAlert();
 
 		Doctor doctor = new Doctor("doc", "doc");
-		// doctor.setType("doctor");
-
-		EHealth.db.createPatient(patient);
 		EHealth.db.createDoctor(doctor);
+		
+		Doctor doctor2 = EHealth.db.retrieveDoctor(EHealth.db.retrieveUser("doc", "doc").getIDUser());
+
+		//firstname = bla1, lastname = bla2, username = ja, password = ab
+		Patient patient = new Patient("bla1", "bla2", doctor2.getIDUser(), "ja", "ab");
+		EHealth.db.createPatient(patient);
+		
+	Patient patient2 = EHealth.db.retrievePatient(EHealth.db.retrieveUser("ja", "ab").getIDUser());
+		
+		Log.d("AuthentificationActivity", "idPatient :" + patient2.getIDPatient());
+		Log.d("AuthentificationActivity", "idDoctor :" + doctor2.getIDDoctor() + ", " + doctor2.getIDUser());
 	}
 
 	// @Override

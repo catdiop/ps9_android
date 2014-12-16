@@ -21,7 +21,7 @@ public class BtThread extends Thread {
 	private String TAG = "BtThread";
 	private boolean stop = false;
 	
-	private int WAITING_TIME = 15;
+	private int WAITING_TIME = 11;
 
 	public BtThread(BluetoothDevice device, Handler handler) {
 		this.handler = handler;

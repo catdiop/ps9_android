@@ -29,7 +29,7 @@ public class User {
 	public int getIDUser() {
 		return idUser;
 	}
-	public void setUser(int idUser) {
+	public void setIDUser(int idUser) {
 		this.idUser = idUser;
 	}
 	

@@ -11,6 +11,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import enseirb.t3.e_health.activity.AlertsActivity;
 import enseirb.t3.e_health.entity.Alert;
 import enseirb.t3.e_health.entity.Data;
 import enseirb.t3.e_health.entity.Doctor;
@@ -29,7 +31,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String TABLE_USERS = "Users";
 	// Patient table name
 	private static final String TABLE_PATIENT = "Patient";
-	//Doctor table name
+	// Doctor table name
 	private static final String TABLE_DOCTOR = "Doctor";
 	// Data table name
 	private static final String TABLE_DATA = "Data";
@@ -40,6 +42,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	// Table Columns names
 	private static final String KEY_ID_DATA = "idData";
+	private static final String KEY_ID_USER = "idUser";
 	private static final String KEY_ID_PATIENT = "idPatient";
 	private static final String KEY_ID_DOCTOR = "idDoctor";
 	private static final String KEY_ID_ALERT = "idAlert";
@@ -55,7 +58,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String KEY_FIRSTNAME = "firstname";
 
 	private static final String CREATE_USER_TABLE = "CREATE TABLE "
-			+ TABLE_USERS + "(" + KEY_ID_DATA + " INTEGER PRIMARY KEY,"
+			+ TABLE_USERS + "(" + KEY_ID_USER + " INTEGER PRIMARY KEY,"
 			+ KEY_USERNAME + " TEXT," + KEY_PASSWORD + " TEXT," + KEY_TYPE
 			+ " TEXT )";
 
@@ -71,15 +74,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			+ TABLE_DATA + "(" + KEY_ID_DATA + " INTEGER PRIMARY KEY,"
 			+ KEY_DATANAME + " TEXT," + KEY_VALUE + " TEXT," + KEY_DATE
 			+ " TEXT," + "" + KEY_ID_PATIENT + " INTEGER" + " )";
-	
+
 	private static final String CREATE_ALERT_TABLE = "CREATE TABLE "
 			+ TABLE_ALERT + "(" + KEY_ID_ALERT + " INTEGER PRIMARY KEY,"
-			+ KEY_ID_PATIENT + " INTEGER," + KEY_DATE + " TEXT," + KEY_ALERTNAME
-			+ " TEXT" + " )";
-	
+			+ KEY_ID_PATIENT + " INTEGER," + KEY_DATE + " TEXT,"
+			+ KEY_ALERTNAME + " TEXT" + " )";
+
 	private static final String CREATE_SAVEDDATA_TABLE = "CREATE TABLE "
-			+ TABLE_SAVEDDATA + "(" + KEY_ID_SAVEDDATA + " INTEGER PRIMARY KEY,"
-			+ KEY_ID_ALERT + " INTEGER," + KEY_DATANAME + " TEXT," + KEY_VALUE + " TEXT," + KEY_DATE
+			+ TABLE_SAVEDDATA + "(" + KEY_ID_SAVEDDATA
+			+ " INTEGER PRIMARY KEY," + KEY_ID_ALERT + " INTEGER,"
+			+ KEY_DATANAME + " TEXT," + KEY_VALUE + " TEXT," + KEY_DATE
 			+ " TEXT" + "" + " )";
 
 	public DatabaseHandler(Context context) {
@@ -208,28 +212,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// Inserting Row
 		db.insert(TABLE_DATA, null, values);
 	}
-	
+
 	public ArrayList<Data> retrieveDataList(String dataname) {
 		SQLiteDatabase db = this.getReadableDatabase();
 		ArrayList<Data> arraySavedData = new ArrayList<Data>();
 		Data data = null;
-//		 DATE = NULL;
+		Date date = null;
 
 		Cursor cursor = db.query(TABLE_DATA, null, KEY_DATANAME + "=?",
 				new String[] { dataname }, null, null, null, null);
 
 		while (cursor.moveToNext()) {
 			try {
-				String sdate = cursor.getString(3);
-				Date date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).parse(sdate);
-				data = new Data(cursor.getString(1),
-						cursor.getString(2), date,
-						cursor.getInt(4));
+				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",
+						Locale.US).parse(cursor.getString(3));
+
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			data = new Data(cursor.getString(1), cursor.getString(2), date,
+					cursor.getInt(4));
 			arraySavedData.add(data);
 		}
 		return arraySavedData;
@@ -260,31 +263,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.delete(TABLE_DATA, null, null);
 		db.close();
 	}
-	
+
 	public int getNumberData() {
 		SQLiteDatabase db = this.getReadableDatabase();
 		String selectQuery = "SELECT * FROM " + TABLE_DATA;
 		int number = 0;
-		
+
 		Cursor cursor = db.rawQuery(selectQuery, null);
-		
+
 		while (cursor.moveToNext())
 			number++;
-		
-		return number;	
+
+		return number;
 	}
 
 	public void deleteLastData() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		String selectQuery = "SELECT * FROM " + TABLE_DATA;
-		
+
 		Cursor cursor = db.rawQuery(selectQuery, null);
-		
+
 		if (cursor.moveToFirst())
-			db.delete(TABLE_DATA, KEY_ID_DATA + "=?",  new String[]{cursor.getString(cursor.getColumnIndex(KEY_ID_DATA))});
+			db.delete(TABLE_DATA, KEY_ID_DATA + "=?", new String[] { cursor
+					.getString(cursor.getColumnIndex(KEY_ID_DATA)) });
 		db.close();
 	}
-	
+
 	public void createPatient(Patient object) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		int userID;
@@ -305,15 +309,38 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Patient patient = null;
 		User user = retrieveUser(id);
+		int i = 10;
 
 		Cursor cursor = db.query(TABLE_PATIENT, null, KEY_ID_PATIENT + "=?",
 				new String[] { Integer.toString(id) }, null, null, null, null);
 
-		if (cursor.moveToFirst())
+		if (cursor.moveToFirst()) {
+			i = cursor.getInt(3);
 			patient = new Patient(cursor.getString(1), cursor.getString(2),
-					Integer.parseInt(cursor.getString(3)), user.getUsername(),
+					i, user.getUsername(),
 					user.getPassword());
+			patient.setIDPatient(id);
+			patient.setIDUser(id);
+		}
+		Log.d("i", Integer.toString(i));
 		return patient;
+	}
+	
+	public ArrayList<Integer> retrieveIdPatientListByDoctor(int idDoctor) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		ArrayList<Integer> idPatientList = new ArrayList<Integer>();
+
+//		Cursor cursor = db.query(TABLE_PATIENT, null, KEY_ID_DOCTOR + "=?",
+//				new String[] { Integer.toString(idDoctor) }, null, null, null, null);
+//		
+		String selectQuery = "SELECT * FROM " + TABLE_PATIENT + " WHERE "
+				+ KEY_ID_DOCTOR + " = ?";
+
+		Cursor cursor = db.rawQuery(selectQuery, new String[] { Integer.toString(idDoctor) });
+
+		while (cursor.moveToNext())
+			idPatientList.add(cursor.getInt(0));
+		return idPatientList;
 	}
 
 	public void createDoctor(Doctor object) {
@@ -337,12 +364,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		Cursor cursor = db.query(TABLE_DOCTOR, null, KEY_ID_DOCTOR + "=?",
 				new String[] { Integer.toString(id) }, null, null, null, null);
 
-		if (cursor.moveToFirst())
+		if (cursor.moveToFirst()) {
 			doctor = new Doctor(user.getUsername(), user.getPassword());
+			doctor.setIDDoctor(id);
+			doctor.setIDUser(id);
+		}
 		return doctor;
 	}
-	
-	public int createAlert (Alert object) {
+
+	public int createAlert(Alert object) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -352,52 +382,56 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		// Inserting Row
 		db.insert(TABLE_ALERT, null, values);
-		
+
 		return retrieveLastIdAlert();
 	}
-	
-	public Alert retrieveLastAlert () {
+
+	public ArrayList<Alert> retrieveAlert(int idAlert, ArrayList<Integer> idPatientList) {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Alert alert = null;
+		ArrayList<Alert> alertList = new ArrayList<Alert>();
 		Date date = null;
+		int cmpt = 0;
 		
 		Cursor cursor = db.query(TABLE_ALERT, null, KEY_ID_ALERT + "=?",
-				new String[] { Integer.toString(retrieveLastIdAlert()) }, null, null, null, null);
-		
-		if (cursor.moveToFirst()){
-			try {
-				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(cursor.getString(2));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				new String[] { Integer.toString(idAlert) }, null, null, null, null);
+
+		while (cursor.moveToFirst() && cmpt < AlertsActivity.NbreAlertPrint)
+			if (idPatientList.contains(cursor.getInt(1))) {
+				try {
+					date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",
+							Locale.US).parse(cursor.getString(2));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			alert = new Alert(cursor.getInt(1), date, cursor.getString(3));
-		}
-		
-		return alert;
+			alertList.add(alert);
+			}
+			
+		return alertList;
 	}
-	
+
 	public int retrieveLastIdAlert() {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		String selectQuery = "SELECT *" + " FROM " + TABLE_ALERT;
 
 		Cursor cursor = db.rawQuery(selectQuery, null);
-		
+
 		if (cursor.moveToLast()) {
 			return cursor.getInt(0);
-		}
-		else {
+		} else {
 			return 0;
 		}
 	}
-	
+
 	public void deleteAllAlert() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_ALERT, null, null);
 		db.close();
 	}
-	
+
 	public void createSavedData(Data object, int idAlert) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
@@ -410,5 +444,5 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// Inserting Row
 		db.insert(TABLE_SAVEDDATA, null, values);
 	}
-	
+
 }
