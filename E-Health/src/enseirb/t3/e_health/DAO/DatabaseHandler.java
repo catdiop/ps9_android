@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 import android.content.ContentValues;
@@ -455,5 +457,57 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// Inserting Row
 		db.insert(TABLE_SAVEDDATA, null, values);
 	}
+	
+	public List<Data> retrieveDatasForAlert(int alertId) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		Data data=null;
+		Date date=null;
+		List<Data> datas=new LinkedList<Data>();
+		
+		
+		Cursor cursor = db.query(TABLE_SAVEDDATA, null, KEY_ID_ALERT + "=?",
+				new String[] { Integer.toString(alertId) }, null, null, null, null);
+
+		
+		while (cursor.moveToNext()) {
+			try {
+				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",
+						Locale.US).parse(cursor.getString(4));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			data = new Data(cursor.getString(2), cursor.getString(3), date, this.retrieveAlertFromId(alertId).getIDPatient());
+			datas.add(data);
+		}
+		return datas;
+	}
+	
+	public Alert retrieveAlertFromId(int alertId) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		Alert alert=null;
+		Date date=null;
+		
+		
+		Cursor cursor = db.query(TABLE_ALERT, null, KEY_ID_ALERT + "=?",
+				new String[] { Integer.toString(alertId) }, null, null, null, null);
+
+		
+		if (cursor.moveToFirst()) {
+			try {
+				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",
+						Locale.US).parse(cursor.getString(2));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			alert = new Alert(cursor.getInt(1), date, cursor.getString(3));
+		}
+		return alert;
+	}
+	
+	
 
 }

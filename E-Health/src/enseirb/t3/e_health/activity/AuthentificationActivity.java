@@ -77,24 +77,24 @@ public class AuthentificationActivity extends Activity implements
 		Button connexion = (Button) findViewById(R.id.connexion);
 		connexion.setOnClickListener(this);
 
-		EHealth.db.deleteAllPatient();
-		EHealth.db.deleteAllDoctor();
-		EHealth.db.deleteAllData();
+//		EHealth.db.deleteAllPatient();
+//		EHealth.db.deleteAllDoctor();
+//		EHealth.db.deleteAllData();
 //		EHealth.db.deleteAllAlert();
 
-		Doctor doctor = new Doctor("doc", "doc");
-		EHealth.db.createDoctor(doctor);
-		
-		Doctor doctor2 = EHealth.db.retrieveDoctor(EHealth.db.retrieveUser("doc", "doc").getIDUser());
-
-		//firstname = bla1, lastname = bla2, username = ja, password = ab
-		Patient patient = new Patient("bla1", "bla2", doctor2.getIDUser(), "ja", "ab");
-		EHealth.db.createPatient(patient);
-		
-		Patient patient2 = EHealth.db.retrievePatient(EHealth.db.retrieveUser("ja", "ab").getIDUser());
-		
-		Log.d("AuthentificationActivity", "idPatient :" + patient2.getIDPatient());
-		Log.d("AuthentificationActivity", "idDoctor :" + doctor2.getIDDoctor() + ", " + doctor2.getIDUser());
+//		Doctor doctor = new Doctor("doc", "doc");
+//		EHealth.db.createDoctor(doctor);
+//		
+//		Doctor doctor2 = EHealth.db.retrieveDoctor(EHealth.db.retrieveUser("doc", "doc").getIDUser());
+//
+//		//firstname = bla1, lastname = bla2, username = ja, password = ab
+//		Patient patient = new Patient("bla1", "bla2", doctor2.getIDUser(), "ja", "ab");
+//		EHealth.db.createPatient(patient);
+//		
+//		Patient patient2 = EHealth.db.retrievePatient(EHealth.db.retrieveUser("ja", "ab").getIDUser());
+//		
+//		Log.d("AuthentificationActivity", "idPatient :" + patient2.getIDPatient());
+//		Log.d("AuthentificationActivity", "idDoctor :" + doctor2.getIDDoctor() + ", " + doctor2.getIDUser());
 	}
 
 	// @Override

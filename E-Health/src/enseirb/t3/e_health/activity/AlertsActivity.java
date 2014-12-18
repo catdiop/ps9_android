@@ -1,10 +1,12 @@
 package enseirb.t3.e_health.activity;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +19,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.project.e_health.R;
 
@@ -71,7 +74,14 @@ public class AlertsActivity extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
 				// TODO Auto-generated method stub
-
+				TextView tv1=(TextView)arg1.findViewById(R.id.alertId);
+				TextView tv2=(TextView)arg1.findViewById(R.id.alert_type);
+				
+				Intent intent = new Intent(AlertsActivity.this, GraphAlertActivity.class);
+				//on ajoute un extra pour permettre à GraphActivity de récupérer l'id de l'alerte
+				intent.putExtra("alertId", Integer.parseInt(tv1.getText().toString()));
+				intent.putExtra("dataName", tv2.getText().toString());
+				startActivity(intent);
 			}
 		});
 
@@ -86,10 +96,10 @@ public class AlertsActivity extends Activity {
 			}
 
 		});
-		
+
 		ArrayList<Integer> idPatientList = EHealth.db.retrieveIdPatientListByDoctor(idDoctor);
 		ArrayList<Alert> alertList = EHealth.db.retrieveAlert(idPatientList);
-		
+
 		adapter = new ListAlertAdapter(AlertsActivity.this, alertList);
 		list.setAdapter(adapter);
 	}
@@ -112,22 +122,22 @@ public class AlertsActivity extends Activity {
 		final DialogWrapper wrapper = new DialogWrapper(addPatient);
 
 		new AlertDialog.Builder(this)
-				.setTitle(R.string.menu_add_patient)
-				.setView(addPatient)
-				.setPositiveButton(R.string.register,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								processAdd(wrapper);
-							}
-						})
-				.setNegativeButton(R.string.cancel,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								// ignore, just dismiss
-							}
-						}).show();
+		.setTitle(R.string.menu_add_patient)
+		.setView(addPatient)
+		.setPositiveButton(R.string.register,
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,
+					int whichButton) {
+				processAdd(wrapper);
+			}
+		})
+		.setNegativeButton(R.string.cancel,
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,
+					int whichButton) {
+				// ignore, just dismiss
+			}
+		}).show();
 	}
 
 	@SuppressWarnings("deprecation")
