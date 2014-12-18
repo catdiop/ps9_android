@@ -1,15 +1,11 @@
 package enseirb.t3.e_health.activity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.achartengine.GraphicalView;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,12 +24,13 @@ public class GraphAlertActivity extends Activity {
 	private GraphicalView view;
 	private LineGraph line;
 	private static String TAG = "Graph";
-	private int cmpt = 0;
+//	private int cmpt = 0;
+	private String dataname = "A";
 	private static int nbreMesuresPrint = 9;
 	private int idPatient;
 	Thread ct = null;
 	private int alertId;
-	private String dataName;
+//	private String dataName;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +41,7 @@ public class GraphAlertActivity extends Activity {
 
 		idPatient = session.getUserDetails();
 		alertId=this.getIntent().getIntExtra("alertId", 0);
-		dataName=this.getIntent().getStringExtra("dataName");
+//		dataName=this.getIntent().getStringExtra("dataName");
 		openChart();
 	}
 
@@ -59,7 +56,40 @@ public class GraphAlertActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
-		case R.id.action_bt:
+		case R.id.action_A:
+			dataname = "A";
+//			cmpt = 0;
+			openChart();
+			return true;
+		case R.id.action_B:
+			dataname = "B";
+//			cmpt = 0;
+			openChart();
+			return true;
+		case R.id.action_C:
+			dataname = "C";
+//			cmpt = 0;
+			openChart();
+			return true;
+		case R.id.action_O:
+			dataname = "O";
+//			cmpt = 0;
+			openChart();
+			return true;
+		case R.id.action_P:
+			dataname = "P";
+//			cmpt = 0;
+			openChart();
+			return true;
+		case R.id.action_R:
+			dataname = "R";
+//			cmpt = 0;
+			openChart();
+			return true;
+		case R.id.action_T:
+			dataname = "T";
+//			cmpt = 0;
+			openChart();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -69,23 +99,31 @@ public class GraphAlertActivity extends Activity {
 
 	private void openChart() {
 		List<Data> datas=EHealth.db.retrieveDatasForAlert(alertId);
+		Data data = null;
 
-		for (Data d:datas) {
-			if(d.getDataname()!=this.dataName)
-				continue;
-
-			Point p = new Point(d.getDate(), Double.parseDouble(d.getValue()));
-			line.addNewPoint(p);
-			cmpt++;
-			if (cmpt > nbreMesuresPrint) {
-				line.removePoint(cmpt - (nbreMesuresPrint + 1));
-				cmpt--;
-			}
-			view.repaint();
-		}
-		line = new LineGraph(dataName);
+		line = new LineGraph(dataname);
 		view = line.getView(this);
 		setContentView(view);
+		
+		for (Data dataTmp:datas) {
+//			if(d.getDataname()!=this.dataName)
+//				continue;
+			if (dataTmp.getDataname().equals(dataname))
+				data = dataTmp;
+//			for (Data dataTmp : datas) {
+//				if (dataTmp.getDataname().equals(dataname))
+//					data = dataTmp;
+//			}
+
+			Point p = new Point(data.getDate(), Double.parseDouble(data.getValue()));
+			line.addNewPoint(p);
+//			cmpt++;
+//			if (cmpt > nbreMesuresPrint) {
+//				line.removePoint(cmpt - (nbreMesuresPrint + 1));
+//				cmpt--;
+//			}
+			view.repaint();
+		}
 	}
 
 	public void onBackPressed(Thread ct) {

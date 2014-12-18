@@ -60,9 +60,6 @@ public class LineGraph {
 		default:
 			break;
 		}
-
-		yTitle = "%";
-		chartTitle = "SPO2";
 		
 		dataset = new TimeSeries(chartTitle);
 

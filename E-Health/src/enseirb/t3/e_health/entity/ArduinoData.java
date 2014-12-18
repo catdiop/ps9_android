@@ -45,12 +45,12 @@ public class ArduinoData  {
     			break;
     		}
     		
-    		date = new Date((System.currentTimeMillis()/1000) - (paquetTimestamp - Long.parseLong(chunkTmp[0])));
+    		date = new Date((System.currentTimeMillis()) - (paquetTimestamp - Long.parseLong(chunkTmp[0])));
     		dataTmp = new Data(chunkTmp[1], chunkTmp[2], date, idPatient);
     		
     		Log.d("gt",dataTmp.getDataname());
     		Log.d("gt",dataTmp.getValue()+"\n");
-    		Log.d("date", dataTmp.getDate().toString());
+    		Log.d("date", date.toString());
     		
     		if (cmpNeedToSave != 0) {
     			EHealth.db.createSavedData(dataTmp, idAlert);
