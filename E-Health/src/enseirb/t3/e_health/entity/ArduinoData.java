@@ -11,9 +11,9 @@ public class ArduinoData  {
 
 	private Date date;
 	private ArrayList<Data> arrayData = new ArrayList<Data>();
-	private final static int numberSensor = 3;
+	private static int numberSensor;
 	private final static int numberDataPerSensor = 15;
-	private final static int numberData = numberDataPerSensor*numberSensor;
+	private static int numberData;
 	private DataProcess dataProcess = null;
 	private Alert alert;
 	private int cmpNeedToSave = 0;
@@ -29,6 +29,8 @@ public class ArduinoData  {
     
     public ArrayList<Data> stockData(String[] chunks, int idPatient) {
     	String[] chunkTmp;
+    	numberSensor = chunks.length - 1;
+    	numberData = numberDataPerSensor*numberSensor;
     	Data dataTmp = null;
     	String paquetTimestampStr = this.getPaquetTimestamp(chunks[0]);
     	Log.d("timestamp", paquetTimestampStr);

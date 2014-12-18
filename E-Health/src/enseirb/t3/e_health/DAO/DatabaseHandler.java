@@ -408,7 +408,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		cursor.moveToLast();
 		cursor.moveToNext();
-		while (cursor.moveToPrevious() && cmpt < AlertsActivity.NbreAlertPrint)
+		while (cursor.moveToPrevious() && cmpt < AlertsActivity.NbreAlertPrinted)
 			if (idPatientList.contains(cursor.getInt(1))) {
 				try {
 					date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",

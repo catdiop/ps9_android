@@ -38,7 +38,7 @@ public class LineGraph {
 			chartTitle = "Pouls";
 			break;
 		case "C":
-			yTitle = "ï¿½S";
+			yTitle = "µS";
 			chartTitle = "Conductance";
 			break;
 		case "O":
@@ -54,7 +54,7 @@ public class LineGraph {
 			chartTitle = "Rï¿½sistance";
 			break;
 		case "T":
-			yTitle = "ï¿½C";
+			yTitle = "°C";
 			chartTitle = "Tempï¿½rature";
 			break;
 		default:

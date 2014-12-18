@@ -1,7 +1,6 @@
 package enseirb.t3.e_health.activity;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -36,20 +35,20 @@ public class AlertsActivity extends Activity {
 	static View view;
 	private Doctor doctor;
 	private int idDoctor;
-	public static final int NbreAlertPrint = 10;
+	public static final int NbreAlertPrinted = 10;
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.add_patient:
 			add();
-			break;
+			return true;
 		case R.id.deconnexion:
-			super.onBackPressed();
+			onBackPressed();
 			return true;
 		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -59,12 +58,6 @@ public class AlertsActivity extends Activity {
 		setContentView(R.layout.activity_alerts);
 
 		session = new SessionManager(getApplicationContext());
-
-		// Hide the status Bar
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-
 		idDoctor = session.getUserDetails();
 
 		list = (ListView) findViewById(R.id.list_alerts);
@@ -140,7 +133,6 @@ public class AlertsActivity extends Activity {
 		}).show();
 	}
 
-	@SuppressWarnings("deprecation")
 	private void processAdd(DialogWrapper wrapper) {
 		addPatient(wrapper.getFirstname(), wrapper.getLastname(),
 				wrapper.getUsername(), wrapper.getPassword(),
@@ -270,6 +262,7 @@ public class AlertsActivity extends Activity {
 		dialog.show();
 	}
 
+	@Override
 	public void onBackPressed() {
 		session.logoutUser();
 		super.onBackPressed();

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,8 +16,6 @@ import android.widget.TextView;
 
 import com.project.e_health.R;
 
-import enseirb.t3.e_health.entity.Doctor;
-import enseirb.t3.e_health.entity.Patient;
 import enseirb.t3.e_health.entity.User;
 import enseirb.t3.e_health.session.SessionManager;
 
@@ -47,22 +44,12 @@ public class AuthentificationActivity extends Activity implements
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			break;
-
 		case R.id.add_doctor:
 			// Add Doctor
 			intent = new Intent(AuthentificationActivity.this,
 					DoctorRegistrationActivity.class);
 			startActivity(intent);
 			break;
-
-		case R.id.menu_alerts:
-			intent = new Intent(AuthentificationActivity.this,
-					AlertsActivity.class);
-			startActivity(intent);
-			break;
-
-		default:
-			;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -77,6 +64,9 @@ public class AuthentificationActivity extends Activity implements
 		Button connexion = (Button) findViewById(R.id.connexion);
 		connexion.setOnClickListener(this);
 
+		//Conseil : Purger la BDD en décommentant les 4 lignes suivantes, puis relancer l'appli en les re-commentant et en décommentant les lignes de "doctor doctor.." à 
+		//EHealth.db.createPatient. Enfin, relancer une dernière fois l'appli en re-commentant tout 
+		
 //		EHealth.db.deleteAllPatient();
 //		EHealth.db.deleteAllDoctor();
 //		EHealth.db.deleteAllData();
@@ -84,17 +74,10 @@ public class AuthentificationActivity extends Activity implements
 
 //		Doctor doctor = new Doctor("doc", "doc");
 //		EHealth.db.createDoctor(doctor);
-//		
-//		Doctor doctor2 = EHealth.db.retrieveDoctor(EHealth.db.retrieveUser("doc", "doc").getIDUser());
 //
 //		//firstname = bla1, lastname = bla2, username = ja, password = ab
 //		Patient patient = new Patient("bla1", "bla2", doctor2.getIDUser(), "ja", "ab");
 //		EHealth.db.createPatient(patient);
-//		
-//		Patient patient2 = EHealth.db.retrievePatient(EHealth.db.retrieveUser("ja", "ab").getIDUser());
-//		
-//		Log.d("AuthentificationActivity", "idPatient :" + patient2.getIDPatient());
-//		Log.d("AuthentificationActivity", "idDoctor :" + doctor2.getIDDoctor() + ", " + doctor2.getIDUser());
 	}
 
 	// @Override

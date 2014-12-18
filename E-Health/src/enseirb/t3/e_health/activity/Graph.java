@@ -33,7 +33,7 @@ public class Graph extends Activity {
 	private String dataname = "O";
 	private static String TAG = "Graph";
 	private int cmpt = 0;
-	private static int nbreMesuresPrint = 9;
+	private static final int nbreMesuresPrint = 9;
 	private int idPatient;
 	public static DataProcess dataProcess = new DataProcess();
 	public static ArduinoData arduinoData = new ArduinoData(dataProcess);
@@ -48,10 +48,6 @@ public class Graph extends Activity {
 
 		bt = new Bluetooth(this);
 		bt.enableBluetooth();
-		// if (!bt.queryingPairedDevices()) {
-		// discover
-		// bt.discoverDevices();
-		// }
 
 		idPatient = session.getUserDetails();
 
@@ -70,10 +66,9 @@ public class Graph extends Activity {
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.action_bt:
-			if (!bt.queryingPairedDevices()) {
-				// discover
+			if (!bt.queryingPairedDevices())
 				bt.discoverDevices();
-			} else {
+			else {
 				ct = new BtThread(bt.device, handler);
 				ct.start();
 			}
@@ -114,7 +109,7 @@ public class Graph extends Activity {
 			openChart();
 			return true;
 		case R.id.deconnexion:
-			onBackPressed(ct);
+			onBackPressed();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -167,8 +162,9 @@ public class Graph extends Activity {
 		view = line.getView(this);
 		setContentView(view);
 	}
-
-	public void onBackPressed(Thread ct) {
+	
+	@Override
+	public void onBackPressed() {
 		session.logoutUser();
 		if (ct != null)
 			((BtThread) ct).close();
