@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.project.e_health.R;
 
+import enseirb.t3.e_health.entity.Doctor;
+import enseirb.t3.e_health.entity.Patient;
 import enseirb.t3.e_health.entity.User;
 import enseirb.t3.e_health.session.SessionManager;
 
@@ -75,8 +77,8 @@ public class AuthentificationActivity extends Activity implements
 //		Doctor doctor = new Doctor("doc", "doc");
 //		EHealth.db.createDoctor(doctor);
 //
-//		//firstname = bla1, lastname = bla2, username = ja, password = ab
-//		Patient patient = new Patient("bla1", "bla2", doctor2.getIDUser(), "ja", "ab");
+		//firstname = bla1, lastname = bla2, username = ja, password = ab
+//		Patient patient = new Patient("bla1", "bla2", EHealth.db.retrieveDoctor(EHealth.db.retrieveUser("doc", "doc").getIDUser()).getIDDoctor(), "ja", "ab");
 //		EHealth.db.createPatient(patient);
 	}
 

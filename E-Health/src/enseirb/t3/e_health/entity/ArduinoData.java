@@ -5,6 +5,7 @@ import java.util.Date;
 
 import android.util.Log;
 import enseirb.t3.e_health.activity.EHealth;
+import enseirb.t3.e_health.bluetooth.BtThread;
 import enseirb.t3.e_health.process.DataProcess;
 
 public class ArduinoData  {
@@ -17,8 +18,10 @@ public class ArduinoData  {
 	private DataProcess dataProcess = null;
 	private Alert alert;
 	private int cmpNeedToSave = 0;
-
-	public ArduinoData(DataProcess dataProcess) {
+	private BtThread btThread;
+	
+	public ArduinoData(BtThread bt, DataProcess dataProcess) {
+		btThread = bt;
 		this.dataProcess = dataProcess;
 	}
     
@@ -58,20 +61,22 @@ public class ArduinoData  {
     			EHealth.db.createSavedData(dataTmp, idAlert);
     			cmpNeedToSave--;
     		} else {
-        		this.dataProcess.process(dataTmp);
+        		dataProcess.process(dataTmp);
     			EHealth.db.createData(dataTmp);
         		if (EHealth.db.getNumberData() > numberData)
         			EHealth.db.deleteLastData();
     		}
     		arrayData.add(dataTmp);
     	}
-    	if ((alert = this.dataProcess.correlation()) != null) {
+    	if ((alert = dataProcess.correlation()) != null) {
 
     		idAlert = EHealth.db.createAlert(alert);
     		cmpNeedToSave = numberData;
     		
+    		btThread.write("MORE".getBytes());
+
     		ArrayList<Data> arraySavedData = new ArrayList<Data>();
-    		ArrayList<String> arrayDataname = this.dataProcess.getDataNames();
+    		ArrayList<String> arrayDataname = dataProcess.getDataNames();
  		
     		for (String dataname : arrayDataname) {
 	    		arraySavedData = EHealth.db.retrieveDataList(dataname);

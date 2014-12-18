@@ -26,18 +26,18 @@ import enseirb.t3.e_health.session.SessionManager;
 
 public class Graph extends Activity {
 
-	SessionManager session;
+	private SessionManager session;
 	private GraphicalView view;
 	private LineGraph line;
-	private Bluetooth bt;
-	private String dataname = "O";
-	private static String TAG = "Graph";
+	private String dataname = "A";
 	private int cmpt = 0;
-	private static final int nbreMesuresPrint = 9;
 	private int idPatient;
+	private Bluetooth bt;
+	private BtThread btThread = null;
+	private static String TAG = "Graph";
 	public static DataProcess dataProcess = new DataProcess();
-	public static ArduinoData arduinoData = new ArduinoData(dataProcess);
-	Thread ct = null;
+	private static int nbreMesuresPrint = 9;
+	private ArduinoData arduinoData;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,11 @@ public class Graph extends Activity {
 
 		bt = new Bluetooth(this);
 		bt.enableBluetooth();
-
+		
+		if (!bt.queryingPairedDevices()) {
+			// discover
+			bt.discoverDevices();
+		}
 		idPatient = session.getUserDetails();
 
 		openChart();
@@ -69,8 +73,9 @@ public class Graph extends Activity {
 			if (!bt.queryingPairedDevices())
 				bt.discoverDevices();
 			else {
-				ct = new BtThread(bt.device, handler);
-				ct.start();
+				btThread = new BtThread(bt.device, handler);
+				btThread.start();
+				arduinoData = new ArduinoData(btThread, dataProcess);
 			}
 			return true;
 		case R.id.action_A:
@@ -126,8 +131,6 @@ public class Graph extends Activity {
 			ArrayList<Data> arrayData = null;
 			String message = bundle.getString("msg");
 			String[] aDataArrayStr = message.split("(?=DATA)");
-			// dataProcess = new DataProcess();
-			// ArduinoData arduinoData = new ArduinoData(Graph.dataProcess);
 
 			for (int i = 1; i < aDataArrayStr.length; i++) {
 				if (aDataArrayStr[i].length() > 35) {
@@ -166,8 +169,8 @@ public class Graph extends Activity {
 	@Override
 	public void onBackPressed() {
 		session.logoutUser();
-		if (ct != null)
-			((BtThread) ct).close();
+		if (btThread != null)
+			((BtThread) btThread).close();
 		super.onBackPressed();
 	}
 }
