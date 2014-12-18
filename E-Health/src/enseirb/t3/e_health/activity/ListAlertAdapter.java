@@ -37,12 +37,14 @@ public class ListAlertAdapter extends ArrayAdapter<Alert>{
 		if(alert!=null) {
 			TextView firstname=(TextView)row.findViewById(R.id.firstname);
 //			firstname.setText(alert.getPatient().getFirstname());
-			firstname.setText(EHealth.db.retrievePatient(alert.getIDPatient()).getFirstname());
-
+			//firstname.setText(EHealth.db.retrievePatient(alert.getIDPatient()).getFirstname());
+           firstname.setText("Cheikh");
+			
 			TextView lastname=(TextView)row.findViewById(R.id.lastname);
 //			lastname.setText(alert.getPatient().getLastname());
-			lastname.setText(EHealth.db.retrievePatient(alert.getIDPatient()).getLastname());
-
+			//lastname.setText(EHealth.db.retrievePatient(alert.getIDPatient()).getLastname());
+			lastname.setText("Diop");
+			
 			TextView date=(TextView)row.findViewById(R.id.date);
 			DateTime dt=new DateTime(alert.getDate());
 			date.setText(dt.toString("dd/MM/yyyy, HH:mm:ss"));
@@ -50,6 +52,10 @@ public class ListAlertAdapter extends ArrayAdapter<Alert>{
 			TextView dataName=(TextView)row.findViewById(R.id.alert_type);
 			dataName.setText(Integer.toString(alert.getIDAlert()));
 //			dataName.setText(alert.getDataName());
+			
+			TextView alertId=(TextView)row.findViewById(R.id.alertId);
+			//alertId.setText(Integer.toString(alert.getIDAlert()));
+			alertId.setText("19");
 		}
 		return row;
 	}

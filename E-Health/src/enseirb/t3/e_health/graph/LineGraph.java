@@ -38,7 +38,7 @@ public class LineGraph {
 			chartTitle = "Pouls";
 			break;
 		case "C":
-			yTitle = "µS";
+			yTitle = "ï¿½S";
 			chartTitle = "Conductance";
 			break;
 		case "O":
@@ -51,16 +51,19 @@ public class LineGraph {
 			break;
 		case "R":
 			yTitle = "Ohm";
-			chartTitle = "Résistance";
+			chartTitle = "Rï¿½sistance";
 			break;
 		case "T":
-			yTitle = "°C";
-			chartTitle = "Température";
+			yTitle = "ï¿½C";
+			chartTitle = "Tempï¿½rature";
 			break;
 		default:
 			break;
 		}
 
+		yTitle = "%";
+		chartTitle = "SPO2";
+		
 		dataset = new TimeSeries(chartTitle);
 
 		mDataset.addSeries(dataset);

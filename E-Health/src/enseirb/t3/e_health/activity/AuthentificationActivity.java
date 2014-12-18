@@ -77,9 +77,9 @@ public class AuthentificationActivity extends Activity implements
 		Button connexion = (Button) findViewById(R.id.connexion);
 		connexion.setOnClickListener(this);
 
-		EHealth.db.deleteAllPatient();
-		EHealth.db.deleteAllDoctor();
-		EHealth.db.deleteAllData();
+//		EHealth.db.deleteAllPatient();
+//		EHealth.db.deleteAllDoctor();
+//		EHealth.db.deleteAllData();
 //		EHealth.db.deleteAllAlert();
 
 		Doctor doctor = new Doctor("doc", "doc");
