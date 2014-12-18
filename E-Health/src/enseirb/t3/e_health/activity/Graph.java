@@ -21,23 +21,24 @@ import enseirb.t3.e_health.entity.ArduinoData;
 import enseirb.t3.e_health.entity.Data;
 import enseirb.t3.e_health.graph.LineGraph;
 import enseirb.t3.e_health.graph.Point;
-import enseirb.t3.e_health.process.DataProcess;
 import enseirb.t3.e_health.session.SessionManager;
 
 public class Graph extends Activity {
 
-	SessionManager session;
+	private SessionManager session;
 	private GraphicalView view;
 	private LineGraph line;
-	private Bluetooth bt;
-	private String dataname = "O";
-	private static String TAG = "Graph";
+	private String dataname = "";
 	private int cmpt = 0;
-	private static int nbreMesuresPrint = 9;
 	private int idPatient;
-	public static DataProcess dataProcess = new DataProcess();
-	public static ArduinoData arduinoData = new ArduinoData(dataProcess);
-	Thread ct = null;
+	private Bluetooth bt;
+	private BtThread btThread = null;
+	
+	private static String TAG = "Graph";
+	private static int nbreMesuresPrint = 9;
+	
+	private ArduinoData arduinoData;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,10 +49,12 @@ public class Graph extends Activity {
 
 		bt = new Bluetooth(this);
 		bt.enableBluetooth();
-		// if (!bt.queryingPairedDevices()) {
-		// discover
-		// bt.discoverDevices();
-		// }
+		if (!bt.queryingPairedDevices()) {
+			// discover
+			bt.discoverDevices();
+		}
+		
+		arduinoData = new ArduinoData(btThread);
 
 		idPatient = session.getUserDetails();
 
@@ -74,8 +77,8 @@ public class Graph extends Activity {
 				// discover
 				bt.discoverDevices();
 			} else {
-				ct = new BtThread(bt.device, handler);
-				ct.start();
+				btThread = new BtThread(bt.device, handler);
+				btThread.start();
 			}
 			return true;
 		case R.id.action_A:
@@ -114,7 +117,7 @@ public class Graph extends Activity {
 			openChart();
 			return true;
 		case R.id.deconnexion:
-			onBackPressed(ct);
+			onBackPressed(btThread);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -131,8 +134,6 @@ public class Graph extends Activity {
 			ArrayList<Data> arrayData = null;
 			String message = bundle.getString("msg");
 			String[] aDataArrayStr = message.split("(?=DATA)");
-			// dataProcess = new DataProcess();
-			// ArduinoData arduinoData = new ArduinoData(Graph.dataProcess);
 
 			for (int i = 1; i < aDataArrayStr.length; i++) {
 				if (aDataArrayStr[i].length() > 35) {
