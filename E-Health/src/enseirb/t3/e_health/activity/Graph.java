@@ -48,6 +48,9 @@ public class Graph extends Activity {
 
 		bt = new Bluetooth(this);
 		bt.enableBluetooth();
+		dataProcess.setZeroOxygenCount(0);
+		dataProcess.setNoAirflowCount(0);
+		dataProcess.setNoAirflowBlockCount(0);
 		
 		if (!bt.queryingPairedDevices()) {
 			// discover
