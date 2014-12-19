@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.achartengine.GraphicalView;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import com.project.e_health.R;
 
 import enseirb.t3.e_health.bluetooth.Bluetooth;
+import enseirb.t3.e_health.bluetooth.BluetoothBroadcastReceiver;
 import enseirb.t3.e_health.bluetooth.BtThread;
 import enseirb.t3.e_health.entity.ArduinoData;
 import enseirb.t3.e_health.entity.Data;
@@ -52,10 +54,6 @@ public class Graph extends Activity {
 		dataProcess.setNoAirflowCount(0);
 		dataProcess.setNoAirflowBlockCount(0);
 		
-		if (!bt.queryingPairedDevices()) {
-			// discover
-			bt.discoverDevices();
-		}
 		idPatient = session.getUserDetails();
 
 		openChart();
@@ -70,13 +68,13 @@ public class Graph extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		BluetoothDevice device;
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.action_bt:
-			if (!bt.queryingPairedDevices())
-				bt.discoverDevices();
-			else {
-				btThread = new BtThread(bt.device, handler);
+			bt.selectDevice();
+			if ( Bluetooth.device != null) {
+				btThread = new BtThread(Bluetooth.device, handler);
 				btThread.start();
 				arduinoData = new ArduinoData(btThread, dataProcess);
 			}
@@ -168,7 +166,7 @@ public class Graph extends Activity {
 		view = line.getView(this);
 		setContentView(view);
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		session.logoutUser();

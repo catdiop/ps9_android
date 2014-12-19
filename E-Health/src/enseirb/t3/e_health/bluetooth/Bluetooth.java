@@ -12,10 +12,10 @@ import android.widget.Toast;
 public class Bluetooth {
 
 	private final static int REQUEST_CODE_ENABLE_BLUETOOTH = 0;
+	public static BluetoothDevice device = null;
 	private Activity activity;
 	private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
 			.getDefaultAdapter();
-	public BluetoothDevice device;
 
 	public Bluetooth(Activity activity) {
 		this.activity = activity;
@@ -31,7 +31,7 @@ public class Bluetooth {
 		}
 	}
 
-	public boolean queryingPairedDevices() {
+	public void selectDevice() {
 		Set<BluetoothDevice> pairedDevices = mBluetoothAdapter
 				.getBondedDevices();
 		// If there are paired devices
@@ -43,18 +43,14 @@ public class Bluetooth {
 
 				if (device.getName().equals("Ehealth")) {
 					Log.d("msg", "Arduino déjà découvert....");
-					this.device = device;
-
-					return true;
+					Bluetooth.device = device;
 				}
-				Toast.makeText(activity, device.getName(), Toast.LENGTH_SHORT)
-						.show();
 			}
-		}
-		return false;
-	}
+		} else
+			discoverDevices();
+	} 
 
-	public void discoverDevices() {
+	private void discoverDevices() {
 		mBluetoothAdapter.startDiscovery();
 	}
 }

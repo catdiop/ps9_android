@@ -24,6 +24,7 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
 					.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 			if (device.getName().equals("Ehealth")) {
 				Log.d("msg1", "Arduino découvert....");
+				Bluetooth.device = device;
 			}
 		}
 	}
