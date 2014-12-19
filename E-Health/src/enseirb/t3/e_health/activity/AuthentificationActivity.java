@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -65,6 +66,9 @@ public class AuthentificationActivity extends Activity implements
 
 		Button connexion = (Button) findViewById(R.id.connexion);
 		connexion.setOnClickListener(this);
+		
+		TextView titleView = (TextView) findViewById(R.id.title);
+		titleView.setText(Html.fromHtml("ME <b>CONNECTER<\b>"));
 
 		//Conseil : Purger la BDD en décommentant les 4 lignes suivantes, puis relancer l'appli en les re-commentant et en décommentant les lignes de "doctor doctor.." à 
 		//EHealth.db.createPatient. Enfin, relancer une dernière fois l'appli en re-commentant tout 

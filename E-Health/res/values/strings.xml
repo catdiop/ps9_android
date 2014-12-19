@@ -2,12 +2,18 @@
 <resources>
 
     <string name="app_name">E-Health</string>
+    
+    <!-- Page de connexion -->
+    <string name="prompt_id">Identifiant</string>
+    <string name="prompt_password">Mot de passe</string>
+    <string name="action_sign_in_short">Valider</string>
+    <string name="connect">Se Connecter</string>
+    
     <string name="add_doctor">Nouveau Médecin</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="passwordCheck">Confirm password</string>
     <string name="register">Sign Up</string>
-    <string name="connect">Connect</string>
     <string name="welcome">Welcome</string>
     <string name="menu_popup_remove">Supprimer</string>
     <string name="menu_alerts">Voir les alertes</string>
