@@ -2,13 +2,12 @@
 <resources>
 
     <string name="app_name">E-Health</string>
-    
+
     <!-- Page de connexion -->
     <string name="prompt_id">Identifiant</string>
     <string name="prompt_password">Mot de passe</string>
     <string name="action_sign_in_short">Valider</string>
     <string name="connect">Se Connecter</string>
-    
     <string name="add_doctor">Nouveau Médecin</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -37,7 +36,10 @@
     <string name="menu_add_patient">Add patient</string>
     <string name="cancel">Cancel</string>
     <string name="deconnexion">Deconnexion</string>
-    <string name="lastname">LastName</string>  
-    <string name="firstname">FirstName</string>  
+    <string name="lastname">LastName</string>
+    <string name="firstname">FirstName</string>
+    <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="imageSplash">SplashImage</string>
+    
 
 </resources>
