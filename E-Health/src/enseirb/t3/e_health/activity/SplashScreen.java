@@ -8,8 +8,8 @@ import com.project.e_health.R;
 
 public class SplashScreen extends Activity {
 
-	/** DurÃ©e d'affichage du SplashScreen */
-	   protected int _splashTime = 3000; 
+	/** Durée d'affichage du SplashScreen */
+	   protected int _splashTime = 5000; 
 
 	   private Thread splashTread;
 

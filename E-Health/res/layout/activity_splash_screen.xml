@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="${relativePackage}.${activityClass}"
-    android:background="#080808" >
+    android:background="#9AEBEF" >
 
     <ImageView 
         android:contentDescription="@string/imageSplash"
