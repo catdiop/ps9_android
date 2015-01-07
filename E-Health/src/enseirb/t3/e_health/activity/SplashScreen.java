@@ -2,6 +2,7 @@ package enseirb.t3.e_health.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import com.project.e_health.R;
@@ -19,6 +20,7 @@ public class SplashScreen extends Activity {
 	   {
 	      super.onCreate(savedInstanceState);
 	      setContentView(R.layout.activity_splash_screen);
+	      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
 	      final SplashScreen sPlashScreen = this; 
 
