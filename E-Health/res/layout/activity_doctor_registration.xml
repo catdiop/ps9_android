@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="30dp"
         android:ems="10"
         android:hint="@string/username"
         android:inputType="text"
@@ -35,12 +35,22 @@
         android:ems="10"
         android:hint="@string/passwordCheck"
         android:inputType="textPassword" />
+    
+    <EditText
+        android:id="@+id/auth"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/username"
+        android:layout_below="@+id/passwordCheck"
+        android:ems="10"
+        android:hint="@string/auth"
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/register"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/passwordCheck"
+        android:layout_below="@+id/auth"
         android:layout_centerHorizontal="true"
         android:background="@drawable/connect_button"
         android:text="@string/register" />

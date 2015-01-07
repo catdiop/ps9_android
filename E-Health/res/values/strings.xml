@@ -12,6 +12,7 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="passwordCheck">Confirm password</string>
+    <string name="auth">Authentification pass</string>
     <string name="register">Sign Up</string>
     <string name="welcome">Welcome</string>
     <string name="menu_popup_remove">Supprimer</string>

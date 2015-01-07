@@ -16,6 +16,8 @@ import enseirb.t3.e_health.entity.Doctor;
 
 public class DoctorRegistrationActivity extends Activity implements
 		OnClickListener {
+	
+	private final String authPass = "pass";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +38,17 @@ public class DoctorRegistrationActivity extends Activity implements
 			TextView usernameView = (TextView) findViewById(R.id.username);
 			TextView passwordView = (TextView) findViewById(R.id.password);
 			TextView passwordCheckView = (TextView) findViewById(R.id.passwordCheck);
+			TextView authView = (TextView) findViewById(R.id.auth);
 
 			if (usernameView.getText().length() > 0
 					&& passwordView.getText().length() > 0
-					&& passwordCheckView.getText().length() > 0) {
+					&& passwordCheckView.getText().length() > 0 ) {
 
 				// If username is already being used
 				if (EHealth.db.doesUserExist(usernameView.getText().toString()))
 					createDialog("Username already in use.");
+				else if (!authView.getText().toString().equals(authPass))
+					createDialog("Wrong Authentification Password.");
 				else {
 
 					// Check password
