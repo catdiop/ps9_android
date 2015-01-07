@@ -11,7 +11,7 @@ public class DataProcess {
 	private static Alert alert;
 	private Data data;
 	private ArrayList<String> alertes = new ArrayList<String>();
-	private ArrayList<String> dataNames= new ArrayList<String>();
+	private ArrayList<String> dataNames;
 	private String TAG = "DataProcess";
 
 	// Oxygen processing variables
@@ -98,7 +98,6 @@ public class DataProcess {
 public void process (Data data) {
 		
 		this.data = data;
-		dataNames = new ArrayList<String>();
 
 		switch (data.getDataname()) {
 		/* Voir calcul d'IAH
@@ -112,180 +111,181 @@ public void process (Data data) {
 			}
 			else 
 				noAirflowCount = 0;
-			Log.d(TAG, "noAirflowCmpt =" + noAirflowCount);
+			Log.d(TAG, "noAirflowCmpt = " + noAirflowCount);
 			if (noAirflowCount == 10) {
 				Log.d(TAG, "airflow = 10");
-				alertes.add("Apnee");
+//				alertes.add("Apnee");
+				alertes.add("Airflow");
 				noAirflowCount = 0;
 			}
 			break;
 		case "B":
 			if (Double.parseDouble(data.getValue()) > 100) {
 				alertes.add("Tachycardie");
-				this.dataNames.add("B");
+//				this.dataNames.add("B");
 			}
-			else if (Double.parseDouble(data.getValue()) < 60) {
+			else if (Double.parseDouble(data.getValue()) < 95) {
 				alertes.add("Bradycardie");
-				this.dataNames.add("B");
+//				this.dataNames.add("B");
 			}
 			break;
 		case "O":
-			if (Double.parseDouble(data.getValue()) < 90) {
-				if (Double.parseDouble(data.getValue()) < 5) {
-
-					this.setZeroOxygenCount(this.getZeroOxygenCount() + 1);	
-					Log.d("oxygen", "< 5");
-					Log.d("zeroOxygenCount", "" + this.getZeroOxygenCount());
-					if (this.zeroOxygenBlockCount > 0 && this.positiveOxygen == true) {
-						
-						alertes.add("Apnée");
-						this.setZeroOxygenBlockCount(0);
-						this.dataNames.add("O");
-						break;
-					}
-					
-					if (this.getZeroOxygenCount() == 10) {
-						
-						this.setZeroOxygenBlockCount(this
-								.getZeroOxygenBlockCount() + 1);
-						this.setZeroOxygenCount(0);
-					}
-
-					this.positiveOxygen = false;
-				}
-				else {
-
-					alertes.add("Hypoxémie");
-					this.dataNames.add("O");
-				}
-			}
-			else {
-				
-				Log.d("Oxygen", "Remis à 0");
-				this.setZeroOxygenCount(0);
-				this.positiveOxygen = true;
-			}
-			break;
-		case "P":
-			this.setPreviousPosition(position);
-			if (Double.parseDouble(data.getValue()) == 1) {
-				Log.d("alerte", "position couchée");
-				this.setPosition(1);
-			} else if (Double.parseDouble(data.getValue()) == 2) {
-				Log.d("alerte", "position couchée");
-				this.setPosition(2);
-			} else if (Double.parseDouble(data.getValue()) == 3) {
-				Log.d("alerte", "position couchée");
-				this.setPosition(3);
-			} else if (Double.parseDouble(data.getValue()) == 4) {
-				Log.d("alerte", "position couchée");
-				this.setPosition(4);
-			} else if (Double.parseDouble(data.getValue()) == 5) {
-				Log.d("alerte", "position debout ou couchée");
-				this.setPosition(5);
-			}
-			break;
-		case "T":
-			if (Double.parseDouble(data.getValue()) > 38) {
-				Log.d("alerte", "hyperthermie");
-				alertes.add("Hyperthermie");
-				this.dataNames.add("T");
-			}
-			else if (Double.parseDouble(data.getValue()) < 35) {
-				Log.d("alerte", "hypothermie");
-				alertes.add("Hypothermie");
-				this.dataNames.add("T");
-			}
-			break;
-		case "C":
-			// Sueur déjà déterminée par la résistance
-			break;
-		case "R":
-			// Sueur : R < 1500 Ohm
-			if (Math.abs(Double.parseDouble(data.getValue())) < 1500) {
-				
-				Log.d("alerte", "sueur");
-				alertes.add("Sueur");
-			}
-			break;
-		case "V":
-			// Sueur déjà déterminée par la résistance
-			break;
+			if (Double.parseDouble(data.getValue()) < 99)
+				alertes.add("Hypoxemie");
+//				if (Double.parseDouble(data.getValue()) < 5) {
+//					this.setZeroOxygenCount(this.getZeroOxygenCount() + 1);	
+//					Log.d(TAG, "Hypoxemie");
+//					Log.d(TAG, "zeroOxygenCount = " + this.getZeroOxygenCount());
+//					if (this.zeroOxygenBlockCount > 0 && this.positiveOxygen == true) {
+//						
+//						alertes.add("Apnee");
+//						this.setZeroOxygenBlockCount(0);
+//						this.dataNames.add("O");
+//						break;
+//					}
+//					
+//					if (this.getZeroOxygenCount() == 10) {
+//						
+//						this.setZeroOxygenBlockCount(this
+//								.getZeroOxygenBlockCount() + 1);
+//						this.setZeroOxygenCount(0);
+//					}
+//
+//					this.positiveOxygen = false;
+//				}
+//				else {
+//
+//
+//					this.dataNames.add("O");
+//				}
+//			}
+//			else {
+//				
+//				Log.d("Oxygen", "Remis à 0");
+//				this.setZeroOxygenCount(0);
+//				this.positiveOxygen = true;
+//			}
+//			break;
+//		case "P":
+//			this.setPreviousPosition(position);
+//			if (Double.parseDouble(data.getValue()) == 1) {
+//				Log.d("alerte", "position couchée");
+//				this.setPosition(1);
+//			} else if (Double.parseDouble(data.getValue()) == 2) {
+//				Log.d("alerte", "position couchée");
+//				this.setPosition(2);
+//			} else if (Double.parseDouble(data.getValue()) == 3) {
+//				Log.d("alerte", "position couchée");
+//				this.setPosition(3);
+//			} else if (Double.parseDouble(data.getValue()) == 4) {
+//				Log.d("alerte", "position couchée");
+//				this.setPosition(4);
+//			} else if (Double.parseDouble(data.getValue()) == 5) {
+//				Log.d("alerte", "position debout ou couchée");
+//				this.setPosition(5);
+//			}
+//			break;
+//		case "T":
+//			if (Double.parseDouble(data.getValue()) > 38) {
+//				Log.d("alerte", "hyperthermie");
+//				alertes.add("Hyperthermie");
+//				this.dataNames.add("T");
+//			}
+//			else if (Double.parseDouble(data.getValue()) < 35) {
+//				Log.d("alerte", "hypothermie");
+//				alertes.add("Hypothermie");
+//				this.dataNames.add("T");
+//			}
+//			break;
+//		case "C":
+//			// Sueur déjà déterminée par la résistance
+//			break;
+//		case "R":
+//			// Sueur : R < 1500 Ohm
+//			if (Math.abs(Double.parseDouble(data.getValue())) < 1500) {
+//				Log.d("alerte", "sueur");
+//				alertes.add("Sueur");
+//			}
+//			break;
+//		case "V":
+//			// Sueur déjà déterminée par la résistance
+//			break;
 		default :
 			break;
 		}
 	}
 	
 	public Alert correlation () {
+		alert = null;
+		this.dataNames = new ArrayList<String>();
 		
-		if (alertes.contains("Apnee")) {
-			alertes = new ArrayList<String>();
-			alert = new Alert(this.data.getIdPatient(), this.data.getDate(), "Apnee");
-			dataNames.add("A");
-			return alert;
-		}
+//		if (alertes.contains("Airflow")) {
+//			alertes = new ArrayList<String>();
+//			alert = new Alert(this.data.getIdPatient(), this.data.getDate(), "Apnee");
+//			dataNames.add("A");
+//			dataNames.add("B");
+//			dataNames.add("O");
+//			return alert;
+//		}
 		
 		
-		if (alertes.contains("Tachycardie") && alertes.contains("Sueur") && this.getPosition() != 5 && this.getPreviousPosition() == 5) {
-			alertes = new ArrayList<String>();
-			alert = new Alert(data.getIdPatient(), data.getDate(), "Malaise");
-			this.dataNames.add("B");
-			this.dataNames.add("R");
-//			this.dataNames.add("P");
-			return alert;
-		}
-		
-		if (alertes.contains("Bradycardie") && alertes.contains("Hypoxémie")) {
-			alertes = new ArrayList<String>();
+//		if (alertes.contains("Tachycardie") && alertes.contains("Sueur") && this.getPosition() != 5 && this.getPreviousPosition() == 5) {
+//			alertes = new ArrayList<String>();
+//			alert = new Alert(data.getIdPatient(), data.getDate(), "Malaise");
+//			this.dataNames.add("B");
+//			this.dataNames.add("R");
+////			this.dataNames.add("P");
+//			return alert;
+//		}
+//		
+		if (alertes.contains("Bradycardie") && alertes.contains("Hypoxemie")) {
 			if (alertes.contains("Sueur")) {
-				
 				alert = new Alert(data.getIdPatient(), data.getDate(), "Angine de poitrine");
 				this.dataNames.add("B");
 				this.dataNames.add("O");
 				this.dataNames.add("R");
-				return alert;
 			}
 			
-			else {
-				
-				alert = new Alert(data.getIdPatient(), data.getDate(), "Apnée");
+			else if (alertes.contains("Airflow")) {
+				alert = new Alert(data.getIdPatient(), data.getDate(), "Apnee");
+				this.dataNames.add("A");
 				this.dataNames.add("B");
 				this.dataNames.add("O");
-				return alert;
 			}
 		}
+//		
+//		if (alertes.contains("Tachycardie") && alertes.contains("Hypoxemie") && alertes.contains("Sueur")) {
+//			alertes = new ArrayList<String>();
+//			alert = new Alert(data.getIdPatient(), data.getDate(), "Problème cardiaque");
+//			this.dataNames.add("B");
+//			this.dataNames.add("O");
+//			this.dataNames.add("R");
+//
+//			return alert;
+//		}
+//		
+//		if (alertes.contains("Hypoxemie")) {
+//			alertes = new ArrayList<String>();
+//			alert = new Alert(data.getIdPatient(), data.getDate(), "Hypoxemie");
+//			this.dataNames.add("O");
+//			return alert;
+//		}
+//		
+//		if  (alertes.contains("Hypothermie")) {
+//			alertes = new ArrayList<String>();
+//			alert = new Alert(data.getIdPatient(), data.getDate(), "Hypothermie");
+//			this.dataNames.add("T");
+//			return alert;
+//		}
+//		
+//		if  (alertes.contains("Hyperthermie")) {
+//			alertes = new ArrayList<String>();
+//			alert = new Alert(data.getIdPatient(), data.getDate(), "Hyperthermie");
+//			this.dataNames.add("T");
+//			return alert;
+//		}			return null;
 		
-		if (alertes.contains("Tachycardie") && alertes.contains("Hypoxémie") && alertes.contains("Sueur")) {
-			alertes = new ArrayList<String>();
-			alert = new Alert(data.getIdPatient(), data.getDate(), "Problème cardiaque");
-			this.dataNames.add("B");
-			this.dataNames.add("O");
-			this.dataNames.add("R");
-
-			return alert;
-		}
-		
-		if (alertes.contains("Hypoxémie")) {
-			alertes = new ArrayList<String>();
-			alert = new Alert(data.getIdPatient(), data.getDate(), "Hypoxémie");
-			this.dataNames.add("O");
-			return alert;
-		}
-		
-		if  (alertes.contains("Hypothermie")) {
-			alertes = new ArrayList<String>();
-			alert = new Alert(data.getIdPatient(), data.getDate(), "Hypothermie");
-			this.dataNames.add("T");
-			return alert;
-		}
-		
-		if  (alertes.contains("Hyperthermie")) {
-			alertes = new ArrayList<String>();
-			alert = new Alert(data.getIdPatient(), data.getDate(), "Hyperthermie");
-			this.dataNames.add("T");
-			return alert;
-		}
-		
-		return null;
+		alertes = new ArrayList<String>();
+		return alert;
 	}
 }

@@ -108,21 +108,25 @@ public class GraphAlertActivity extends Activity {
 		for (Data dataTmp:datas) {
 //			if(d.getDataname()!=this.dataName)
 //				continue;
-			if (dataTmp.getDataname().equals(dataname))
-				data = dataTmp;
+			if (dataTmp.getDataname().equals(dataname)) {
+				Point p = new Point(dataTmp.getDate(), Double.parseDouble(dataTmp.getValue()));
+				line.addNewPoint(p);
+				view.repaint();
+			}
+//				data = dataTmp;
 //			for (Data dataTmp : datas) {
 //				if (dataTmp.getDataname().equals(dataname))
 //					data = dataTmp;
 //			}
 
-			Point p = new Point(data.getDate(), Double.parseDouble(data.getValue()));
-			line.addNewPoint(p);
+//			Point p = new Point(data.getDate(), Double.parseDouble(data.getValue()));
+//			line.addNewPoint(p);
 //			cmpt++;
 //			if (cmpt > nbreMesuresPrint) {
 //				line.removePoint(cmpt - (nbreMesuresPrint + 1));
 //				cmpt--;
 //			}
-			view.repaint();
+//			view.repaint();
 		}
 	}
 
