@@ -77,7 +77,7 @@ public class AlertsActivity extends Activity {
 				TextView tv2=(TextView)arg1.findViewById(R.id.alert_type);
 				
 				Intent intent = new Intent(AlertsActivity.this, GraphAlertActivity.class);
-				//on ajoute un extra pour permettre Ã  GraphActivity de rÃ©cupÃ©rer l'id de l'alerte
+				//on ajoute un extra pour permettre à GraphActivity de récupérer l'id de l'alerte
 				intent.putExtra("alertId", Integer.parseInt(tv1.getText().toString()));
 				intent.putExtra("dataName", tv2.getText().toString());
 				startActivity(intent);
