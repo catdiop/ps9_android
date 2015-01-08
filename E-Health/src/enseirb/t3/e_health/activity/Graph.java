@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import org.achartengine.GraphicalView;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import com.project.e_health.R;
 
 import enseirb.t3.e_health.bluetooth.Bluetooth;
-import enseirb.t3.e_health.bluetooth.BluetoothBroadcastReceiver;
 import enseirb.t3.e_health.bluetooth.BtThread;
 import enseirb.t3.e_health.entity.ArduinoData;
 import enseirb.t3.e_health.entity.Data;
@@ -68,15 +67,16 @@ public class Graph extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		BluetoothDevice device;
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.action_bt:
+			item.setIcon(R.drawable.ic_action_bluetooth_searching);
 			bt.selectDevice();
 			if ( Bluetooth.device != null) {
 				btThread = new BtThread(Bluetooth.device, handler);
 				btThread.start();
 				arduinoData = new ArduinoData(btThread, dataProcess);
+				item.setIcon(R.drawable.ic_action_bluetooth_connected);
 			}
 			return true;
 		case R.id.action_A:
@@ -122,6 +122,7 @@ public class Graph extends Activity {
 		}
 	}
 
+	@SuppressLint("HandlerLeak") 
 	public Handler handler = new Handler() {
 		// private DataProcess dataProcess;
 

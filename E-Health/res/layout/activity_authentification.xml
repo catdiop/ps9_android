@@ -24,7 +24,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_centerVertical="true"
-	            android:src="@drawable/icone_cle" />
+	            android:src="@drawable/connect" />
 	
 	        <TextView
 	            android:id="@+id/title"

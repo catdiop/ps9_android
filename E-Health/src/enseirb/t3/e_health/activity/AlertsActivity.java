@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,6 +59,9 @@ public class AlertsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_alerts);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+		
+		TextView title = (TextView) findViewById(R.id.title);
+		title.setText(Html.fromHtml("MES <b>ALERTES</b>"));
 
 		session = new SessionManager(getApplicationContext());
 		idDoctor = session.getUserDetails();

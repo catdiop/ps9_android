@@ -95,6 +95,7 @@ public class BtThread extends Thread {
 	public void write(byte[] buffer) {
 		try {
 			mmOutStream.write(buffer);
+			Log.d(TAG,"Envoi : " + new String(buffer, "UTF-8"));
 		} catch (IOException e) {
 			Log.e(TAG, "Exception during write", e);
 		}

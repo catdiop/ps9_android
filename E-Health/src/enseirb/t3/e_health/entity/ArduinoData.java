@@ -1,5 +1,6 @@
 package enseirb.t3.e_health.entity;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -73,7 +74,12 @@ public class ArduinoData  {
     		idAlert = EHealth.db.createAlert(alert);
     		cmpNeedToSave = numberData;
     		
-    		btThread.write("MORE".getBytes());
+    		try {
+				btThread.write("MORE\n".getBytes("UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
     		ArrayList<Data> arraySavedData = new ArrayList<Data>();
     		ArrayList<String> arrayDataname = dataProcess.getDataNames();
