@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -26,6 +27,9 @@ public class DoctorRegistrationActivity extends Activity implements
 		setContentView(R.layout.activity_doctor_registration);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
+		TextView titre = (TextView) findViewById(R.id.title);
+		titre.setText(Html.fromHtml("NOUVEAU <b>M&Eacute;DECIN</b>"));
+		
 		Button register = (Button) findViewById(R.id.register);
 		register.setOnClickListener(this);
 	}
