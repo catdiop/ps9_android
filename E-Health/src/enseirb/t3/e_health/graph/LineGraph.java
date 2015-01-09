@@ -38,7 +38,7 @@ public class LineGraph {
 			chartTitle = "Pouls";
 			break;
 		case "C":
-			yTitle = "µS";
+			yTitle = "ï¿½S";
 			chartTitle = "Conductance";
 			break;
 		case "O":
@@ -51,11 +51,11 @@ public class LineGraph {
 			break;
 		case "R":
 			yTitle = "Ohm";
-			chartTitle = "Résistance";
+			chartTitle = "Rï¿½sistance";
 			break;
 		case "T":
-			yTitle = "°C";
-			chartTitle = "Température";
+			yTitle = "ï¿½C";
+			chartTitle = "Tempï¿½rature";
 			break;
 		default:
 			break;
@@ -108,5 +108,7 @@ public class LineGraph {
 	public void removePoint(int i) {
 		dataset.remove(i);
 	}
-
+	public void setWindow(int window){
+		this.window=window;
+	}
 }

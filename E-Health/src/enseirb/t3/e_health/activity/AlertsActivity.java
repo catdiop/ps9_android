@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,9 +58,6 @@ public class AlertsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_alerts);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-		
-		TextView title = (TextView) findViewById(R.id.title);
-		title.setText(Html.fromHtml("MES <b>ALERTES</b>"));
 
 		session = new SessionManager(getApplicationContext());
 		idDoctor = session.getUserDetails();
@@ -77,7 +73,7 @@ public class AlertsActivity extends Activity {
 				TextView tv2=(TextView)arg1.findViewById(R.id.alert_type);
 				
 				Intent intent = new Intent(AlertsActivity.this, GraphAlertActivity.class);
-				//on ajoute un extra pour permettre à GraphActivity de récupérer l'id de l'alerte
+				//on ajoute un extra pour permettre Ã  GraphActivity de rÃ©cupÃ©rer l'id de l'alerte
 				intent.putExtra("alertId", Integer.parseInt(tv1.getText().toString()));
 				intent.putExtra("dataName", tv2.getText().toString());
 				startActivity(intent);
