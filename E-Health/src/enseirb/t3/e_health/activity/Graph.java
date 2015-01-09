@@ -52,6 +52,9 @@ public class Graph extends Activity {
 		dataProcess.setZeroOxygenCount(0);
 		dataProcess.setNoAirflowCount(0);
 		dataProcess.setNoAirflowBlockCount(0);
+		dataProcess.setHypoTCount(0);
+		dataProcess.setHyperTCount(0);
+		dataProcess.setStandCount(0);
 		
 		idPatient = session.getUserDetails();
 

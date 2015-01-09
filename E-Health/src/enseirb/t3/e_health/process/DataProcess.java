@@ -26,6 +26,11 @@ public class DataProcess {
 	// Position processing variables
 	private int position;
 	private int previousPosition;
+	private int standCount;
+
+	// Temprature processing variables
+	private int hypoTCount;
+	private int hyperTCount;
 
 	public ArrayList<String> getDataNames() {
 		return this.dataNames;
@@ -93,151 +98,172 @@ public class DataProcess {
 		this.data = data;
 	}
 
+	public int getHypoTCount() {
+		return this.hypoTCount;
+	}
 
+	public void setHypoTCount(int hypoTCount) {
+		this.hypoTCount = hypoTCount;
+	}
 
-public void process (Data data) {
-		
+	public int getHyperTCount() {
+		return this.hyperTCount;
+	}
+
+	public void setHyperTCount(int hyperTCount) {
+		this.hyperTCount = hyperTCount;
+	}
+
+	public int getStandCount() {
+		return this.standCount;
+	}
+
+	public void setStandCount(int standCount) {
+		this.standCount = standCount;
+	}
+
+	public void process (Data data) {
+
 		this.data = data;
 
 		switch (data.getDataname()) {
-		/* Voir calcul d'IAH
-		 Apnée centrale : arrêt total du flux respiratoire pendant au moins 10 s
-		 Hypopnée : diminution du flux respiratoire de 50 % pendant au moins 10 s
-		 Pour l'instant : pas de différenciation des deux vu qu'on ne calcule pas l'IAH */
 		case "A":
 			if (Double.parseDouble(data.getValue()) < 30) {
+				Log.d(TAG, "Valeur airflow : " + Double.parseDouble(data.getValue()));
 				Log.d(TAG, "airflow < 128");
-				noAirflowCount++;
+				this.noAirflowCount++;
 			}
-			else 
-				noAirflowCount = 0;
-			Log.d(TAG, "noAirflowCmpt = " + noAirflowCount);
-			if (noAirflowCount == 10) {
+			else  {
+				this.noAirflowCount = 0;
+			}
+			Log.d(TAG, "noAirflowCmpt = " + this.noAirflowCount);
+			if (this.noAirflowCount == 10) {
 				Log.d(TAG, "airflow = 10");
-//				alertes.add("Apnee");
-				alertes.add("Airflow");
-				noAirflowCount = 0;
+				alertes.add("Apnee");
+				this.noAirflowCount = 0;
 			}
 			break;
 		case "B":
 			if (Double.parseDouble(data.getValue()) > 100) {
 				alertes.add("Tachycardie");
-//				this.dataNames.add("B");
 			}
 			else if (Double.parseDouble(data.getValue()) < 95) {
 				alertes.add("Bradycardie");
-//				this.dataNames.add("B");
 			}
 			break;
 		case "O":
-			if (Double.parseDouble(data.getValue()) < 99)
-				alertes.add("Hypoxemie");
-//				if (Double.parseDouble(data.getValue()) < 5) {
-//					this.setZeroOxygenCount(this.getZeroOxygenCount() + 1);	
-//					Log.d(TAG, "Hypoxemie");
-//					Log.d(TAG, "zeroOxygenCount = " + this.getZeroOxygenCount());
-//					if (this.zeroOxygenBlockCount > 0 && this.positiveOxygen == true) {
-//						
-//						alertes.add("Apnee");
-//						this.setZeroOxygenBlockCount(0);
-//						this.dataNames.add("O");
-//						break;
-//					}
-//					
-//					if (this.getZeroOxygenCount() == 10) {
-//						
-//						this.setZeroOxygenBlockCount(this
-//								.getZeroOxygenBlockCount() + 1);
-//						this.setZeroOxygenCount(0);
-//					}
-//
-//					this.positiveOxygen = false;
-//				}
-//				else {
-//
-//
-//					this.dataNames.add("O");
-//				}
-//			}
-//			else {
-//				
-//				Log.d("Oxygen", "Remis à 0");
-//				this.setZeroOxygenCount(0);
-//				this.positiveOxygen = true;
-//			}
-//			break;
-//		case "P":
-//			this.setPreviousPosition(position);
-//			if (Double.parseDouble(data.getValue()) == 1) {
-//				Log.d("alerte", "position couchée");
-//				this.setPosition(1);
-//			} else if (Double.parseDouble(data.getValue()) == 2) {
-//				Log.d("alerte", "position couchée");
-//				this.setPosition(2);
-//			} else if (Double.parseDouble(data.getValue()) == 3) {
-//				Log.d("alerte", "position couchée");
-//				this.setPosition(3);
-//			} else if (Double.parseDouble(data.getValue()) == 4) {
-//				Log.d("alerte", "position couchée");
-//				this.setPosition(4);
-//			} else if (Double.parseDouble(data.getValue()) == 5) {
-//				Log.d("alerte", "position debout ou couchée");
-//				this.setPosition(5);
-//			}
-//			break;
-//		case "T":
-//			if (Double.parseDouble(data.getValue()) > 38) {
-//				Log.d("alerte", "hyperthermie");
-//				alertes.add("Hyperthermie");
-//				this.dataNames.add("T");
-//			}
-//			else if (Double.parseDouble(data.getValue()) < 35) {
-//				Log.d("alerte", "hypothermie");
-//				alertes.add("Hypothermie");
-//				this.dataNames.add("T");
-//			}
-//			break;
-//		case "C":
-//			// Sueur déjà déterminée par la résistance
-//			break;
-//		case "R":
-//			// Sueur : R < 1500 Ohm
+			if (Double.parseDouble(data.getValue()) < 1) {
+				break;
+			}
+			else {
+				if (Double.parseDouble(data.getValue()) < 99)
+					alertes.add("Hypoxemie");
+				if (Double.parseDouble(data.getValue()) < 5) {
+					this.setZeroOxygenCount(this.getZeroOxygenCount() + 1);	
+					//				Log.d(TAG, "Hypoxemie");
+					//				Log.d(TAG, "zeroOxygenCount = " + this.getZeroOxygenCount());
+					if (this.zeroOxygenBlockCount > 0 && this.positiveOxygen == true) {
+
+						alertes.add("Apnee");
+						this.setZeroOxygenBlockCount(0);
+						break;
+					}
+
+					if (this.getZeroOxygenCount() == 10) {
+
+						this.setZeroOxygenBlockCount(this
+								.getZeroOxygenBlockCount() + 1);
+						this.setZeroOxygenCount(0);
+					}
+
+					this.positiveOxygen = false;
+				}
+				else {
+
+					this.setZeroOxygenCount(0);
+					this.positiveOxygen = true;
+				}
+			}
+			break;
+		case "P":
+			this.setPreviousPosition(position);
+			if (Double.parseDouble(data.getValue()) == 1) {
+				this.setPosition(1);
+			} else if (Double.parseDouble(data.getValue()) == 2) {
+				this.setPosition(2);
+			} else if (Double.parseDouble(data.getValue()) == 3) {
+				this.setPosition(3);
+			} else if (Double.parseDouble(data.getValue()) == 4) {
+				this.setPosition(4);
+			}
+			// position debout
+			else if (Double.parseDouble(data.getValue()) == 5) {
+				this.setPosition(5);
+				this.standCount++;
+				if (standCount == 20) {
+
+					alertes.add("Somnambulisme");
+				}
+			}
+			break;
+		case "T":
+			if (Double.parseDouble(data.getValue()) > 38) {
+				this.hyperTCount++;
+
+				if (this.hyperTCount == 11) {
+
+					this.hyperTCount = 0;
+					Log.d("alerte", "hyperthermie");
+					alertes.add("Hyperthermie");
+					//	this.dataNames.add("T");
+				}
+			}
+			else if (Double.parseDouble(data.getValue()) < 35) {
+				this.hypoTCount ++;
+
+				if (this.hypoTCount == 10) {
+
+					this.hypoTCount = 0;
+					Log.d("alerte", "hypothermie");
+					alertes.add("Hypothermie");
+				}
+			}
+			break;
+		case "C":
+			if (Math.abs(Double.parseDouble(data.getValue())) > 5) {
+				Log.d("alerte", "sueur");
+				alertes.add("Sueur");
+			}
+			break;
+		case "R":
+			// Sueur déterminée par la conductivité
+			// Sueur : R < 1500 Ohm
 //			if (Math.abs(Double.parseDouble(data.getValue())) < 1500) {
-//				Log.d("alerte", "sueur");
+//				
+//				Log.d("resistance", "R = " + Double.parseDouble(data.getValue()));
 //				alertes.add("Sueur");
 //			}
-//			break;
-//		case "V":
-//			// Sueur déjà déterminée par la résistance
-//			break;
+			break;
+		case "V":
+			// Sueur déjà déterminée par la conductivité
+			break;
 		default :
 			break;
 		}
 	}
-	
+
 	public Alert correlation () {
 		alert = null;
 		this.dataNames = new ArrayList<String>();
-		
-//		if (alertes.contains("Airflow")) {
-//			alertes = new ArrayList<String>();
-//			alert = new Alert(this.data.getIdPatient(), this.data.getDate(), "Apnee");
-//			dataNames.add("A");
-//			dataNames.add("B");
-//			dataNames.add("O");
-//			return alert;
-//		}
-		
-		
-//		if (alertes.contains("Tachycardie") && alertes.contains("Sueur") && this.getPosition() != 5 && this.getPreviousPosition() == 5) {
-//			alertes = new ArrayList<String>();
-//			alert = new Alert(data.getIdPatient(), data.getDate(), "Malaise");
-//			this.dataNames.add("B");
-//			this.dataNames.add("R");
-////			this.dataNames.add("P");
-//			return alert;
-//		}
-//		
+
+		if (alertes.contains("Tachycardie") && alertes.contains("Sueur") && this.getPosition() != 5 && this.getPreviousPosition() == 5) {
+			alert = new Alert(data.getIdPatient(), data.getDate(), "Malaise");
+			this.dataNames.add("B");
+			this.dataNames.add("R");
+			this.dataNames.add("P");
+			return alert;
+		}
+
 		if (alertes.contains("Bradycardie") && alertes.contains("Hypoxemie")) {
 			if (alertes.contains("Sueur")) {
 				alert = new Alert(data.getIdPatient(), data.getDate(), "Angine de poitrine");
@@ -245,46 +271,38 @@ public void process (Data data) {
 				this.dataNames.add("O");
 				this.dataNames.add("R");
 			}
-			
-			else if (alertes.contains("Airflow")) {
-				alert = new Alert(data.getIdPatient(), data.getDate(), "Apnee");
-				this.dataNames.add("A");
-				this.dataNames.add("B");
-				this.dataNames.add("O");
-			}
 		}
-//		
-//		if (alertes.contains("Tachycardie") && alertes.contains("Hypoxemie") && alertes.contains("Sueur")) {
-//			alertes = new ArrayList<String>();
-//			alert = new Alert(data.getIdPatient(), data.getDate(), "Problème cardiaque");
-//			this.dataNames.add("B");
-//			this.dataNames.add("O");
-//			this.dataNames.add("R");
-//
-//			return alert;
-//		}
-//		
-//		if (alertes.contains("Hypoxemie")) {
-//			alertes = new ArrayList<String>();
-//			alert = new Alert(data.getIdPatient(), data.getDate(), "Hypoxemie");
-//			this.dataNames.add("O");
-//			return alert;
-//		}
-//		
-//		if  (alertes.contains("Hypothermie")) {
-//			alertes = new ArrayList<String>();
-//			alert = new Alert(data.getIdPatient(), data.getDate(), "Hypothermie");
-//			this.dataNames.add("T");
-//			return alert;
-//		}
-//		
-//		if  (alertes.contains("Hyperthermie")) {
-//			alertes = new ArrayList<String>();
-//			alert = new Alert(data.getIdPatient(), data.getDate(), "Hyperthermie");
-//			this.dataNames.add("T");
-//			return alert;
-//		}			return null;
-		
+
+		if (alertes.contains("Apnee")) {
+
+			alert = new Alert(data.getIdPatient(), data.getDate(), "Apnee");
+			this.dataNames.add("A");
+			this.dataNames.add("B");
+			this.dataNames.add("O");
+		}
+
+		if (alertes.contains("Tachycardie") && alertes.contains("Hypoxemie") && alertes.contains("Sueur")) {
+			alert = new Alert(data.getIdPatient(), data.getDate(), "Problème cardiaque");
+			this.dataNames.add("B");
+			this.dataNames.add("O");
+			this.dataNames.add("R");
+		}
+
+		if  (alertes.contains("Hypothermie")) {
+			alert = new Alert(data.getIdPatient(), data.getDate(), "Hypothermie");
+			this.dataNames.add("T");
+		}
+
+		if  (alertes.contains("Hyperthermie")) {
+			alert = new Alert(data.getIdPatient(), data.getDate(), "Hyperthermie");
+			this.dataNames.add("T");
+		}
+
+		if  (alertes.contains("Somnambulisme")) {
+			this.dataNames.add("P");
+			alert = new Alert(data.getIdPatient(), data.getDate(), "Somnambulisme");
+		}
+
 		alertes = new ArrayList<String>();
 		return alert;
 	}
