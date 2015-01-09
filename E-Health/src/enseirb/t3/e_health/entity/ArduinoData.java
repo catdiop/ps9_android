@@ -19,6 +19,9 @@ public class ArduinoData  {
 	private Alert alert;
 	private int cmpNeedToSave = 0;
 	private BtThread btThread;
+	private String TAG = "ArduinoData";
+	private ArrayList<String> arrayDataname = new ArrayList<String>();
+	private int idAlert;
 	
 	public ArduinoData(BtThread bt, DataProcess dataProcess) {
 		btThread = bt;
@@ -32,38 +35,42 @@ public class ArduinoData  {
     
     public ArrayList<Data> stockData(String[] chunks, int idPatient) {
     	String[] chunkTmp;
-    	numberSensor = chunks.length - 1;
-    	numberData = numberDataPerSensor*numberSensor;
     	Data dataTmp = null;
     	String paquetTimestampStr = this.getPaquetTimestamp(chunks[0]);
     	Log.d("timestamp", paquetTimestampStr);
     	long paquetTimestamp = Long.parseLong(paquetTimestampStr);
-    	int idAlert = 0;
     	arrayData = new ArrayList<Data>();
+    	long currentTime = System.currentTimeMillis();
     	
     	for (int i = 1; i < chunks.length; i++) {
     		
     		chunkTmp = chunks[i].trim().split("\\||\\\n");
-    		
     		if(chunkTmp.length < 3){
     			Log.d("erreur","données invalides");
     			break;
     		}
     		
-    		date = new Date((System.currentTimeMillis()) - (paquetTimestamp - Long.parseLong(chunkTmp[0])));
+    		date = new Date(currentTime - (paquetTimestamp - Long.parseLong(chunkTmp[0])));
+//    		date = new Date(currentTime);
     		dataTmp = new Data(chunkTmp[1], chunkTmp[2], date, idPatient);
     		
     		Log.d("gt",dataTmp.getDataname());
     		Log.d("gt",dataTmp.getValue()+"\n");
     		Log.d("date", date.toString());
     		
-    		if (cmpNeedToSave != 0) {
+    		if (cmpNeedToSave != 0 && arrayDataname.contains(dataTmp.getDataname())) {
+    			Log.d(TAG, "idAlert no alert = " + Integer.toString(idAlert));
     			EHealth.db.createSavedData(dataTmp, idAlert);
     			cmpNeedToSave--;
-    		} else {
+    			Log.d(TAG, "cmpNeedToSave = " + Integer.toString(cmpNeedToSave));
+    		} else if (cmpNeedToSave == 0 && arrayDataname.contains(dataTmp.getDataname())) {
+    			btThread.write("STOP\n".getBytes());
+    			arrayDataname = new ArrayList<String>();
+    			idAlert = 0;
+    		} else if (cmpNeedToSave == 0) {
         		dataProcess.process(dataTmp);
     			EHealth.db.createData(dataTmp);
-        		if (EHealth.db.getNumberData() > numberData)
+        		if (EHealth.db.getNumberData() > (chunks.length - 1)*numberDataPerSensor)
         			EHealth.db.deleteLastData();
     		}
     		arrayData.add(dataTmp);
@@ -71,17 +78,21 @@ public class ArduinoData  {
     	if ((alert = dataProcess.correlation()) != null) {
 
     		idAlert = EHealth.db.createAlert(alert);
-    		cmpNeedToSave = numberData;
-    		
-    		btThread.write("MORE".getBytes());
+    		btThread.write("MORE\n".getBytes());
 
-    		ArrayList<Data> arraySavedData = new ArrayList<Data>();
-    		ArrayList<String> arrayDataname = dataProcess.getDataNames();
+    		arrayDataname = dataProcess.getDataNames();
+    		
+        	numberSensor = arrayDataname.size();
+        	numberData = numberDataPerSensor*numberSensor;
+    		cmpNeedToSave = numberData;
+    		Log.d(TAG, "SensorNbre = " + Integer.toString(numberSensor));
  		
+    		//TODO appel a la BDD
     		for (String dataname : arrayDataname) {
-	    		arraySavedData = EHealth.db.retrieveDataList(dataname);
-	    		for (Data data : arraySavedData)
-	    			EHealth.db.createSavedData(data, idAlert);
+	    		EHealth.db.moveDataToSavedData(dataname, idAlert);
+	    		Log.d(TAG, "idAlert alerte = " + Integer.toString(idAlert));
+//	    		for (Data data : arraySavedData)
+//	    			EHealth.db.createSavedData(data, idAlert);
     		}
 			EHealth.db.deleteAllData();
     	}

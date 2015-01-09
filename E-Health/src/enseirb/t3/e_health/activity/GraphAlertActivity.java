@@ -6,6 +6,7 @@ import org.achartengine.GraphicalView;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -99,7 +100,7 @@ public class GraphAlertActivity extends Activity {
 
 	private void openChart() {
 		List<Data> datas=EHealth.db.retrieveDatasForAlert(alertId);
-		Data data = null;
+//		Data data = null;
 
 		line = new LineGraph(dataname);
 		view = line.getView(this);
@@ -109,9 +110,9 @@ public class GraphAlertActivity extends Activity {
 //			if(d.getDataname()!=this.dataName)
 //				continue;
 			if (dataTmp.getDataname().equals(dataname)) {
+				Log.d(TAG, "date = " + dataTmp.getDate());
 				Point p = new Point(dataTmp.getDate(), Double.parseDouble(dataTmp.getValue()));
 				line.addNewPoint(p);
-				view.repaint();
 			}
 //				data = dataTmp;
 //			for (Data dataTmp : datas) {
@@ -128,6 +129,7 @@ public class GraphAlertActivity extends Activity {
 //			}
 //			view.repaint();
 		}
+		view.repaint();
 	}
 
 	public void onBackPressed(Thread ct) {

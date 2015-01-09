@@ -13,6 +13,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.format.DateFormat;
 import android.util.Log;
 import enseirb.t3.e_health.activity.AlertsActivity;
 import enseirb.t3.e_health.entity.Alert;
@@ -23,6 +24,8 @@ import enseirb.t3.e_health.entity.User;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
+	private String TAG = "DatabaseHandler";
+	
 	// Database Version
 	private static final int DATABASE_VERSION = 1;
 
@@ -198,40 +201,51 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	public void createData(Data object) {
 		SQLiteDatabase db = this.getWritableDatabase();
-
+		SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS z yyyy");
+		String date = df.format(object.getDate());
+		Log.d(TAG, "date enregistrée avec format = " + date);
+		
 		ContentValues values = new ContentValues();
 		values.put(KEY_DATANAME, object.getDataname());
 		values.put(KEY_VALUE, object.getValue());
-		values.put(KEY_DATE, object.getDate().toString());
+		values.put(KEY_DATE, date);
 		values.put(KEY_ID_PATIENT, object.getIdPatient());
 
 		// Inserting Row
 		db.insert(TABLE_DATA, null, values);
 	}
 
-	public ArrayList<Data> retrieveDataList(String dataname) {
-		SQLiteDatabase db = this.getReadableDatabase();
-		ArrayList<Data> arraySavedData = new ArrayList<Data>();
-		Data data = null;
-		Date date = null;
+	public void moveDataToSavedData(String dataname, int idAlert) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
 
 		Cursor cursor = db.query(TABLE_DATA, null, KEY_DATANAME + "=?",
 				new String[] { dataname }, null, null, null, null);
 
 		while (cursor.moveToNext()) {
-			try {
-				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",
-						Locale.US).parse(cursor.getString(3));
+//			try {
+//				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",
+//						Locale.US).parse(cursor.getString(3));
+//				Log.d(TAG, "date = " + date.toString() + "/" + cursor.getString(3));
+//
+//			} catch (ParseException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			data = new Data(cursor.getString(1), cursor.getString(2), date,
+//					cursor.getInt(4));
+			
 
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			data = new Data(cursor.getString(1), cursor.getString(2), date,
-					cursor.getInt(4));
-			arraySavedData.add(data);
+			values.put(KEY_ID_ALERT, Integer.toString(idAlert));
+			values.put(KEY_DATANAME, cursor.getString(1));
+			values.put(KEY_VALUE, cursor.getString(2));
+			values.put(KEY_DATE, cursor.getString(3));
+
+			// Inserting Row
+			db.insert(TABLE_SAVEDDATA, null, values);
+			Log.d(TAG, "Date = " + cursor.getString(3) + " enregistrée");
 		}
-		return arraySavedData;
+		Log.d(TAG, "DataName = " + dataname + " enregistrée");
 	}
 
 	public int updateData(Data object) {
@@ -411,8 +425,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		while (cursor.moveToPrevious() && cmpt < AlertsActivity.NbreAlertPrinted)
 			if (idPatientList.contains(cursor.getInt(1))) {
 				try {
-					date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",
-							Locale.US).parse(cursor.getString(2));
+					date = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS z yyyy").parse(cursor.getString(2));
+					Log.d(TAG, "Date parsée dans retrieveAlert = " + cursor.getString(2));
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -447,12 +461,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	public void createSavedData(Data object, int idAlert) {
 		SQLiteDatabase db = this.getWritableDatabase();
+		
+		SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS z yyyy");
+		String date = df.format(object.getDate());
 
 		ContentValues values = new ContentValues();
 		values.put(KEY_ID_ALERT, Integer.toString(idAlert));
 		values.put(KEY_DATANAME, object.getDataname());
 		values.put(KEY_VALUE, object.getValue());
-		values.put(KEY_DATE, object.getDate().toString());
+		values.put(KEY_DATE, date);
+		
+		Log.d(TAG, "Date après alerte = " + date + " enregistrée");
 
 		// Inserting Row
 		db.insert(TABLE_SAVEDDATA, null, values);
@@ -464,19 +483,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		Date date=null;
 		List<Data> datas=new LinkedList<Data>();
 		
-		
 		Cursor cursor = db.query(TABLE_SAVEDDATA, null, KEY_ID_ALERT + "=?",
 				new String[] { Integer.toString(alertId) }, null, null, null, null);
 
-		
 		while (cursor.moveToNext()) {
+			Log.d(TAG, "Date dans retrieve data = " + cursor.getString(4) + " / " + cursor.getString(2) + " enregistrée");
 			try {
-				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",
-						Locale.US).parse(cursor.getString(4));
+				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS z yyyy").parse(cursor.getString(4));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+//			Log.d(TAG, "Date parsée = " + date.toString() + " / " + cursor.getString(2) + " enregistrée");
 			
 			data = new Data(cursor.getString(2), cursor.getString(3), date, this.retrieveAlertFromId(alertId).getIDPatient());
 			datas.add(data);
@@ -484,20 +502,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return datas;
 	}
 	
+	public void deleteAllASavedData() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_SAVEDDATA, null, null);
+		db.close();
+	}
+	
 	public Alert retrieveAlertFromId(int alertId) {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Alert alert=null;
 		Date date=null;
 		
-		
+
 		Cursor cursor = db.query(TABLE_ALERT, null, KEY_ID_ALERT + "=?",
 				new String[] { Integer.toString(alertId) }, null, null, null, null);
 
 		
 		if (cursor.moveToFirst()) {
 			try {
-				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",
-						Locale.US).parse(cursor.getString(2));
+				date = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS z yyyy").parse(cursor.getString(2));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -55,6 +55,7 @@ public class BtThread extends Thread {
 			int time = 0;
 
 			String value = "";
+			write("HELLO\n".getBytes());
 			while (!stop) {
 				bytes = mmInStream.read(buffer, 0, 128);
 				if (bytes > 0 && time > WAITING_TIME) {

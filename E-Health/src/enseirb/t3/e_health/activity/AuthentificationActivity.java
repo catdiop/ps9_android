@@ -77,8 +77,9 @@ public class AuthentificationActivity extends Activity implements
 		
 //		EHealth.db.deleteAllPatient();
 //		EHealth.db.deleteAllDoctor();
-//		EHealth.db.deleteAllData();
-//		EHealth.db.deleteAllAlert();
+		EHealth.db.deleteAllData();
+		EHealth.db.deleteAllAlert();
+		EHealth.db.deleteAllASavedData();
 
 //		Doctor doctor = new Doctor("doc", "doc");
 //		EHealth.db.createDoctor(doctor);
