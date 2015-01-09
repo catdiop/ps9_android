@@ -172,7 +172,6 @@ public class GraphAlertActivity extends Activity {
 			//			}
 			//			view.repaint();
 		}
-		Toast.makeText(getApplicationContext(), Integer.toString(iter), Toast.LENGTH_LONG).show();
 	}
 
 	public void onBackPressed(Thread ct) {

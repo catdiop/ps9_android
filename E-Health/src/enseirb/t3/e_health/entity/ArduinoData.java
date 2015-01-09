@@ -4,8 +4,17 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.project.e_health.R;
+
 import enseirb.t3.e_health.activity.EHealth;
+import enseirb.t3.e_health.activity.GraphAlertActivity;
 import enseirb.t3.e_health.bluetooth.BtThread;
 import enseirb.t3.e_health.process.DataProcess;
 
@@ -20,10 +29,18 @@ public class ArduinoData  {
 	private Alert alert;
 	private int cmpNeedToSave = 0;
 	private BtThread btThread;
+	private int mId=2;
+	private Context context;
 	
 	public ArduinoData(BtThread bt, DataProcess dataProcess) {
 		btThread = bt;
 		this.dataProcess = dataProcess;
+	}
+	
+	public ArduinoData(BtThread bt, DataProcess dataProcess, Context context) {
+		btThread = bt;
+		this.dataProcess = dataProcess;
+		this.context=context;
 	}
     
     // Get data timestamp
@@ -47,7 +64,7 @@ public class ArduinoData  {
     		chunkTmp = chunks[i].trim().split("\\||\\\n");
     		
     		if(chunkTmp.length < 3){
-    			Log.d("erreur","donn�es invalides");
+    			Log.d("erreur","donn�es invalides");
     			break;
     		}
     		
@@ -72,6 +89,7 @@ public class ArduinoData  {
     	if ((alert = dataProcess.correlation()) != null) {
 
     		idAlert = EHealth.db.createAlert(alert);
+    		sendNotification(alert.getAlertName(), idAlert);
     		cmpNeedToSave = numberData;
     		
     		try {
@@ -96,6 +114,25 @@ public class ArduinoData  {
     
     public String[] getChunks(String ArduinoData) {
     	return ArduinoData.split(";");
+    }
+    
+    private void sendNotification(String typeAlert, int idAlert){
+    	NotificationCompat.Builder mBuilder =
+    	        new NotificationCompat.Builder(context)
+    	        .setSmallIcon(R.drawable.ic_action_bluetooth)
+    	        .setContentTitle("Alert E-Health")
+    	        .setContentText("Une nouvelle alerte "+typeAlert+" vient d'être détectée");
+    	// Creates an explicit intent for an Activity in your app
+    	Intent resultIntent = new Intent(context, GraphAlertActivity.class);
+    	resultIntent.putExtra("alertId", idAlert);
+    	PendingIntent contentIntent = PendingIntent.getActivity(context,
+                0, resultIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+    	mBuilder.setContentIntent(contentIntent);
+    	NotificationManager mNotificationManager =
+    	    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    	// mId allows you to update the notification later on.
+    	mNotificationManager.notify(mId, mBuilder.build());
     }
 }
 

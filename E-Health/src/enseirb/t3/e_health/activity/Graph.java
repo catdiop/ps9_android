@@ -75,7 +75,7 @@ public class Graph extends Activity {
 			if ( Bluetooth.device != null) {
 				btThread = new BtThread(Bluetooth.device, handler);
 				btThread.start();
-				arduinoData = new ArduinoData(btThread, dataProcess);
+				arduinoData = new ArduinoData(btThread, dataProcess, this);
 				item.setIcon(R.drawable.ic_action_bluetooth_connected);
 			}
 			return true;
