@@ -4,7 +4,8 @@
     <item 
         android:id="@+id/action_bt"
         android:orderInCategory="300"
-        android:showAsAction="never"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_bluetooth"
         android:title="@string/button_bluetooth"/>
     <item 
         android:id="@+id/action_A"
