@@ -18,8 +18,8 @@ public class LineGraph {
 	private XYMultipleSeriesDataset mDataset = new XYMultipleSeriesDataset();
 	private XYSeriesRenderer renderer = new XYSeriesRenderer();
 	private XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
-	private float textSize = 22;
-	private float titleTextSize = 24;
+	private float textSize = 40;
+	private float titleTextSize = 60;
 	private int window = 10;
 
 	public LineGraph(String dataname) {
@@ -51,18 +51,18 @@ public class LineGraph {
 			break;
 		case "R":
 			yTitle = "Ohm";
-			chartTitle = "Rï¿½sistance";
+			chartTitle = "Résistance";
 			break;
 		case "T":
 			yTitle = "°C";
-			chartTitle = "Tempï¿½rature";
+			chartTitle = "Température";
 			break;
 		default:
 			break;
 		}
 		
-		dataset = new TimeSeries(chartTitle);
-
+		dataset = new TimeSeries(chartTitle + " " + yTitle);
+		
 		mDataset.addSeries(dataset);
 
 		renderer.setColor(Color.RED);
@@ -72,13 +72,18 @@ public class LineGraph {
 		renderer.setDisplayChartValues(true);
 		mRenderer.setXLabels(window);
 		mRenderer.setChartTitle(chartTitle);
+		mRenderer.setAxisTitleTextSize(titleTextSize);
+		mRenderer.setChartTitleTextSize(titleTextSize);
 		mRenderer.setXTitle(xTitle);
 		mRenderer.setYTitle(yTitle);
-		mRenderer.setZoomButtonsVisible(true);
+		mRenderer.setLabelsColor(Color.rgb(44, 196, 196));
+		mRenderer.setLegendTextSize(textSize);
+		mRenderer.setZoomButtonsVisible(false);
 		mRenderer.setAxisTitleTextSize(textSize);
 		mRenderer.setLabelsTextSize(textSize);
-		mRenderer.setChartTitleTextSize(titleTextSize);
-
+		mRenderer.setMarginsColor(Color.WHITE);
+		mRenderer.setLegendHeight(50);
+	    mRenderer.setMargins(new int[]{0, 70, 80, 70});
 		mRenderer.addSeriesRenderer(renderer);
 	}
 
