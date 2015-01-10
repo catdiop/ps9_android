@@ -20,7 +20,7 @@ public class LineGraph {
 	private XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
 	private float textSize = 40;
 	private float titleTextSize = 60;
-	private int window = 10;
+	private int window = 9;
 
 	public LineGraph(String dataname) {
 		String xTitle = "Time";
@@ -30,7 +30,7 @@ public class LineGraph {
 		switch (dataname) {
 		case "A":
 			//TODO 0 -> 1024 : 0 -> 8L/s
-			yTitle = "L/s";
+			yTitle = "mL/s";
 			chartTitle = "Airflow";
 			break;
 		case "B":

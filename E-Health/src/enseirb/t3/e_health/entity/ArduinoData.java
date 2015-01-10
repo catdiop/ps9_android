@@ -18,6 +18,8 @@ import enseirb.t3.e_health.activity.GraphAlertActivity;
 import enseirb.t3.e_health.bluetooth.BtThread;
 import enseirb.t3.e_health.process.DataProcess;
 
+import java.lang.Math;
+
 public class ArduinoData  {
 
 	private Date date;
@@ -68,6 +70,11 @@ public class ArduinoData  {
     			break;
     		}
     		
+    		if (chunkTmp[1].equals("A")) {
+    			Double lng = Math.ceil(Double.parseDouble(chunkTmp[2]));
+    			chunkTmp[2] = Double.toString(lng*8000/1024);
+    		}
+    		
     		date = new Date(currentTime - (paquetTimestamp - Long.parseLong(chunkTmp[0])));
 //    		date = new Date(currentTime);
     		dataTmp = new Data(chunkTmp[1], chunkTmp[2], date, idPatient);
@@ -94,6 +101,10 @@ public class ArduinoData  {
     		arrayData.add(dataTmp);
     	}
     	if ((alert = dataProcess.correlation()) != null) {
+    		dataProcess.setNoAirflowCount(0);
+    		dataProcess.setStandCount(0);
+    		dataProcess.setTempHyperCount(0);
+    		dataProcess.setTempHypoCount(0);
 
     		idAlert = EHealth.db.createAlert(alert);
     		sendNotification(alert.getAlertName(), idAlert);
@@ -132,9 +143,9 @@ public class ArduinoData  {
     private void sendNotification(String typeAlert, int idAlert){
     	NotificationCompat.Builder mBuilder =
     	        new NotificationCompat.Builder(context)
-    	        .setSmallIcon(R.drawable.ic_action_bluetooth)
-    	        .setContentTitle("Alert E-Health")
-    	        .setContentText("Une nouvelle alerte "+typeAlert+" vient d'être détectée");
+    	        .setSmallIcon(R.drawable.ic_launcher)
+    	        .setContentTitle("Alert!")
+    	        .setContentText("Une nouvelle alerte "+ typeAlert +" vient d'etre detectee.");
     	// Creates an explicit intent for an Activity in your app
     	Intent resultIntent = new Intent(context, GraphAlertActivity.class);
     	resultIntent.putExtra("alertId", idAlert);

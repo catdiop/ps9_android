@@ -425,8 +425,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		while (cursor.moveToPrevious() && cmpt < AlertsActivity.NbreAlertPrinted)
 			if (idPatientList.contains(cursor.getInt(1))) {
 				try {
-					date = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS z yyyy").parse(cursor.getString(2));
-					Log.d(TAG, "Date parsée dans retrieveAlert = " + cursor.getString(2));
+					Log.d(TAG, "Date non parsée dans retrieveAlert = " + cursor.getString(2));
+					date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).parse(cursor.getString(2));
+					Log.d(TAG, "Date parsée dans retrieveAlert = " + date);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -434,6 +435,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				alert = new Alert(cursor.getInt(1), date, cursor.getString(3));
 				alert.setIDAlert(cursor.getInt(0));
 				alertList.add(alert);
+				cmpt++;
 			}
 
 		return alertList;

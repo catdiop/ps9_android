@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,6 +63,9 @@ public class AlertsActivity extends Activity {
 		session = new SessionManager(getApplicationContext());
 		idDoctor = session.getUserDetails();
 
+		TextView titre = (TextView) findViewById(R.id.title);
+		titre.setText(Html.fromHtml("MES <b>ALERTES</b>"));
+		
 		list = (ListView) findViewById(R.id.list_alerts);
 		list.setOnItemClickListener(new OnItemClickListener() {
 

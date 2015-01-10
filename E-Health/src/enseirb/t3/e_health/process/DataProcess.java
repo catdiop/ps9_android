@@ -14,79 +14,37 @@ public class DataProcess {
 	private ArrayList<String> dataNames;
 	private String TAG = "DataProcess";
 
-	// Oxygen processing variables
-	private int zeroOxygenCount;
-	private int zeroOxygenBlockCount;
-	private boolean positiveOxygen;
-
 	// Airflow processing variables
-	private int noAirflowCount;
-	private int noAirflowBlockCount;
+	private int noAirflowCount = 0;
 
 	// Position processing variables
 	private int position;
 	private int previousPosition;
-	private int standCount;
+	private int standCount = 0;
 
-	// Temprature processing variables
-	private int hypoTCount;
-	private int hyperTCount;
+	// Temperature processing variables
+	private int tempHypoCount = 0;
+	private int tempHyperCount = 0;
+
 
 	public ArrayList<String> getDataNames() {
 		return this.dataNames;
 	}
-
-	public int getZeroOxygenCount() {
-		return this.zeroOxygenCount;
+	
+	public void setStandCount(int standCount) {
+		this.standCount = standCount;
 	}
-
-	public void setZeroOxygenCount(int zeroOxygenCount) {
-		this.zeroOxygenCount = zeroOxygenCount;
-	}
-
-	public int getZeroOxygenBlockCount() {
-		return this.zeroOxygenBlockCount;
-	}
-
-	public void setZeroOxygenBlockCount(int zeroOxygenBlockCount) {
-		this.zeroOxygenBlockCount = zeroOxygenBlockCount;
-	}
-
-	public void setPositiveOxygen (boolean positiveOxygen) {
-
-		this.positiveOxygen = positiveOxygen;
-	}
-
-	public int getNoAirflowCount() {
-		return this.noAirflowCount;
-	}
-
+	
 	public void setNoAirflowCount(int noAirflowCount) {
 		this.noAirflowCount = noAirflowCount;
 	}
-
-	public int getNoAirflowBlockCount() {
-		return this.noAirflowBlockCount;
+	
+	public void setTempHypoCount(int tempHypoCount) {
+		this.tempHypoCount = tempHypoCount;
 	}
-
-	public void setNoAirflowBlockCount(int noAirflowBlockCount) {
-		this.noAirflowBlockCount = noAirflowBlockCount;
-	}
-
-	public int getPosition() {
-		return this.position;
-	}
-
-	public void setPosition(int position) {
-		this.position = position;
-	}
-
-	public int getPreviousPosition() {
-		return this.previousPosition;
-	}
-
-	public void setPreviousPosition(int previousPosition) {
-		this.previousPosition = previousPosition;
+	
+	public void setTempHyperCount(int tempHyperCount) {
+		this.tempHyperCount = tempHyperCount;
 	}
 
 	public DataProcess () {
@@ -98,29 +56,6 @@ public class DataProcess {
 		this.data = data;
 	}
 
-	public int getHypoTCount() {
-		return this.hypoTCount;
-	}
-
-	public void setHypoTCount(int hypoTCount) {
-		this.hypoTCount = hypoTCount;
-	}
-
-	public int getHyperTCount() {
-		return this.hyperTCount;
-	}
-
-	public void setHyperTCount(int hyperTCount) {
-		this.hyperTCount = hyperTCount;
-	}
-
-	public int getStandCount() {
-		return this.standCount;
-	}
-
-	public void setStandCount(int standCount) {
-		this.standCount = standCount;
-	}
 
 	public void process (Data data) {
 
@@ -128,14 +63,13 @@ public class DataProcess {
 
 		switch (data.getDataname()) {
 		case "A":
-			if (Double.parseDouble(data.getValue()) < 30) {
+			if (Double.parseDouble(data.getValue()) < 250) {
 				Log.d(TAG, "Valeur airflow : " + Double.parseDouble(data.getValue()));
 				Log.d(TAG, "airflow < 128");
 				this.noAirflowCount++;
 			}
-			else  {
+			else 
 				this.noAirflowCount = 0;
-			}
 			Log.d(TAG, "noAirflowCmpt = " + this.noAirflowCount);
 			if (this.noAirflowCount == 10) {
 				Log.d(TAG, "airflow = 10");
@@ -152,81 +86,48 @@ public class DataProcess {
 			}
 			break;
 		case "O":
-			if (Double.parseDouble(data.getValue()) < 1) {
-				break;
-			}
-			else {
-				if (Double.parseDouble(data.getValue()) < 99)
+			if (Double.parseDouble(data.getValue()) < 99 && Double.parseDouble(data.getValue()) > 1)
 					alertes.add("Hypoxemie");
-				if (Double.parseDouble(data.getValue()) < 5) {
-					this.setZeroOxygenCount(this.getZeroOxygenCount() + 1);	
-					//				Log.d(TAG, "Hypoxemie");
-					//				Log.d(TAG, "zeroOxygenCount = " + this.getZeroOxygenCount());
-					if (this.zeroOxygenBlockCount > 0 && this.positiveOxygen == true) {
-
-						alertes.add("Apnee");
-						this.setZeroOxygenBlockCount(0);
-						break;
-					}
-
-					if (this.getZeroOxygenCount() == 10) {
-
-						this.setZeroOxygenBlockCount(this
-								.getZeroOxygenBlockCount() + 1);
-						this.setZeroOxygenCount(0);
-					}
-
-					this.positiveOxygen = false;
-				}
-				else {
-
-					this.setZeroOxygenCount(0);
-					this.positiveOxygen = true;
-				}
-			}
 			break;
 		case "P":
-			this.setPreviousPosition(position);
+			previousPosition = position;
 			if (Double.parseDouble(data.getValue()) == 1) {
-				this.setPosition(1);
+				position = 1;
 			} else if (Double.parseDouble(data.getValue()) == 2) {
-				this.setPosition(2);
+				position = 2;
 			} else if (Double.parseDouble(data.getValue()) == 3) {
-				this.setPosition(3);
+				position = 3;
 			} else if (Double.parseDouble(data.getValue()) == 4) {
-				this.setPosition(4);
+				position = 4;
 			}
 			// position debout
 			else if (Double.parseDouble(data.getValue()) == 5) {
-				this.setPosition(5);
+				position = 5;
 				this.standCount++;
 				if (standCount == 20) {
-
 					alertes.add("Somnambulisme");
 				}
 			}
 			break;
 		case "T":
 			if (Double.parseDouble(data.getValue()) > 38) {
-				this.hyperTCount++;
-
-				if (this.hyperTCount == 11) {
-
-					this.hyperTCount = 0;
-					Log.d("alerte", "hyperthermie");
-					alertes.add("Hyperthermie");
-					//	this.dataNames.add("T");
-				}
+				tempHypoCount = 0;
+				tempHyperCount++;
 			}
 			else if (Double.parseDouble(data.getValue()) < 35) {
-				this.hypoTCount ++;
-
-				if (this.hypoTCount == 10) {
-
-					this.hypoTCount = 0;
-					Log.d("alerte", "hypothermie");
-					alertes.add("Hypothermie");
-				}
+				tempHyperCount = 0;
+				tempHypoCount++;
+			}
+			else {
+				tempHyperCount = 0;
+				tempHypoCount = 0;
+			}
+			if (tempHypoCount == 10) {
+				alertes.add("Hypothermie");
+				tempHypoCount = 0;
+			} else if (tempHyperCount == 10) {
+				alertes.add("Hyperthermie");
+				tempHyperCount = 0;
 			}
 			break;
 		case "C":
@@ -256,11 +157,12 @@ public class DataProcess {
 		alert = null;
 		this.dataNames = new ArrayList<String>();
 
-		if (alertes.contains("Tachycardie") && alertes.contains("Sueur") && this.getPosition() != 5 && this.getPreviousPosition() == 5) {
+		if (alertes.contains("Tachycardie") && alertes.contains("Sueur") && position != 5 && previousPosition == 5) {
 			alert = new Alert(data.getIdPatient(), data.getDate(), "Malaise");
 			this.dataNames.add("B");
 			this.dataNames.add("R");
 			this.dataNames.add("P");
+			alertes = new ArrayList<String>();
 			return alert;
 		}
 
@@ -270,6 +172,8 @@ public class DataProcess {
 				this.dataNames.add("B");
 				this.dataNames.add("O");
 				this.dataNames.add("R");
+				alertes = new ArrayList<String>();
+				return alert;
 			}
 		}
 
@@ -279,6 +183,8 @@ public class DataProcess {
 			this.dataNames.add("A");
 			this.dataNames.add("B");
 			this.dataNames.add("O");
+			alertes = new ArrayList<String>();
+			return alert;
 		}
 
 		if (alertes.contains("Tachycardie") && alertes.contains("Hypoxemie") && alertes.contains("Sueur")) {
@@ -286,23 +192,31 @@ public class DataProcess {
 			this.dataNames.add("B");
 			this.dataNames.add("O");
 			this.dataNames.add("R");
+			alertes = new ArrayList<String>();
+			return alert;
 		}
 
 		if  (alertes.contains("Hypothermie")) {
 			alert = new Alert(data.getIdPatient(), data.getDate(), "Hypothermie");
 			this.dataNames.add("T");
+			alertes = new ArrayList<String>();
+			return alert;
 		}
 
 		if  (alertes.contains("Hyperthermie")) {
 			alert = new Alert(data.getIdPatient(), data.getDate(), "Hyperthermie");
 			this.dataNames.add("T");
+			alertes = new ArrayList<String>();
+			return alert;
 		}
 
 		if  (alertes.contains("Somnambulisme")) {
 			this.dataNames.add("P");
 			alert = new Alert(data.getIdPatient(), data.getDate(), "Somnambulisme");
+			alertes = new ArrayList<String>();
+			return alert;
 		}
-
+		
 		alertes = new ArrayList<String>();
 		return alert;
 	}

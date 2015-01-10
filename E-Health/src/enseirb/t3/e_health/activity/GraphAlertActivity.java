@@ -26,14 +26,11 @@ public class GraphAlertActivity extends Activity {
 	private GraphicalView view;
 	private LineGraph line;
 	private static String TAG = "Graph";
-	//	private int cmpt = 0;
 	private String dataname;
 	private static int nbreMesuresPrint = 30;
-	private int idPatient;
 	Thread ct = null;
 	private int alertId;
 	List<String> menuPossible;
-	//	private String dataName;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +39,7 @@ public class GraphAlertActivity extends Activity {
 
 		session = new SessionManager(getApplicationContext());
 
-		idPatient = session.getUserDetails();
+//		idPatient = session.getUserDetails();
 		alertId=this.getIntent().getIntExtra("alertId", 0);
 		//		dataName=this.getIntent().getStringExtra("dataName");
 
@@ -103,37 +100,30 @@ public class GraphAlertActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.action_A:
 			dataname = "A";
-			//			cmpt = 0;
 			openChart();
 			return true;
 		case R.id.action_B:
 			dataname = "B";
-			//			cmpt = 0;
 			openChart();
 			return true;
 		case R.id.action_C:
 			dataname = "C";
-			//			cmpt = 0;
 			openChart();
 			return true;
 		case R.id.action_O:
 			dataname = "O";
-			//			cmpt = 0;
 			openChart();
 			return true;
 		case R.id.action_P:
 			dataname = "P";
-			//			cmpt = 0;
 			openChart();
 			return true;
 		case R.id.action_R:
 			dataname = "R";
-			//			cmpt = 0;
 			openChart();
 			return true;
 		case R.id.action_T:
 			dataname = "T";
-			//			cmpt = 0;
 			openChart();
 			return true;
 		default:
@@ -147,7 +137,7 @@ public class GraphAlertActivity extends Activity {
 		this.dataname = datas.get(0).getDataname();
 
 		line = new LineGraph(dataname);
-		line.setWindow(nbreMesuresPrint);
+//		line.setWindow(nbreMesuresPrint);
 		view = line.getView(this);
 		setContentView(view);
 		for (Data dataTmp:datas) {
@@ -156,20 +146,6 @@ public class GraphAlertActivity extends Activity {
 				Point p = new Point(dataTmp.getDate(), Double.parseDouble(dataTmp.getValue()));
 				line.addNewPoint(p);
 			}
-			//				data = dataTmp;
-			//			for (Data dataTmp : datas) {
-			//				if (dataTmp.getDataname().equals(dataname))
-			//					data = dataTmp;
-			//			}
-
-			//			Point p = new Point(data.getDate(), Double.parseDouble(data.getValue()));
-			//			line.addNewPoint(p);
-			//			cmpt++;
-			//			if (cmpt > nbreMesuresPrint) {
-			//				line.removePoint(cmpt - (nbreMesuresPrint + 1));
-			//				cmpt--;
-			//			}
-			//			view.repaint();
 		}
 		view.repaint();
 	}
