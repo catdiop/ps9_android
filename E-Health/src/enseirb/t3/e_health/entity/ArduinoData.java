@@ -112,6 +112,7 @@ public class ArduinoData  {
     		
     		try {
 				btThread.write("MORE\n".getBytes("UTF-8"));
+				btThread.write("MORE\n".getBytes("UTF-8"));
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -123,13 +124,10 @@ public class ArduinoData  {
         	numberData = numberDataPerSensor*numberSensor;
     		cmpNeedToSave = numberData;
     		Log.d(TAG, "SensorNbre = " + Integer.toString(numberSensor));
- 		
-    		//TODO appel a la BDD
+
     		for (String dataname : arrayDataname) {
 	    		EHealth.db.moveDataToSavedData(dataname, idAlert);
 	    		Log.d(TAG, "idAlert alerte = " + Integer.toString(idAlert));
-//	    		for (Data data : arraySavedData)
-//	    			EHealth.db.createSavedData(data, idAlert);
     		}
 			EHealth.db.deleteAllData();
     	}

@@ -81,7 +81,7 @@ public class DataProcess {
 			if (Double.parseDouble(data.getValue()) > 100) {
 				alertes.add("Tachycardie");
 			}
-			else if (Double.parseDouble(data.getValue()) < 95) {
+			else if (Double.parseDouble(data.getValue()) < 99) {
 				alertes.add("Bradycardie");
 			}
 			break;
@@ -114,7 +114,7 @@ public class DataProcess {
 				tempHypoCount = 0;
 				tempHyperCount++;
 			}
-			else if (Double.parseDouble(data.getValue()) < 35) {
+			else if (Double.parseDouble(data.getValue()) < 35 && Double.parseDouble(data.getValue()) > 1) {
 				tempHyperCount = 0;
 				tempHypoCount++;
 			}

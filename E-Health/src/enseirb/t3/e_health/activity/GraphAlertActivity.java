@@ -27,8 +27,6 @@ public class GraphAlertActivity extends Activity {
 	private LineGraph line;
 	private static String TAG = "Graph";
 	private String dataname;
-	private static int nbreMesuresPrint = 30;
-	Thread ct = null;
 	private int alertId;
 	List<String> menuPossible;
 
@@ -159,7 +157,6 @@ public class GraphAlertActivity extends Activity {
 
 	private List<String> getAlertDatasTypes(){
 		List<Data> datas=EHealth.db.retrieveDatasForAlert(alertId);
-		Data data = null;
 		List<String> datasTypes=new LinkedList<String>();
 
 		for (Data dataTmp:datas) {
